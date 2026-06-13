@@ -118,7 +118,7 @@ func CoinUpdate(c *gin.Context) {
 		updates["symbol"] = req.Symbol
 	}
 	updates["close"] = req.Close
-	updates["quantityprecision"] = req.Quantityprecision
+	updates["priceprecision"] = req.Priceprecision
 	updates["open"] = req.Open
 	updates["low"] = req.Low
 	updates["high"] = req.High

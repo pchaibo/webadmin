@@ -1,4 +1,4 @@
-export interface LoginRequest {
+﻿export interface LoginRequest {
   username?: string
   email?: string
   password: string
@@ -343,7 +343,7 @@ export async function getShellMax(
    name: string
    symbol: string
    close: number
-   quantityprecision: number
+   priceprecision: number
    open: number
    low: number
    high: number
@@ -379,7 +379,7 @@ export async function getCoins(page: number = 1, symbol?: string, status?: numbe
    name: string
    symbol: string
    close?: number
-   quantityprecision?: number
+   priceprecision?: number
    open?: number
    low?: number
    high?: number
@@ -399,7 +399,7 @@ export async function getCoins(page: number = 1, symbol?: string, status?: numbe
      name?: string
      symbol?: string
      close?: number
-     quantityprecision?: number
+     priceprecision?: number
      open?: number
      low?: number
      high?: number

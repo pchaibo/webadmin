@@ -1,4 +1,4 @@
-package model
+﻿package model
 
 type Admin struct {
 	Id           int    `json:"id"`
@@ -8,6 +8,7 @@ type Admin struct {
 	Status       int    `json:"status"`
 	Registertime string `json:"register_time"`
 }
+
 type AuthGroup struct {
 	Id     int    `json:"id"`
 	Title  string `json:"title"`
@@ -58,9 +59,7 @@ type ShellMax struct {
 	Status  int    `json:"status"`
 }
 
-// func (ShellMax) TableName() string {
-// 	return "tu_shellmax"
-// }
+// func (ShellMax) TableName() string {// 	return "tu_shellmax"// }
 
 type ShellMin struct {
 	Id      int    `json:"id"`
@@ -69,6 +68,7 @@ type ShellMin struct {
 	Addtime int    `json:"addtime"`
 	Status  int    `json:"status"`
 }
+
 type User struct {
 	Id        int    `json:"id"`
 	Username  string `json:"username"`
@@ -82,17 +82,17 @@ type User struct {
 
 // heyue:合约
 type Coin struct {
-	Id                int64   `gorm:"primaryKey" json:"id" `
-	Name              string  `json:"name"`              //名称
-	Symbol            string  `json:"symbol"`            //合约代码
-	Close             float64 `json:"close"`             //最新价
-	Quantityprecision int `json:"quantityprecision"` //价格精度
-	Open              float64 `json:"open"`
-	Low               float64 `json:"low"`
-	High              float64 `json:"high"`
-	Status            uint    `json:"status"` //状态  1:正常 0:停用
-	AddTime           int64   `json:"addtime"`
-	UpdateTime        int64   `json:"updatetime"`
+	Id             int64   `gorm:"primaryKey" json:"id" `
+	Name           string  `json:"name"`           //名称
+	Symbol         string  `json:"symbol"`         //合约代码
+	Close          float64 `json:"close"`          //最新价
+	Priceprecision int     `json:"priceprecision"` //价格精度
+	Open           float64 `json:"open"`
+	Low            float64 `json:"low"`
+	High           float64 `json:"high"`
+	Status         uint    `json:"status"` //状态  1:正常 0:停用
+	AddTime        int64   `json:"addtime"`
+	UpdateTime     int64   `json:"updatetime"`
 }
 
 func (Coin) TableName() string {
