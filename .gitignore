@@ -1,0 +1,24 @@
+# 前端构建产物（Vite 输出到 Backend/frontend）
+Backend/frontend/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Go
+.gocache
+/tmp/
+*.exe
+*.test
+*.out
+
+# Node
+node_modules/
+
+# Env
+.env
