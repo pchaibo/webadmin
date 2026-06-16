@@ -15,7 +15,7 @@
         label-width="90px"
         @keyup.enter="submitForm"
       >
-        <el-row :gutter="16">
+        <!-- <el-row :gutter="16">
           <el-col :span="12">
             <el-form-item label="主机" prop="host">
               <el-input v-model="form.host" placeholder="请输入主机" />
@@ -26,7 +26,18 @@
               <el-input v-model="form.scheme" placeholder="http/https" />
             </el-form-item>
           </el-col>
-        </el-row>
+        </el-row> -->
+
+        <el-form-item label="大图URL" prop="maxurl">
+          <el-input v-model="form.maxurl" placeholder="大图 URL" />
+        </el-form-item>
+
+    
+
+        
+        <el-form-item label="小图URL">
+          <el-input v-model="form.minurl" placeholder="小图 URL" />
+        </el-form-item>
 
         <el-row :gutter="16">
           <el-col :span="12">
@@ -36,35 +47,18 @@
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
-            <el-form-item label="数量">
-              <el-input-number v-model="form.num" :min="0" controls-position="right" style="width:100%" />
-            </el-form-item>
-          </el-col>
         </el-row>
-
-        <el-form-item label="大图URL">
-          <el-input v-model="form.maxurl" placeholder="大图 URL" />
-        </el-form-item>
-        <el-form-item label="小图URL">
-          <el-input v-model="form.minurl" placeholder="小图 URL" />
-        </el-form-item>
 
         <el-row :gutter="16">
           <el-col :span="12">
-            <el-form-item label="目录">
-              <el-input-number v-model="form.dir" :min="0" controls-position="right" style="width:100%" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
             <el-form-item label="状态">
-              <el-switch
-                v-model="form.status"
-                :active-value="1"
-                :inactive-value="0"
-                active-text="启用"
-                inactive-text="禁用"
-              />
+              <el-select v-model="form.status" placeholder="请选择状态" style="width:100%">
+                <el-option label="待处理" :value="0" />
+                <el-option label="正常" :value="1" />
+                <el-option label="失效" :value="2" />
+                <el-option label="人工处理" :value="3" />
+                <el-option label="处理失败" :value="4" />
+              </el-select>
             </el-form-item>
           </el-col>
         </el-row>
@@ -72,13 +66,11 @@
         <el-row :gutter="16">
           <el-col :span="12">
             <el-form-item label="锁定">
-              <el-switch
-                v-model="form.lock"
-                :active-value="1"
-                :inactive-value="0"
-                active-text="是"
-                inactive-text="否"
-              />
+              <el-select v-model="form.lock" placeholder="请选择" style="width:100%">
+                <el-option label="没锁" :value="0" />
+                <el-option label="首页" :value="1" />
+                <el-option label="全锁" :value="2" />
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -117,17 +109,17 @@ const form = reactive({
   host: '',
   scheme: '',
   group_id: 0,
-  status: 1,
+  status: 0,
   num: 0,
   maxurl: '',
-  minurl: '',
+  minurl: 'admin.php',
   dir: 0,
   lock: 0,
   remark: '',
 })
 
 const formRules = {
-  host: [{ required: true, message: '请输入主机', trigger: 'blur' }],
+  maxurl: [{ required: true, message: '请输入大图URL', trigger: 'blur' }],
 }
 
 const formRef = ref()
@@ -145,6 +137,9 @@ async function fetchGroupOptions() {
     const res = await getShellGroups(1)
     if (res.status === 1) {
       groupOptions.value = res.data || []
+      if (groupOptions.value.length > 0) {
+        form.group_id = groupOptions.value[0]!.id
+      }
     }
   } catch {
     // ignore

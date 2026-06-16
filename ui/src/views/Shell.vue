@@ -1,7 +1,30 @@
 ﻿<template>
   <div class="shell-page">
     <div class="toolbar">
+      <el-input
+        v-model="searchHost"
+        placeholder="搜索主机"
+        clearable
+        style="width: 200px"
+        @keyup.enter="handleSearch"
+        @clear="handleSearch"
+      />
+      <el-select
+        v-model="searchStatus"
+        placeholder="状态筛选"
+        clearable
+        style="width: 130px"
+        @change="handleSearch"
+      >
+        <el-option label="待处理" :value="0" />
+          <el-option label="正常" :value="1" />
+          <el-option label="失效" :value="2" />
+          <el-option label="人工处理" :value="3" />
+          <el-option label="处理失败" :value="4" />
+      </el-select>
+      <el-button type="primary" @click="handleSearch">搜索</el-button>
       <el-button type="primary" @click="router.push('/shell/add')">新增Shell</el-button>
+      <el-button type="primary" :disabled="!selectedIds.length" @click="handleExport">导出选中</el-button>
       <el-button type="danger" :disabled="!selectedIds.length" @click="handleBatchDelete">
         批量删除
       </el-button>
@@ -10,7 +33,6 @@
     <el-table
       :data="items"
       stripe
-      border
       v-loading="loading"
       style="width: 100%"
       @selection-change="onSelectionChange"
@@ -18,39 +40,49 @@
       <el-table-column type="selection" width="45" />
       <el-table-column prop="id" label="ID" width="55" />
       <el-table-column prop="host" label="主机" min-width="130" />
-      <el-table-column prop="scheme" label="协议" width="70" />
-      <el-table-column label="分组名称" min-width="120">
+     
+      <el-table-column label="分组" min-width="120">
         <template #default="{ row }">
           {{ row.group?.name || '-' }}
         </template>
       </el-table-column>
-      <el-table-column prop="status" label="状态" width="70">
+      <el-table-column prop="status" label="状态" width="80">
         <template #default="{ row }">
-          <el-tag :type="row.status === 1 ? 'success' : 'danger'" size="small">
-            {{ row.status === 1 ? '启用' : '禁用' }}
+          <el-tag :type="getStatusInfo(row.status).type" size="small">
+            {{ getStatusInfo(row.status).label }}
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column prop="maxurl" label="大图URL" min-width="140" show-overflow-tooltip />
+       <el-table-column prop="lock" label="锁定" width="120">
+        <template #default="{ row }">
+          <el-tag :type="getLockInfo(row.lock).type" size="small">
+            {{ getLockInfo(row.lock).label }}
+          </el-tag>
+        </template>
+      </el-table-column>
+
+      <el-table-column prop="sitenum" label="收录" width="70" />
+      <el-table-column label="大图URL" min-width="200">
+        <template #default="{ row }">
+          <a :href="row.maxurl" target="_blank" rel="noopener noreferrer" class="maxurl-link">{{ row.maxurl }}</a>
+        </template>
+      </el-table-column>
+       
       <el-table-column label="大图" width="80">
         <template #default="{ row }">
           <el-button size="small" @click="showMaxImages(row)">查看</el-button>
         </template>
       </el-table-column>
+
+      <el-table-column prop="scheme" label="协议" width="70" />
       
       <el-table-column prop="minurl" label="小图URL" min-width="140" show-overflow-tooltip />
-      <el-table-column prop="dir" label="目录" width="60">
+       <!-- <el-table-column prop="dir" label="目录" width="60">
         <template #default="{ row }">
           <el-tag size="small">{{ row.dir }}</el-tag>
         </template>
-      </el-table-column>
-      <el-table-column prop="lock" label="锁定" width="60">
-        <template #default="{ row }">
-          <el-tag :type="row.lock === 1 ? 'danger' : 'info'" size="small">
-            {{ row.lock === 1 ? '是' : '否' }}
-          </el-tag>
-        </template>
-      </el-table-column>
+      </el-table-column>  -->
+     
       <el-table-column prop="remark" label="备注" min-width="120" show-overflow-tooltip />
       <el-table-column prop="addtime" label="添加时间" width="150">
         <template #default="{ row }">
@@ -89,18 +121,12 @@
         label-width="90px"
         @keyup.enter="submitForm"
       >
-        <el-row :gutter="16">
-          <el-col :span="12">
-            <el-form-item label="主机" prop="host">
-              <el-input v-model="form.host" placeholder="请输入主机" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="协议">
-              <el-input v-model="form.scheme" placeholder="http/https" />
-            </el-form-item>
-          </el-col>
-        </el-row>
+       <el-form-item label="大图URL" prop="maxurl">
+          <el-input v-model="form.maxurl" placeholder="大图 URL" />
+        </el-form-item>
+        <el-form-item label="小图URL">
+          <el-input v-model="form.minurl" placeholder="小图 URL" />
+        </el-form-item>
 
         <el-row :gutter="16">
           <el-col :span="12">
@@ -110,35 +136,19 @@
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
-            <el-form-item label="数量">
-              <el-input-number v-model="form.num" :min="0" controls-position="right" style="width:100%" />
-            </el-form-item>
-          </el-col>
+         
         </el-row>
-
-        <el-form-item label="大图URL">
-          <el-input v-model="form.maxurl" placeholder="大图 URL" />
-        </el-form-item>
-        <el-form-item label="小图URL">
-          <el-input v-model="form.minurl" placeholder="小图 URL" />
-        </el-form-item>
 
         <el-row :gutter="16">
           <el-col :span="12">
-            <el-form-item label="目录">
-              <el-input-number v-model="form.dir" :min="0" controls-position="right" style="width:100%" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
             <el-form-item label="状态">
-              <el-switch
-                v-model="form.status"
-                :active-value="1"
-                :inactive-value="0"
-                active-text="启用"
-                inactive-text="禁用"
-              />
+              <el-select v-model="form.status" placeholder="请选择状态" style="width:100%">
+                <el-option label="待处理" :value="0" />
+                <el-option label="正常" :value="1" />
+                <el-option label="失效" :value="2" />
+                <el-option label="人工处理" :value="3" />
+                <el-option label="处理失败" :value="4" />
+              </el-select>
             </el-form-item>
           </el-col>
         </el-row>
@@ -146,13 +156,11 @@
         <el-row :gutter="16">
           <el-col :span="12">
             <el-form-item label="锁定">
-              <el-switch
-                v-model="form.lock"
-                :active-value="1"
-                :inactive-value="0"
-                active-text="是"
-                inactive-text="否"
-              />
+              <el-select v-model="form.lock" placeholder="请选择" style="width:100%">
+                <el-option label="没锁" :value="0" />
+                <el-option label="首页" :value="1" />
+                <el-option label="全锁" :value="2" />
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -170,7 +178,11 @@
     <el-dialog v-model="maxDialogVisible" :title="maxDialogTitle" width="700px" :close-on-click-modal="false">
       <el-table :data="maxImages" stripe border v-loading="maxLoading" style="width:100%">
         <el-table-column prop="id" label="ID" width="60" />
-        <el-table-column prop="url" label="URL" min-width="350" show-overflow-tooltip />
+        <el-table-column label="URL" min-width="350" show-overflow-tooltip>
+            <template #default="{ row }">
+              <a :href="row.url" target="_blank" rel="noopener noreferrer" class="maxurl-link">{{ row.url }}</a>
+            </template>
+          </el-table-column>
         <el-table-column prop="addtime" label="添加时间" width="150">
           <template #default="{ row }">
             {{ formatTime(row.addtime) }}
@@ -178,8 +190,8 @@
         </el-table-column>
         <el-table-column prop="status" label="状态" width="70">
           <template #default="{ row }">
-            <el-tag :type="row.status === 1 ? 'success' : 'danger'" size="small">
-              {{ row.status === 1 ? '启用' : '禁用' }}
+            <el-tag :type="getStatusInfo(row.status).type" size="small">
+              {{ getStatusInfo(row.status).label }}
             </el-tag>
           </template>
         </el-table-column>
@@ -212,6 +224,8 @@ const currentPage = ref(1)
 const pageSize = Number(import.meta.env.VITE_PAGE_SIZE) || 20
 const selectedIds = ref<number[]>([])
 const groupOptions = ref<ShellGroupItem[]>([])
+const searchHost = ref('')
+const searchStatus = ref<number | undefined>(undefined)
 
 const dialogVisible = ref(false)
 const editingId = ref<number | null>(null)
@@ -230,7 +244,7 @@ const form = reactive({
 })
 
 const formRules = {
-  host: [{ required: true, message: '请输入主机', trigger: 'blur' }],
+  maxurl: [{ required: true, message: '请输入大图URL', trigger: 'blur' }],
 }
 
 const formRef = ref()
@@ -275,6 +289,31 @@ async function fetchGroupOptions() {
   }
 }
 
+async function handleSearch() {
+  currentPage.value = 1
+  fetchItems()
+}
+
+function getLockInfo(lock: number): { label: string; type: string } {
+  const map: Record<number, { label: string; type: string }> = {
+    0: { label: '没锁', type: 'info' },
+    1: { label: '首页', type: 'success' },
+    2: { label: '全锁', type: 'danger' },
+  }
+  return map[lock] || { label: '未知', type: 'info' }
+}
+
+function getStatusInfo(status: number): { label: string; type: string } {
+  const map: Record<number, { label: string; type: string }> = {
+    0: { label: '待处理', type: 'warning' },
+    1: { label: '正常', type: 'success' },
+    2: { label: '失效', type: 'danger' },
+    3: { label: '人工处理', type: '' },
+    4: { label: '处理失败', type: 'danger' },
+  }
+  return map[status] || { label: '未知', type: 'info' }
+}
+
 onMounted(() => {
   fetchItems()
   fetchGroupOptions()
@@ -283,7 +322,7 @@ onMounted(() => {
 async function fetchItems() {
   loading.value = true
   try {
-    const res = await getShells(currentPage.value)
+    const res = await getShells(currentPage.value, searchHost.value || undefined, searchStatus.value)
     if (res.status === 1) {
       items.value = res.data || []
       total.value = res.total
@@ -373,6 +412,19 @@ async function handleDelete(row: ShellItem) {
   }
 }
 
+function handleExport() {
+  const rows = items.value.filter((r) => selectedIds.value.includes(r.id))
+  if (!rows.length) return
+  const csv = 'id,host,maxurl\n' + rows.map((r) => `${r.id},${r.host},${r.maxurl}`).join('\n')
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = `shell_export_${Date.now()}.csv`
+  a.click()
+  URL.revokeObjectURL(url)
+}
+
 async function handleBatchDelete() {
   if (!selectedIds.value.length) return
   try {
@@ -413,6 +465,15 @@ async function handleBatchDelete() {
   margin-bottom: 16px;
   display: flex;
   gap: 8px;
+}
+
+.maxurl-link {
+  display: inline-block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: bottom;
 }
 
 .pagination-wrap {

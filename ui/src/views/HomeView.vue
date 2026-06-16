@@ -33,13 +33,13 @@
           权限规则
         </el-menu-item>
         <el-menu-item index="/shellgroup">
-          Shell管理
+          Shell分组
         </el-menu-item>
         <el-menu-item index="/shell">
           Shell列表
         </el-menu-item>
         <el-menu-item index="/coin">
-          Coin管理
+          Coin列表
         </el-menu-item>
       </el-menu>
     </aside>

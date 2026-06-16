@@ -239,6 +239,7 @@ export interface ShellItem {
   }
   status: number
   num: number
+  sitenum: number
   maxurl: string
   minurl: string
   dir: number
@@ -257,8 +258,15 @@ export interface ShellListResponse {
   error?: string
 }
 
-export async function getShells(page: number = 1): Promise<ShellListResponse> {
-  const res = await fetch(`/api/shell?page=${page}`, {
+export async function getShells(page: number = 1, host?: string, status?: number): Promise<ShellListResponse> {
+  let url = `/api/shell?page=${page}`
+  if (host) {
+    url += `&host=${encodeURIComponent(host)}`
+  }
+  if (status !== undefined) {
+    url += `&status=${status}`
+  }
+  const res = await fetch(url, {
     headers: authHeaders(),
   })
   return res.json()

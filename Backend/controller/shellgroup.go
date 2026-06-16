@@ -35,7 +35,7 @@ func ShellGroupList(c *gin.Context) {
 		return
 	}
 
-	if err := model.Db.Order("id asc").Limit(pageSize).Offset(offset).Find(&items).Error; err != nil {
+	if err := model.Db.Order("id desc").Limit(pageSize).Offset(offset).Find(&items).Error; err != nil {
 		errorResponse(c, 500, "Failed to retrieve shell groups")
 		return
 	}

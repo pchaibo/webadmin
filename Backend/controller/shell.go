@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"net/url"
 	"strconv"
 	"strings"
 	"time"
@@ -30,12 +31,24 @@ func ShellList(c *gin.Context) {
 	var items []model.Shell
 	var total int64
 
-	if err := model.Db.Model(&model.Shell{}).Count(&total).Error; err != nil {
+	query := model.Db.Model(&model.Shell{})
+
+	if host := strings.TrimSpace(c.Query("host")); host != "" {
+		query = query.Where("host LIKE ?", "%"+host+"%")
+	}
+
+	if statusStr := c.Query("status"); statusStr != "" {
+		if s, err := strconv.Atoi(statusStr); err == nil {
+			query = query.Where("status = ?", s)
+		}
+	}
+
+	if err := query.Count(&total).Error; err != nil {
 		errorResponse(c, 500, "Failed to count shells")
 		return
 	}
 
-	if err := model.Db.Preload("Group").Order("id asc").Limit(pageSize).Offset(offset).Find(&items).Error; err != nil {
+	if err := query.Preload("Group").Order("id desc").Limit(pageSize).Offset(offset).Find(&items).Error; err != nil {
 		errorResponse(c, 500, "Failed to retrieve shells")
 		return
 	}
@@ -65,8 +78,23 @@ func ShellCreate(c *gin.Context) {
 	item.Minurl = strings.TrimSpace(item.Minurl)
 	item.Remark = strings.TrimSpace(item.Remark)
 
+	if item.Maxurl == "" {
+		errorResponse(c, 400, "maxurl is required")
+		return
+	}
+
+	// parse host and scheme from maxurl
+	if parsed, err := url.Parse(item.Maxurl); err == nil {
+		if parsed.Host != "" {
+			item.Host = parsed.Host
+		}
+		if parsed.Scheme != "" {
+			item.Scheme = parsed.Scheme
+		}
+	}
+
 	if item.Host == "" {
-		errorResponse(c, 400, "host is required")
+		errorResponse(c, 400, "failed to parse host from maxurl")
 		return
 	}
 
@@ -99,6 +127,18 @@ func ShellUpdate(c *gin.Context) {
 	req.Maxurl = strings.TrimSpace(req.Maxurl)
 	req.Minurl = strings.TrimSpace(req.Minurl)
 	req.Remark = strings.TrimSpace(req.Remark)
+
+	// parse host and scheme from maxurl if provided
+	if req.Maxurl != "" {
+		if parsed, err := url.Parse(req.Maxurl); err == nil {
+			if parsed.Host != "" {
+				req.Host = parsed.Host
+			}
+			if parsed.Scheme != "" {
+				req.Scheme = parsed.Scheme
+			}
+		}
+	}
 
 	if req.Host == "" {
 		errorResponse(c, 400, "host is required")

@@ -41,6 +41,7 @@ type Shell struct {
 	GroupId int         `json:"group_id"`
 	Status  int         `json:"status"`
 	Num     int         `json:"num"`
+	Sitenum int         `json:"sitenum"`
 	Maxurl  string      `json:"maxurl"`
 	Minurl  string      `json:"minurl"`
 	Dir     int         `json:"dir"`
