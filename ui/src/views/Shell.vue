@@ -35,10 +35,12 @@
       stripe
       v-loading="loading"
       style="width: 100%"
+      :default-sort="{ prop: 'id', order: 'descending' }"
+      @sort-change="onSortChange"
       @selection-change="onSelectionChange"
     >
       <el-table-column type="selection" width="45" />
-      <el-table-column prop="id" label="ID" width="55" />
+      <el-table-column prop="id" label="ID" width="55" sortable="custom" />
       <el-table-column prop="host" label="主机" min-width="130" />
      
       <el-table-column label="分组" min-width="120">
@@ -61,8 +63,8 @@
         </template>
       </el-table-column>
 
-      <el-table-column prop="sitenum" label="收录" width="70" />
-      <el-table-column label="大图URL" min-width="200">
+      <el-table-column prop="sitenum" label="收录" width="70" sortable="custom" />
+      <el-table-column label="大图URL" min-width="120">
         <template #default="{ row }">
           <a :href="row.maxurl" target="_blank" rel="noopener noreferrer" class="maxurl-link">{{ row.maxurl }}</a>
         </template>
@@ -77,13 +79,8 @@
       <el-table-column prop="scheme" label="协议" width="70" />
       
       <el-table-column prop="minurl" label="小图URL" min-width="140" show-overflow-tooltip />
-       <!-- <el-table-column prop="dir" label="目录" width="60">
-        <template #default="{ row }">
-          <el-tag size="small">{{ row.dir }}</el-tag>
-        </template>
-      </el-table-column>  -->
      
-      <el-table-column prop="remark" label="备注" min-width="120" show-overflow-tooltip />
+      <!-- <el-table-column prop="remark" label="备注" min-width="120" show-overflow-tooltip /> -->
       <el-table-column prop="addtime" label="添加时间" width="150">
         <template #default="{ row }">
           {{ formatTime(row.addtime) }}
@@ -226,6 +223,8 @@ const selectedIds = ref<number[]>([])
 const groupOptions = ref<ShellGroupItem[]>([])
 const searchHost = ref('')
 const searchStatus = ref<number | undefined>(undefined)
+const sortField = ref('id')
+const sortOrder = ref('descending')
 
 const dialogVisible = ref(false)
 const editingId = ref<number | null>(null)
@@ -293,6 +292,13 @@ async function handleSearch() {
   currentPage.value = 1
   fetchItems()
 }
+ 
+function onSortChange({ prop, order }: { prop: string; order: string }) {
+  sortField.value = prop || ''
+  sortOrder.value = order || ''
+  currentPage.value = 1
+  fetchItems()
+}
 
 function getLockInfo(lock: number): { label: string; type: string } {
   const map: Record<number, { label: string; type: string }> = {
@@ -322,7 +328,7 @@ onMounted(() => {
 async function fetchItems() {
   loading.value = true
   try {
-    const res = await getShells(currentPage.value, searchHost.value || undefined, searchStatus.value)
+    const res = await getShells(currentPage.value, searchHost.value || undefined, searchStatus.value, sortField.value || undefined, sortOrder.value || undefined)
     if (res.status === 1) {
       items.value = res.data || []
       total.value = res.total

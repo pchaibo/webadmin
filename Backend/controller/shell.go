@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"log"
 	"net/url"
 	"strconv"
 	"strings"
@@ -43,12 +44,25 @@ func ShellList(c *gin.Context) {
 		}
 	}
 
+	// sort & order, whitelist allowed fields
+	sort := c.DefaultQuery("sort", "id")
+	order := c.DefaultQuery("order", "desc")
+	allowedSorts := map[string]bool{"id": true, "sitenum": true}
+	allowedOrders := map[string]bool{"asc": true, "desc": true}
+	if !allowedSorts[sort] || !allowedOrders[order] {
+		sort = "id"
+		order = "desc"
+	}
+	orderClause := sort + " " + order
+
 	if err := query.Count(&total).Error; err != nil {
 		errorResponse(c, 500, "Failed to count shells")
 		return
 	}
 
-	if err := query.Preload("Group").Order("id desc").Limit(pageSize).Offset(offset).Find(&items).Error; err != nil {
+	log.Print("orderClause:", orderClause)
+
+	if err := query.Preload("Group").Order(orderClause).Limit(pageSize).Offset(offset).Find(&items).Error; err != nil {
 		errorResponse(c, 500, "Failed to retrieve shells")
 		return
 	}

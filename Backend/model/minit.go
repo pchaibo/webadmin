@@ -1,8 +1,6 @@
 package model
 
 import (
-	"fmt"
-
 	"webadmin/config"
 
 	"gorm.io/driver/mysql"
@@ -27,8 +25,7 @@ func init() {
 		return
 	}
 	Db = db
-	if err := db.AutoMigrate(&Admin{}, &AuthGroup{}, &AuthRule{}, &ShellGroup{}, &Shell{}, &ShellMax{}, &ShellMin{}, &Coin{}); err != nil {
- 		fmt.Println("auto migrate failed:", err)
- 	}
-	fmt.Println("db:", db)
+	// if err := db.AutoMigrate(&Admin{}, &AuthGroup{}, &AuthRule{}, &ShellGroup{}, &Shell{}, &ShellMax{}, &ShellMin{}, &Coin{}); err != nil {
+	// 	fmt.Println("auto migrate failed:", err)
+	// }
 }

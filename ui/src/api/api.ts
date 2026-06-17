@@ -258,13 +258,17 @@ export interface ShellListResponse {
   error?: string
 }
 
-export async function getShells(page: number = 1, host?: string, status?: number): Promise<ShellListResponse> {
+export async function getShells(page: number = 1, host?: string, status?: number, sort?: string, order?: string): Promise<ShellListResponse> {
   let url = `/api/shell?page=${page}`
   if (host) {
     url += `&host=${encodeURIComponent(host)}`
   }
   if (status !== undefined) {
     url += `&status=${status}`
+  }
+  if (sort) {
+    const shortOrder = order === 'ascending' ? 'asc' : order === 'descending' ? 'desc' : order || 'asc'
+    url += `&sort=${sort}&order=${shortOrder}`
   }
   const res = await fetch(url, {
     headers: authHeaders(),
