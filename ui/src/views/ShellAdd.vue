@@ -58,6 +58,7 @@
                 <el-option label="失效" :value="2" />
                 <el-option label="人工处理" :value="3" />
                 <el-option label="处理失败" :value="4" />
+                <el-option label="网络错误" :value="5" />
               </el-select>
             </el-form-item>
           </el-col>

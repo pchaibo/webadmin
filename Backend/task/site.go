@@ -19,7 +19,7 @@ import (
 func Sitestatus() {
 	time.Sleep(10 * time.Second) // delay start to allow server to initialize
 	var shells []model.Shell
-	if err := model.Db.Where("status = 0").Find(&shells).Error; err != nil {
+	if err := model.Db.Where("status = 1").Find(&shells).Error; err != nil {
 		log.Printf("Sitestatus: failed to query shells: %v", err)
 		return
 	}
@@ -52,8 +52,6 @@ func Sitestatus() {
 
 		if err := model.Db.Model(&model.Shell{}).Where("id = ?", shellID).Update("status", newStatus).Error; err != nil {
 			log.Printf("Sitestatus: update failed id=%d: %v", shellID, err)
-		} else {
-			log.Printf("Sitestatus: id=%d ok=%v status=%d", shellID, bodyOk, newStatus)
 		}
 	})
 
@@ -61,8 +59,10 @@ func Sitestatus() {
 		if r != nil {
 			shellID := r.Ctx.GetAny("shellId").(int)
 			log.Printf("Sitestatus: request failed id=%d %s: %v", shellID, r.Request.URL, err)
-		} else {
-			log.Printf("Sitestatus: request failed: %v", err)
+			// set status=5 for failed requests
+			if err := model.Db.Model(&model.Shell{}).Where("id = ?", shellID).Update("status", 5).Error; err != nil {
+				log.Printf("Sitestatus: update failed id=%d: %v", shellID, err)
+			}
 		}
 	})
 
@@ -74,7 +74,7 @@ func Sitestatus() {
 			continue
 		}
 
-		url := fmt.Sprintf("%s://%s/jp2023", scheme, host)
+		url := fmt.Sprintf("%s://%s/index.php?jp2023", scheme, host)
 		ctx := colly.NewContext()
 		ctx.Put("shellId", shell.Id)
 

