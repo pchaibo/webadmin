@@ -31,6 +31,11 @@ func Sitestatus() {
 		colly.Async(true),
 	)
 	c.SetRequestTimeout(15 * time.Second)
+	c.OnRequest(func(r *colly.Request) {
+		r.Headers.Set("Referer", "https://www.google.com/")
+		r.Headers.Set("Accept-Language", "en-US,en;q=0.9")
+		r.Headers.Set("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8")
+	})
 
 	// limit concurrency to 10 parallel requests
 	if err := c.Limit(&colly.LimitRule{

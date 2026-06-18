@@ -21,7 +21,7 @@ CREATE TABLE `tu_admin` (
   `username` varchar(255) DEFAULT NULL,
   `password` varchar(255) DEFAULT NULL,
   `avatar` varchar(255) NOT NULL DEFAULT '' COMMENT '用户头像，相对于upload/avatar目录',
-  `email` longtext,
+  `email` varchar(255) DEFAULT NULL,
   `email_code` varchar(60) DEFAULT NULL COMMENT '激活码',
   `phone` bigint(20) unsigned DEFAULT NULL COMMENT '手机号',
   `status` bigint(20) DEFAULT NULL,
@@ -29,14 +29,13 @@ CREATE TABLE `tu_admin` (
   `last_login_ip` varchar(16) NOT NULL DEFAULT '' COMMENT '最后登录ip',
   `last_login_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后登录时间',
   `remark` varchar(100) DEFAULT NULL,
-  `registertime` longtext,
   PRIMARY KEY (`id`),
   KEY `user_login_key` (`username`)
 ) ENGINE=MyISAM AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
 
 /*Data for the table `tu_admin` */
 
-insert  into `tu_admin`(`id`,`username`,`password`,`avatar`,`email`,`email_code`,`phone`,`status`,`register_time`,`last_login_ip`,`last_login_time`,`remark`,`registertime`) values (1,'admin','a9bf03cd0485dfde54b0225bd4144e41','/uploads/file/20241114/6cac6c24901ddaf5e7e80090f3d120f9.png','admin++@qq.com',NULL,13912345600,1,1716813295,'',0,'',NULL),(20,'test','ee989b7e5f1087a5be8ab95c15d96cdb','','cqhaibo@gmail.com',NULL,NULL,0,0,'',0,NULL,NULL);
+insert  into `tu_admin`(`id`,`username`,`password`,`avatar`,`email`,`email_code`,`phone`,`status`,`register_time`,`last_login_ip`,`last_login_time`,`remark`) values (1,'admin','a9bf03cd0485dfde54b0225bd4144e41','/uploads/file/20241114/6cac6c24901ddaf5e7e80090f3d120f9.png','admin++@qq.com',NULL,13912345600,1,1716813295,'',0,''),(20,'test','ee989b7e5f1087a5be8ab95c15d96cdb','','cqhaibo@gmail.com',NULL,NULL,0,0,'',0,NULL);
 
 /*Table structure for table `tu_auth_group` */
 
@@ -44,9 +43,9 @@ DROP TABLE IF EXISTS `tu_auth_group`;
 
 CREATE TABLE `tu_auth_group` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `title` longtext,
+  `title` varchar(200) DEFAULT NULL,
   `status` bigint(20) DEFAULT NULL,
-  `rules` longtext,
+  `rules` text,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COMMENT='用户组表';
 
@@ -413,11 +412,11 @@ CREATE TABLE `tu_shell` (
   `group_id` bigint(20) DEFAULT NULL COMMENT '分组',
   `status` bigint(20) DEFAULT NULL COMMENT '状态 0:待处理 1:正常 2:失效 3:人工处理 4:处理失败 5:网络问题',
   `num` bigint(20) DEFAULT NULL COMMENT '0:没备 1:备小码 2:备大码',
-  `maxurl` longtext COMMENT '大码',
-  `minurl` longtext COMMENT '小码',
+  `maxurl` text COMMENT '大码',
+  `minurl` text COMMENT '小码',
   `dir` bigint(20) DEFAULT NULL,
   `lock` bigint(20) DEFAULT NULL COMMENT '锁定 0:没锁 1:首页 2:全锁',
-  `remark` longtext COMMENT '备注',
+  `remark` varchar(200) DEFAULT NULL COMMENT '备注',
   `addtime` bigint(20) DEFAULT NULL COMMENT '添加时间',
   `uptime` bigint(20) DEFAULT NULL COMMENT '更新时间',
   `sitenum` bigint(20) DEFAULT NULL COMMENT '收录',
