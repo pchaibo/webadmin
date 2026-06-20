@@ -28,10 +28,14 @@ type AuthRule struct {
 }
 
 type ShellGroup struct {
-	Id      int    `json:"id"`
-	Name    string `json:"name"`
-	Mmurl   string `json:"mmurl" gorm:"column:url"`
-	Addtime int    `json:"addtime"`
+	Id        int    `json:"id"`
+	Name      string `json:"name"`
+	Mmurl     string `json:"mmurl"`
+ 	Mmtext    string `json:"mmtext"`
+	Checkurl  string `json:"checkurl"`
+	Checktext string `json:"checktext"`
+	Status    int    `json:"status"` //状态  1:正常 2:停用
+	Addtime   int    `json:"addtime"`
 }
 
 type Shell struct {

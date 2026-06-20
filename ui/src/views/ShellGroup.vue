@@ -17,8 +17,27 @@
     >
       <el-table-column type="selection" width="55" />
       <el-table-column prop="id" label="ID" width="60" />
-      <el-table-column prop="name" label="分组名称" min-width="150" />
-      <el-table-column prop="mmurl" label="域名" min-width="180" />
+      <el-table-column prop="name" label="分组名称" min-width="100" />
+      <el-table-column prop="mmurl" label="版本url" min-width="180" />
+      <!-- <el-table-column prop="mmtext" label="域名备注" min-width="200">
+        <template #default="{ row }">
+          <div class="mmtext-cell" :title="row.mmtext">{{ row.mmtext || '-' }}</div>
+        </template>
+      </el-table-column> -->
+
+      <el-table-column prop="checkurl" label="检测URL" min-width="180" />
+      <el-table-column prop="checktext" label="检测返回" min-width="200">
+        <template #default="{ row }">
+          <div class="mmtext-cell" :title="row.checktext">{{ row.checktext || '-' }}</div>
+        </template>
+      </el-table-column>
+      <el-table-column prop="status" label="状态" width="80" align="center">
+        <template #default="{ row }">
+          <el-tag :type="row.status === 1 ? 'success' : 'info'" size="small">
+            {{ row.status === 1 ? '正常' : '停用' }}
+          </el-tag>
+        </template>
+      </el-table-column>
       <el-table-column prop="addtime" label="添加时间" width="160">
         <template #default="{ row }">
           {{ formatTime(row.addtime) }}
@@ -46,7 +65,7 @@
     <el-dialog
       v-model="dialogVisible"
       :title="isEditing ? '编辑Shell分组' : '新增Shell分组'"
-      width="480px"
+      width="520px"
       :close-on-click-modal="false"
     >
       <el-form
@@ -59,8 +78,23 @@
         <el-form-item label="名称" prop="name">
           <el-input v-model="form.name" placeholder="请输入分组名称" />
         </el-form-item>
-        <el-form-item label="域名">
-          <el-input v-model="form.mmurl" placeholder="域名或 URL" />
+        <el-form-item label="版本url">
+          <el-input v-model="form.mmurl" placeholder="版本 URL" />
+        </el-form-item>
+        <el-form-item label="版本代码">
+          <el-input v-model="form.mmtext" type="textarea" :rows="3" placeholder="版本（多行文本）" />
+        </el-form-item>
+        <el-form-item label="检测URL">
+          <el-input v-model="form.checkurl" placeholder="检测URL" />
+        </el-form-item>
+        <el-form-item label="检测返回">
+          <el-input v-model="form.checktext" type="textarea" :rows="2" placeholder="检测返回文本" />
+        </el-form-item>
+        <el-form-item label="状态">
+          <el-select v-model="form.status" placeholder="请选择状态">
+            <el-option :value="1" label="正常" />
+            <el-option :value="2" label="停用" />
+          </el-select>
         </el-form-item>
       </el-form>
       <template #footer>
@@ -99,6 +133,10 @@ const editingId = ref<number | null>(null)
 const form = reactive({
   name: '',
   mmurl: '',
+  mmtext: '',
+  checkurl: '',
+  checktext: '',
+  status: 1,
 })
 
 const formRules = {
@@ -144,6 +182,10 @@ function openCreate() {
   editingId.value = null
   form.name = ''
   form.mmurl = ''
+  form.mmtext = ''
+  form.checkurl = ''
+  form.checktext = ''
+  form.status = 1
   dialogVisible.value = true
 }
 
@@ -152,6 +194,10 @@ function openEdit(row: ShellGroupItem) {
   editingId.value = row.id
   form.name = row.name
   form.mmurl = row.mmurl
+  form.mmtext = row.mmtext
+  form.checkurl = row.checkurl
+  form.checktext = row.checktext
+  form.status = row.status
   dialogVisible.value = true
 }
 
@@ -166,6 +212,10 @@ async function submitForm() {
       const res = await updateShellGroup(editingId.value, {
         name: form.name,
         mmurl: form.mmurl,
+        mmtext: form.mmtext,
+        checkurl: form.checkurl,
+        checktext: form.checktext,
+        status: form.status,
       })
       if (res.status === 1) {
         ElMessage.success('更新成功')
@@ -178,6 +228,10 @@ async function submitForm() {
       const res = await createShellGroup({
         name: form.name,
         mmurl: form.mmurl,
+        mmtext: form.mmtext,
+        checkurl: form.checkurl,
+        checktext: form.checktext,
+        status: form.status,
       })
       if (res.status === 1) {
         ElMessage.success('创建成功')
@@ -264,5 +318,15 @@ async function handleBatchDelete() {
   margin-top: 16px;
   display: flex;
   justify-content: flex-end;
+}
+
+.mmtext-cell {
+  max-width: 300px;
+  white-space: pre-wrap;
+  word-break: break-all;
+  line-height: 1.4;
+  max-height: 60px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 </style>

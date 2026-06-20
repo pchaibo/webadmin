@@ -42,9 +42,9 @@
     >
       <el-table-column type="selection" width="45" />
       <el-table-column prop="id" label="ID" width="55" sortable="custom" />
-      <el-table-column prop="host" label="主机" min-width="130" />
+      <el-table-column prop="host" label="主机" max-width="130" />
      
-      <el-table-column label="分组" min-width="120">
+      <el-table-column label="分组" max-width="120">
         <template #default="{ row }">
           {{ row.group?.name || '-' }}
         </template>
@@ -79,7 +79,7 @@
 
       <el-table-column prop="scheme" label="协议" width="70" />
       
-      <el-table-column prop="minurl" label="小图URL" min-width="140" show-overflow-tooltip />
+      <!-- <el-table-column prop="minurl" label="小图URL" min-width="140" show-overflow-tooltip /> -->
      
       <!-- <el-table-column prop="remark" label="备注" min-width="120" show-overflow-tooltip /> -->
       <el-table-column prop="addtime" label="添加时间" width="150">

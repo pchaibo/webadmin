@@ -61,12 +61,18 @@ func ShellGroupCreate(c *gin.Context) {
 
 	item.Name = strings.TrimSpace(item.Name)
 	item.Mmurl = strings.TrimSpace(item.Mmurl)
+	item.Mmtext = strings.TrimSpace(item.Mmtext)
+	item.Checkurl = strings.TrimSpace(item.Checkurl)
+	item.Checktext = strings.TrimSpace(item.Checktext)
 
 	if item.Name == "" {
 		errorResponse(c, 400, "name is required")
 		return
 	}
 
+	if item.Status == 0 {
+		item.Status = 1
+	}
 	item.Addtime = int(time.Now().Unix())
 
 	if err := model.Db.Create(&item).Error; err != nil {
@@ -91,6 +97,9 @@ func ShellGroupUpdate(c *gin.Context) {
 
 	req.Name = strings.TrimSpace(req.Name)
 	req.Mmurl = strings.TrimSpace(req.Mmurl)
+	req.Mmtext = strings.TrimSpace(req.Mmtext)
+	req.Checkurl = strings.TrimSpace(req.Checkurl)
+	req.Checktext = strings.TrimSpace(req.Checktext)
 
 	if req.Name == "" {
 		errorResponse(c, 400, "name is required")
@@ -98,8 +107,12 @@ func ShellGroupUpdate(c *gin.Context) {
 	}
 
 	updates := map[string]any{
-		"name": req.Name,
-		"url":  req.Mmurl,
+		"name":      req.Name,
+ 		"mmurl":     req.Mmurl,
+		"mmtext":    req.Mmtext,
+		"checkurl":  req.Checkurl,
+		"checktext": req.Checktext,
+		"status":    req.Status,
 	}
 
 	result := model.Db.Model(&model.ShellGroup{}).Where("id = ?", id).Updates(updates)

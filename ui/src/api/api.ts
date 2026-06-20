@@ -28,6 +28,10 @@ export interface ShellGroupItem {
   id: number
   name: string
   mmurl: string
+  mmtext: string
+  checkurl: string
+  checktext: string
+  status: number
   addtime: number
 }
 
@@ -50,6 +54,10 @@ export async function getShellGroups(page: number = 1): Promise<ShellGroupListRe
 export async function createShellGroup(data: {
   name: string
   mmurl?: string
+  mmtext?: string
+  checkurl?: string
+  checktext?: string
+  status?: number
 }): Promise<{ status: number; shell_group?: ShellGroupItem; error?: string }> {
   const res = await fetch('/api/shell_group', {
     method: 'POST',
@@ -61,7 +69,7 @@ export async function createShellGroup(data: {
 
 export async function updateShellGroup(
   id: number,
-  data: { name?: string; mmurl?: string }
+  data: { name?: string; mmurl?: string; mmtext?: string; checkurl?: string; checktext?: string; status?: number }
 ): Promise<{ status: number; shell_group?: ShellGroupItem; error?: string }> {
   const res = await fetch(`/api/shell_group/${id}`, {
     method: 'PUT',
@@ -235,6 +243,10 @@ export interface ShellItem {
     id: number
     name: string
     mmurl: string
+    mmtext: string
+    checkurl: string
+    checktext: string
+    status: number
     addtime: number
   }
   status: number
