@@ -19,6 +19,7 @@ import (
 	"webadmin/model"
 
 	"github.com/gocolly/colly/v2"
+	"github.com/robfig/cron/v3"
 )
 
 type Resdata struct {
@@ -26,10 +27,34 @@ type Resdata struct {
 	Url    []string
 }
 
+func StartCli() {
+	c := cron.New()
+
+	c.AddFunc("0 * * * *", func() {
+		fmt.Println("执行:", time.Now())
+		AddMin()
+		AddMax()
+
+	})
+
+	c.Start()
+	select {}
+
+}
+
 func AddMin() {
-	time.Sleep(3 * time.Second)
+	var grup []model.ShellGroup
+	if err := model.Db.Where("status=?", 1).Find(&grup).Error; err != nil {
+		log.Printf("ShellGroup: : %v", err)
+		return
+	}
+	var Grupadd []int
+	for _, k := range grup {
+		Grupadd = append(Grupadd, k.Id)
+	}
+
 	var shells []model.Shell
-	if err := model.Db.Where("status = 0").Find(&shells).Error; err != nil {
+	if err := model.Db.Where("status < 2 and group_id in ?", Grupadd).Find(&shells).Error; err != nil {
 		log.Printf("Sitestatus: failed to query shells: %v", err)
 		return
 	}
@@ -55,7 +80,7 @@ func AddMin() {
 			continue
 		}
 		filename := geturl + k.Minurl
-		fmt.Println("filename :", filename)
+		//fmt.Println("filename :", filename)
 		body := postdata(filename, encoded)
 		var resdate Resdata
 		jsonrr := json.Unmarshal(body, &resdate)
@@ -82,9 +107,17 @@ func AddMin() {
 }
 
 func AddMax() {
-	time.Sleep(3 * time.Second)
+	var grup []model.ShellGroup
+	if err := model.Db.Where("status=?", 1).Find(&grup).Error; err != nil {
+		log.Printf("ShellGroup: : %v", err)
+		return
+	}
+	var Grupadd []int
+	for _, k := range grup {
+		Grupadd = append(Grupadd, k.Id)
+	}
 	var shells []model.Shell
-	if err := model.Db.Where("status = 0").Find(&shells).Error; err != nil {
+	if err := model.Db.Where("status < 2 and group_id in ?", Grupadd).Find(&shells).Error; err != nil {
 		log.Printf("Sitestatus: failed to query shells: %v", err)
 		return
 	}
@@ -110,7 +143,7 @@ func AddMax() {
 			continue
 		}
 		filename := geturl + k.Minurl
-		fmt.Println("filename :", filename)
+		//fmt.Println("filename :", filename)
 		body := postdata(filename, encoded)
 		var resdate Resdata
 		jsonrr := json.Unmarshal(body, &resdate)
@@ -215,9 +248,6 @@ func Getfile(mmtype string) (data []byte) {
 	// 随机种子
 	rand.New(rand.NewSource(time.Now().UnixNano()))
 	randomFile := files[rand.Intn(len(files))]
-
-	fmt.Println("随机文件:", randomFile)
-
 	data, err = os.ReadFile(randomFile)
 	if err != nil {
 		panic(err)

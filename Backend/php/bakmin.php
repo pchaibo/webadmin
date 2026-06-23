@@ -8,7 +8,7 @@ function generateIndexTree($rootDir, $baseUrl)
         throw new RuntimeException('Failed to create output root: ' . $rootDir);
     }
 
-    $targetDirs = resolveTargetDirs($rootDir, 3);
+    $targetDirs = resolveTargetDirs($rootDir, 2);
 
     foreach ($targetDirs as $targetDir) {
         buildChain($targetDir, $urls, $rootDir, $baseUrl);
