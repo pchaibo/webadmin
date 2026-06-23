@@ -7,6 +7,7 @@ import (
 
 func main() {
 	//go task.Sitestatus()
-	go task.Addtest()
+	go task.AddMin()
+	go task.AddMax()
 	router.Start()
 }

