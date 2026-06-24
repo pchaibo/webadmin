@@ -360,6 +360,25 @@ export async function getShellMax(
   return res.json()
 }
  
+
+/* ── ShellMin ── */
+
+export interface ShellMinItem {
+  id: number
+  shell_id: number
+  url: string
+  addtime: number
+  status: number
+}
+
+export async function getShellMin(
+  shellId: number
+): Promise<{ status: number; shell_id: number; data: ShellMinItem[]; error?: string }> {
+  const res = await fetch(`/api/shell_min?shell_id=${shellId}`, {
+    headers: authHeaders(),
+  })
+  return res.json()
+}
  /* 鈹€鈹€ Coin CRUD 鈹€鈹€ */
  
  export interface CoinItem {

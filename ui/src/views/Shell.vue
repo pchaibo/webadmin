@@ -63,7 +63,13 @@
           </el-tag>
         </template>
       </el-table-column>
-
+      <el-table-column label="备码" width="70">
+        <template #default="{ row }">
+          <el-tag :type="getNumInfo(row.num).type" size="small">
+            {{ getNumInfo(row.num).label }}
+          </el-tag>
+        </template>
+      </el-table-column>
       <el-table-column prop="sitenum" label="收录" width="70" sortable="custom" />
       <el-table-column label="大图URL" min-width="120">
         <template #default="{ row }">
@@ -78,15 +84,18 @@
       </el-table-column>
 
       <el-table-column prop="scheme" label="协议" width="70" />
-      
-      <!-- <el-table-column prop="minurl" label="小图URL" min-width="140" show-overflow-tooltip /> -->
-     
+      <el-table-column label="小图" width="80">
+        <template #default="{ row }">
+          <el-button size="small" @click="showMinImages(row)">查看</el-button>
+        </template>
+      </el-table-column>
       <!-- <el-table-column prop="remark" label="备注" min-width="120" show-overflow-tooltip /> -->
       <el-table-column prop="addtime" label="添加时间" width="150">
         <template #default="{ row }">
           {{ formatTime(row.addtime) }}
         </template>
       </el-table-column>
+      
       <el-table-column label="操作" width="160" fixed="right">
         <template #default="{ row }">
           <el-button size="small" @click="openEdit(row)">编辑</el-button>
@@ -174,6 +183,28 @@
         <el-button type="primary" :loading="submitting" @click="submitForm">保存</el-button>
       </template>
     </el-dialog>
+    <el-dialog v-model="minDialogVisible" :title="minDialogTitle" width="700px" :close-on-click-modal="false">
+      <el-table :data="minImages" stripe border v-loading="minLoading" style="width:100%">
+        <el-table-column prop="id" label="ID" width="60" />
+        <el-table-column label="URL" min-width="350" show-overflow-tooltip>
+            <template #default="{ row }">
+              <a :href="row.url" target="_blank" rel="noopener noreferrer" class="maxurl-link">{{ row.url }}</a>
+            </template>
+          </el-table-column>
+        <el-table-column prop="addtime" label="添加时间" width="150">
+          <template #default="{ row }">
+            {{ formatTime(row.addtime) }}
+          </template>
+        </el-table-column>
+        <el-table-column prop="status" label="状态" width="80">
+          <template #default="{ row }">
+            <el-tag :type="getStatusInfo(row.status).type" size="small">
+              {{ getStatusInfo(row.status).label }}
+            </el-tag>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-dialog>
     <el-dialog v-model="maxDialogVisible" :title="maxDialogTitle" width="700px" :close-on-click-modal="false">
       <el-table :data="maxImages" stripe border v-loading="maxLoading" style="width:100%">
         <el-table-column prop="id" label="ID" width="60" />
@@ -208,9 +239,11 @@ import {
   updateShell,
   deleteShell,
   getShellMax,
+  getShellMin,
   getShellGroups,
   type ShellItem,
   type ShellMaxItem,
+  type ShellMinItem,
   type ShellGroupItem,
 } from '@/api/api'
 
@@ -249,6 +282,28 @@ const formRules = {
 }
 
 const formRef = ref()
+const minDialogVisible = ref(false)
+const minDialogTitle = ref('')
+const minLoading = ref(false)
+const minImages = ref<ShellMinItem[]>([])
+
+async function showMinImages(row: ShellItem) {
+  minDialogTitle.value = `小图列表 - ${row.host} `
+  minDialogVisible.value = true
+  minLoading.value = true
+  try {
+    const res = await getShellMin(row.id)
+    if (res.status === 1) {
+      minImages.value = res.data || []
+    } else {
+      ElMessage.error(res.error || '获取小图列表失败')
+    }
+  } catch {
+    ElMessage.error('网络错误')
+  } finally {
+    minLoading.value = false
+  }
+}
 const maxDialogVisible = ref(false)
 const maxDialogTitle = ref('')
 const maxLoading = ref(false)
@@ -322,6 +377,15 @@ function getStatusInfo(status: number): { label: string; type: string } {
   }
   return map[status] || { label: '未知', type: 'info' }
 }
+function getNumInfo(num: number): { label: string; type: string } {
+  const map: Record<number, { label: string; type: string }> = {
+    0: { label: '没备', type: 'info' },
+    1: { label: '小码', type: 'success' },
+    2: { label: '有备', type: 'primary' },
+  }
+  return map[num] || { label: '未知', type: 'info' }
+}
+
 
 onMounted(() => {
   fetchItems()
