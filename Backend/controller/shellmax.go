@@ -22,7 +22,7 @@ func ShellMaxList(c *gin.Context) {
 	}
 
 	var items []model.ShellMax
-	if err := model.Db.Where("shell_id = ?", shellId).Order("id desc").Find(&items).Error; err != nil {
+	if err := model.Db.Where("shell_id = ?", shellId).Order("id desc").Limit(50).Find(&items).Error; err != nil {
 		errorResponse(c, 500, "Failed to query shell max")
 		return
 	}

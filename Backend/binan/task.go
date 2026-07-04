@@ -3,15 +3,14 @@ package binan
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"math"
 	"strings"
 	"sync"
 	"time"
 
-	"github.com/gotify/server/v2/config"
-	"github.com/gotify/server/v2/database"
-	"github.com/gotify/server/v2/logger"
-	"github.com/gotify/server/v2/model"
+	"webadmin/model"
+
 	"github.com/tidwall/gjson"
 )
 
@@ -21,15 +20,19 @@ const (
 
 var Look sync.Mutex
 var wg sync.WaitGroup
-var Logs = logger.Logger
-var Users []*model.User
-var Db *database.GormDatabase
-var Proxyurl string
+var Logs = log.Default()
 var Proxytcp string
 var ProxyEnabled bool
 
-func Taskuser(d *database.GormDatabase) {
-	Updateuser(d)
+type userHeyue struct {
+	User   *model.User
+	Heyues []*model.Heyue
+}
+
+var Users []*userHeyue
+
+func Taskuser() {
+	Updateuser()
 	for true {
 		Updtecoinpric()
 		time.Sleep(10 * time.Second)
@@ -38,8 +41,8 @@ func Taskuser(d *database.GormDatabase) {
 }
 
 func Updtecoinpric() {
-	coin, err := Db.GetCoin()
-	if err != nil {
+	var coin []model.Coin
+	if err := model.Db.Model(&model.Coin{}).Find(&coin).Error; err != nil {
 		Logs.Println(err.Error())
 		return
 	}
@@ -60,21 +63,21 @@ func Updtecoinpric() {
 		coinup.High = symbol.H
 		coinup.Low = symbol.I
 
-		Db.DB.Model(&coin).Where("id=?", v.Id).Updates(coinup)
+		model.Db.Model(&coin).Where("id=?", v.Id).Updates(coinup)
 
 	}
 }
 
-func Task(db *database.GormDatabase, conf *config.Configuration) {
-	Db = db
+func Task() {
+	//Db = db
 	//Updateuser(db)
-	Proxyurl = "http://" + conf.Proxyurl.Tcp
-	Proxytcp = conf.Proxyurl.Tcp
-	ProxyEnabled = conf.Proxyurl.Enabled
+	//Proxyurl = "http://" + config.Get("Proxyurl")
+	//Proxytcp = config.Get("Proxyurl")
+	//ProxyEnabled = config.Get("Proxyurl") != ""
 	for true {
 
 		for _, v := range Users {
-			if len(v.Heyue) < 1 {
+			if len(v.Heyues) < 1 {
 				continue
 			}
 			wg.Add(1)
@@ -84,15 +87,15 @@ func Task(db *database.GormDatabase, conf *config.Configuration) {
 		wg.Wait()
 
 		time.Sleep(6 * time.Second) //
-		Updateuser(db)
+		Updateuser()
 	}
 
 }
 
 // 更新用户信息
-func Updateuser(d *database.GormDatabase) {
+func Updateuser() {
 	var users []*model.User
-	err := d.DB.Where("status=1 and bnaccess !='' and bnasecret !=''").Find(&users).Error
+	err := model.Db.Where("status=1 and bnaccess !='' and bnasecret !=''").Find(&users).Error
 	if err != nil {
 		Logs.Println(err.Error())
 		return
@@ -101,12 +104,12 @@ func Updateuser(d *database.GormDatabase) {
 	Users = nil
 	for _, v := range users {
 		var heyuns []*model.Heyue
-		d.DB.Where("status=1 and user_id=?", v.ID).Find(&heyuns)
+		model.Db.Where("status=1 and user_id=?", v.Id).Find(&heyuns)
 		for _, heyun := range heyuns {
 			v.Heyue = append(v.Heyue, heyun)
 		}
 		Look.Lock()
-		Users = append(Users, v)
+		Users = append(Users, &userHeyue{User: v, Heyues: heyuns})
 		Look.Unlock()
 
 	}
@@ -114,12 +117,12 @@ func Updateuser(d *database.GormDatabase) {
 }
 
 // check user 合约
-func Userinfo(user *model.User) {
+func Userinfo(u *userHeyue) {
 	defer wg.Done()
 	//查询金额更新
-	userbalance(user)
+	userbalance(u.User)
 	//Logs.Println("userinfo Margin:  \n ", user.Margin)
-	resdata, err := GetPositionRisk(user.Bnaccess, user.Bnasecret)
+	resdata, err := GetPositionRisk(u.User.Bnaccess, u.User.Bnasecret)
 	if err != nil {
 		Logs.Println("resdata error: ", err.Error())
 		return
@@ -129,8 +132,9 @@ func Userinfo(user *model.User) {
 		return
 	}
 
-	heyue := user.Heyue
-	for _, hey := range heyue {
+	user := u.User
+	heyues := u.Heyues
+	for _, hey := range heyues {
 		if len(resdata) > 0 {
 
 			//查询持仓
@@ -191,7 +195,7 @@ func userbalance(user *model.User) (rest int) {
 
 	//fmt.Println("balance:", balance)
 	jsonstr, _ := json.Marshal(balance) //返回json
-	id := fmt.Sprintf("%d", user.ID)
+	id := fmt.Sprintf("%d", user.Id)
 	err = Redisclinet.HSet(Ctx, "user", id, jsonstr).Err()
 	if err != nil {
 		fmt.Println("redis: ", err.Error())
@@ -255,12 +259,12 @@ func Checkadd(user *model.User, heyue *model.Heyue) {
 	if heyue.Risk == 2 && heyue.Is_num > 1 && heyue.NewTime > 100 {
 		risk := Ckeckrisk(heyue)
 		if risk != 1 {
-			Logs.Println("风控时间内: ", user.Name, heyue.Symbol, heyue.Repeatpric, heyue.Side)
+			Logs.Println("风控时间内: ", user.Username, heyue.Symbol, heyue.Repeatprice, heyue.Side)
 			return
 		}
 	}
 
-	Logs.Println("Checkadd  : ", user.Name, heyue.Symbol, heyue.Onepric, heyue.Repeatpric)
+	Logs.Println("Checkadd  : ", user.Username, heyue.Symbol, heyue.Oneprice, heyue.Repeatprice)
 	Addpositon(user, heyue)
 
 }
@@ -289,7 +293,7 @@ func Checkheyun(user *model.User, heyue *model.Heyue, resdata []PositionRisk) (r
 					posite_red := Closeposition(user, heyue, v)
 					if posite_red == 1 {
 						heyue.Is_num = 0
-						heyue.Newpric = 0
+						heyue.Newprice = 0
 						Addpositon(user, heyue) //马上加仓
 					}
 					return
@@ -299,12 +303,12 @@ func Checkheyun(user *model.User, heyue *model.Heyue, resdata []PositionRisk) (r
 				}
 
 				//网格类型 1:差价usdt计算
-			} else if heyue.Rangetype == 1 && heyue.Newpric > 0 && heyue.Rangeprice > 0 && heyue.Is_num < heyue.Num {
+			} else if heyue.Rangetype == 1 && heyue.Newprice > 0 && heyue.Rangeprice > 0 && heyue.Is_num < heyue.Num {
 				//网格加仓做多
-				if positionSide == "LONG" && (heyue.Newpric-heyue.Rangeprice) > v.MarkPrice {
+				if positionSide == "LONG" && (heyue.Newprice-heyue.Rangeprice) > v.MarkPrice {
 					Checkadd(user, heyue)
 					//网格做空
-				} else if positionSide == "SHORT" && (heyue.Newpric+heyue.Rangeprice) < v.MarkPrice {
+				} else if positionSide == "SHORT" && (heyue.Newprice+heyue.Rangeprice) < v.MarkPrice {
 					Checkadd(user, heyue)
 				}
 
@@ -314,11 +318,11 @@ func Checkheyun(user *model.User, heyue *model.Heyue, resdata []PositionRisk) (r
 					Logs.Println("保证金百分比小于0:", Rangepercent, v.UnRealizedProfit, Marginpercentage)
 					continue
 				}
-				//v.MarkPrice < heyue.Newpric
+				//v.MarkPrice < heyue.Newprice
 				if positionSide == "LONG" {
 					Logs.Println("保证金百分比计算LONG:", Rangepercent, v.UnRealizedProfit, Marginpercentage, v.MarkPrice)
 					Checkadd(user, heyue)
-					//&& v.MarkPrice > heyue.Newpric
+					//&& v.MarkPrice > heyue.Newprice
 				} else if positionSide == "SHORT" {
 					Logs.Println("保证金百分比计算SHORT:", Rangepercent, v.UnRealizedProfit, Marginpercentage, v.MarkPrice)
 					Checkadd(user, heyue)
@@ -346,10 +350,10 @@ func Rangclosing(user *model.User, heyue *model.Heyue, resdata []PositionRisk) {
 		}
 		if v.Symbol == strings.ToUpper(heyue.Symbol) && v.positionSide == positionSide {
 			//取网格日志
-			var order = model.Heyuesorder{}
-			Db.DB.Model(&model.Heyuesorder{}).Where("ordertype=1 and  symbol=? and  side =? and user_id=?  and num=? ", heyue.Symbol, heyue.Side, heyue.UserId, heyue.Is_num).Order("id desc").First(&order)
+			var order = model.Heyueorder{}
+			model.Db.Model(&model.Heyueorder{}).Where("ordertype=1 and  symbol=? and  side =? and user_id=?  and num=? ", heyue.Symbol, heyue.Side, heyue.UserId, heyue.Is_num).Order("id desc").First(&order)
 			//Logs.Println("网格 log: ", order)
-			if order.Price <= 0 || heyue.Newpric <= 0 {
+			if order.Price <= 0 || heyue.Newprice <= 0 {
 				continue
 			}
 
@@ -361,7 +365,7 @@ func Rangclosing(user *model.User, heyue *model.Heyue, resdata []PositionRisk) {
 			v.PositionAmt = order.Quantity
 			v.UnRealizedProfit = 0
 			//做多
-			if heyue.Side == 1 && newprcie > user_LONG && v.MarkPrice > order.Price && v.MarkPrice > heyue.Newpric {
+			if heyue.Side == 1 && newprcie > user_LONG && v.MarkPrice > order.Price && v.MarkPrice > heyue.Newprice {
 				Logs.Println("newprcie:", newprcie)
 				Logs.Println("user_LONG:", user_LONG)
 				Logs.Println("网格平多 log: ", order)
@@ -370,7 +374,7 @@ func Rangclosing(user *model.User, heyue *model.Heyue, resdata []PositionRisk) {
 					RangCloseposition(user, heyue, v)
 				}
 
-			} else if heyue.Side == 2 && newprcie < user_SHORT && v.MarkPrice < order.Price && v.MarkPrice < heyue.Newpric {
+			} else if heyue.Side == 2 && newprcie < user_SHORT && v.MarkPrice < order.Price && v.MarkPrice < heyue.Newprice {
 				Logs.Println("newprcie:", newprcie)
 				Logs.Println("user_SHORT:", user_SHORT)
 				Logs.Println("网格平空 log: ", order)

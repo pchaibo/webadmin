@@ -194,8 +194,8 @@ func Sign(data, SecretKey string) string {
 
 func Userclient() (client *http.Client) {
 	// ======== 配置 HTTP Client（支持代理） =========
-	//proxyAddr := "http://127.0.0.1:1080"
-	proxyAddr := Proxyurl
+	proxyAddr := "http://127.0.0.1:1080"
+	//proxyAddr := Proxyurl
 	transport := &http.Transport{
 		DialContext: (&net.Dialer{
 			Timeout: 10 * time.Second,

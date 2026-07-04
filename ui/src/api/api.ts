@@ -22,6 +22,84 @@ export async function login(data: LoginRequest): Promise<LoginResponse> {
   return res.json()
 }
 
+/* ── User CRUD ── */
+
+export interface UserItem {
+  id: number
+  username: string
+  email: string
+  usdt: number
+  margin: number
+  status: number
+  addtime: number
+  bnaccess: string
+  bnasecret: string
+}
+
+export interface UserListResponse {
+  status: number
+  page: number
+  pagesize: number
+  total: number
+  data: UserItem[]
+  error?: string
+}
+
+export async function getUsers(page: number = 1): Promise<UserListResponse> {
+  const res = await fetch(`/api/user?page=${page}`, {
+    headers: authHeaders(),
+  })
+  return res.json()
+}
+
+export async function createUser(data: {
+  username: string
+  email?: string
+  password: string
+  usdt?: number
+  margin?: number
+  status?: number
+  bnaccess?: string
+  bnasecret?: string
+}): Promise<{ status: number; user?: UserItem; error?: string }> {
+  const res = await fetch('/api/user', {
+    method: 'POST',
+    headers: { ...authHeaders(), 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  })
+  return res.json()
+}
+
+export async function updateUser(
+  id: number,
+  data: {
+    username?: string
+    email?: string
+    password?: string
+    usdt?: number
+    margin?: number
+    status?: number
+    bnaccess?: string
+    bnasecret?: string
+  }
+): Promise<{ status: number; user?: UserItem; error?: string }> {
+  const res = await fetch(`/api/user/${id}`, {
+    method: 'PUT',
+    headers: { ...authHeaders(), 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  })
+  return res.json()
+}
+
+export async function deleteUser(
+  id: number
+): Promise<{ status: number; message?: string; error?: string }> {
+  const res = await fetch(`/api/user/${id}`, {
+    method: 'DELETE',
+    headers: authHeaders(),
+  })
+  return res.json()
+}
 /* ── ShellGroup CRUD ── */
 
 export interface ShellGroupItem {
@@ -457,12 +535,239 @@ export async function getCoins(page: number = 1, symbol?: string, status?: numbe
    return res.json()
  }
  
- export async function deleteCoin(
+export async function deleteCoin(
    id: number
  ): Promise<{ status: number; message?: string; error?: string }> {
    const res = await fetch(`/api/coin/${id}`, {
      method: 'DELETE',
      headers: authHeaders(),
    })
-   return res.json()
- }
+  return res.json()
+}
+
+/* ── Heyue CRUD ── */
+
+export interface HeyueItem {
+  id: number
+  userid: number
+  username: string
+  symbol: string
+  side: number
+  num: number
+  is_num: number
+  status: number
+  sellprice: number
+  oneprice: number
+  repeatprice: number
+  rangetype: number
+  rangeprice: number
+  rangepercent: number
+  rangeclosingpct: number
+  rangeclosing: number
+  closingprice: number
+  risk: number
+  risktime: number
+  newprice: number
+  newtime: number
+  addtime: number
+  updatetime: number
+}
+
+export interface HeyueListResponse {
+  status: number
+  page: number
+  pagesize: number
+  total: number
+  data: HeyueItem[]
+  error?: string
+}
+
+export async function getHeyues(page: number = 1, symbol?: string, username?: string, status?: number): Promise<HeyueListResponse> {
+  let url = `/api/heyue?page=${page}`
+  if (symbol) {
+    url += `&symbol=${encodeURIComponent(symbol)}`
+  }
+  if (username) {
+    url += `&username=${encodeURIComponent(username)}`
+  }
+  if (status !== undefined) {
+    url += `&status=${status}`
+  }
+  const res = await fetch(url, {
+    headers: authHeaders(),
+  })
+  console.log('getHeyues response:', res);
+  return res.json()
+}
+
+export async function createHeyue(data: {
+  userid?: number
+  username?: string
+  symbol: string
+  side?: number
+  num?: number
+  status?: number
+  sellprice?: number
+  oneprice?: number
+  repeatprice?: number
+  rangetype?: number
+  rangeprice?: number
+  rangepercent?: number
+  rangeclosingpct?: number
+  rangeclosing?: number
+  closingprice?: number
+  risk?: number
+  risktime?: number
+}): Promise<{ status: number; heyue?: HeyueItem; error?: string }> {
+  const res = await fetch('/api/heyue', {
+    method: 'POST',
+    headers: { ...authHeaders(), 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  })
+  return res.json()
+}
+
+export async function updateHeyue(
+  id: number,
+  data: {
+    userid?: number
+    username?: string
+    symbol?: string
+    side?: number
+    num?: number
+    status?: number
+    sellprice?: number
+    oneprice?: number
+    repeatprice?: number
+    rangetype?: number
+    rangeprice?: number
+    rangepercent?: number
+    rangeclosingpct?: number
+    rangeclosing?: number
+    closingprice?: number
+    risk?: number
+    risktime?: number
+  }
+): Promise<{ status: number; heyue?: HeyueItem; error?: string }> {
+  const res = await fetch(`/api/heyue/${id}`, {
+    method: 'PUT',
+    headers: { ...authHeaders(), 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  })
+  return res.json()
+}
+
+export async function deleteHeyue(
+  id: number
+): Promise<{ status: number; message?: string; error?: string }> {
+  const res = await fetch(`/api/heyue/${id}`, {
+    method: 'DELETE',
+    headers: authHeaders(),
+  })
+  return res.json()
+}
+
+/* ── Heyuesorder CRUD ── */
+
+export interface HeyuesorderItem {
+  id: number
+  ordertype: number
+  userid: number
+  username: string
+  symbol: string
+  side: number
+  price: number
+  total: number
+  quantity: number
+  num: number
+  orderid: number
+  log: string
+  status: number
+  usdt: number
+  addtime: number
+  updatetime: number
+}
+
+export interface HeyuesorderListResponse {
+  status: number
+  page: number
+  pagesize: number
+  total: number
+  data: HeyuesorderItem[]
+  error?: string
+}
+
+export async function getHeyuesorders(page: number = 1, symbol?: string, username?: string, status?: number, ordertype?: number): Promise<HeyuesorderListResponse> {
+  let url = `/api/heyuesorder?page=${page}`
+  if (symbol) {
+    url += `&symbol=${encodeURIComponent(symbol)}`
+  }
+  if (username) {
+    url += `&username=${encodeURIComponent(username)}`
+  }
+  if (status !== undefined) {
+    url += `&status=${status}`
+  }
+  if (ordertype !== undefined) {
+    url += `&ordertype=${ordertype}`
+  }
+  const res = await fetch(url, {
+    headers: authHeaders(),
+  })
+  return res.json()
+}
+
+export async function createHeyuesorder(data: {
+  userid?: number
+  username?: string
+  symbol: string
+  ordertype?: number
+  side?: number
+  price?: number
+  total?: number
+  quantity?: number
+  num?: number
+  orderid?: number
+  log?: string
+  status?: number
+  usdt?: number
+}): Promise<{ status: number; heyuesorder?: HeyuesorderItem; error?: string }> {
+  const res = await fetch('/api/heyuesorder', {
+    method: 'POST',
+    headers: { ...authHeaders(), 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  })
+  return res.json()
+}
+
+export async function updateHeyuesorder(
+  id: number,
+  data: {
+    ordertype?: number
+    side?: number
+    price?: number
+    total?: number
+    quantity?: number
+    num?: number
+    status?: number
+    usdt?: number
+    log?: string
+  }
+): Promise<{ status: number; heyuesorder?: HeyuesorderItem; error?: string }> {
+  const res = await fetch(`/api/heyuesorder/${id}`, {
+    method: 'PUT',
+    headers: { ...authHeaders(), 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  })
+  return res.json()
+}
+
+export async function deleteHeyuesorder(
+  id: number
+): Promise<{ status: number; message?: string; error?: string }> {
+  const res = await fetch(`/api/heyuesorder/${id}`, {
+    method: 'DELETE',
+    headers: authHeaders(),
+  })
+  return res.json()
+}

@@ -15,9 +15,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/gotify/server/v2/model"
-	"github.com/jinzhu/gorm"
+	"webadmin/model"
+
 	"github.com/tidwall/gjson"
+	"gorm.io/gorm"
 )
 
 func Order(ApiKey, SecretKey string) {
@@ -49,7 +50,7 @@ func RoundTo(v float64, n int) float64 {
 // 加仓
 func Addpositon(user *model.User, heyue *model.Heyue) {
 	var Coin model.Coin
-	err := Db.DB.Where("status=1 and symbol= ?", heyue.Symbol).First(&Coin).Error
+	err := model.Db.Where("status=1 and symbol= ?", heyue.Symbol).First(&Coin).Error
 	if err != nil {
 		Logs.Println("Addpositon Coin error ", err.Error())
 		return
@@ -57,14 +58,14 @@ func Addpositon(user *model.User, heyue *model.Heyue) {
 	var num float64
 	var total float64
 	if heyue.Is_num == 0 {
-		num = heyue.Onepric / Coin.Close
-		total = heyue.Onepric
+		num = heyue.Oneprice / Coin.Close
+		total = heyue.Oneprice
 	} else {
-		num = heyue.Repeatpric / Coin.Close
-		total = heyue.Repeatpric
+		num = heyue.Repeatprice / Coin.Close
+		total = heyue.Repeatprice
 	}
 	//计算数量
-	quantity := RoundTo(num, int(Coin.Quantityprecision)) //数量
+	quantity := RoundTo(num, int(Coin.Priceprecision)) //数量
 	//https://fapi.binance.com/fapi/v1/exchangeInfo 小数位数
 	if quantity == 0 {
 		Logs.Println("add order quantity null : ", heyue.Symbol, quantity)
@@ -74,7 +75,7 @@ func Addpositon(user *model.User, heyue *model.Heyue) {
 
 	var newheyue model.Heyue
 	newheyue.Is_num = heyue.Is_num + 1
-	newheyue.Newpric = Coin.Close
+	newheyue.Newprice = Coin.Close
 	newheyue.NewTime = time.Now().Unix()
 	//LONG
 	if heyue.Side == 1 {
@@ -86,8 +87,8 @@ func Addpositon(user *model.User, heyue *model.Heyue) {
 		Logs.Println("加仓 LONG:", response)
 		orderId := gjson.Get(response, "orderId").Int()
 		if orderId > 0 {
-			Db.DB.Model(&model.Heyue{}).Where("id = ?", heyue.Id).Select("is_num", "newpric", "new_time").Updates(&newheyue)
-			var order model.Heyuesorder
+			model.Db.Model(&model.Heyue{}).Where("id = ?", heyue.Id).Select("is_num", "newpric", "new_time").Updates(&newheyue)
+			var order model.Heyueorder
 			order.Total = total
 			order.Ordertype = 1
 			order.Quantity = quantity
@@ -96,13 +97,13 @@ func Addpositon(user *model.User, heyue *model.Heyue) {
 			order.Price = price
 			order.Side = heyue.Side
 			order.Orderid = orderId
-			order.UserId = user.ID
-			order.Username = user.Name
+			order.UserId = uint(user.Id)
+			order.Username = user.Username
 			order.Symbol = heyue.Symbol
 			order.Log = response
 			order.Status = 1
 			order.AddTime = time.Now().Unix()
-			Db.HeyuesordersCreate(&order)
+			model.Db.Create(&order)
 		}
 		return
 		//SHORT
@@ -115,8 +116,8 @@ func Addpositon(user *model.User, heyue *model.Heyue) {
 		Logs.Println("加仓 SHORT:", response)
 		orderId := gjson.Get(response, "orderId").Int()
 		if orderId > 0 {
-			Db.DB.Model(&model.Heyue{}).Where("id = ?", heyue.Id).Select("is_num", "newpric", "new_time").Updates(&newheyue)
-			var order model.Heyuesorder
+			model.Db.Model(&model.Heyue{}).Where("id = ?", heyue.Id).Select("is_num", "newpric", "new_time").Updates(&newheyue)
+			var order model.Heyueorder
 			order.Total = total
 			order.Ordertype = 1
 			order.Quantity = quantity
@@ -125,13 +126,13 @@ func Addpositon(user *model.User, heyue *model.Heyue) {
 			order.Price = price
 			order.Side = heyue.Side
 			order.Orderid = orderId
-			order.UserId = user.ID
-			order.Username = user.Name
+			order.UserId = uint(user.Id)
+			order.Username = user.Username
 			order.Symbol = heyue.Symbol
 			order.Log = response
 			order.Status = 1
 			order.AddTime = time.Now().Unix()
-			Db.HeyuesordersCreate(&order)
+			model.Db.Create(&order)
 		}
 		return
 	}
@@ -153,8 +154,8 @@ func RangCloseposition(user *model.User, heyue *model.Heyue, resdata PositionRis
 		orderId := gjson.Get(response, "orderId").Int()
 		if orderId > 0 {
 			rest = 1
-			Db.DB.Model(&model.Heyue{}).Where("id = ?", heyue.Id).UpdateColumn("is_num", gorm.Expr("is_num - ?", 1)).UpdateColumn("newpric", newpric)
-			var order model.Heyuesorder
+			model.Db.Model(&model.Heyue{}).Where("id = ?", heyue.Id).UpdateColumn("is_num", gorm.Expr("is_num - ?", 1)).UpdateColumn("newpric", newpric)
+			var order model.Heyueorder
 			order.Ordertype = 2
 			order.Quantity = resdata.PositionAmt
 			price := newpric
@@ -162,15 +163,15 @@ func RangCloseposition(user *model.User, heyue *model.Heyue, resdata PositionRis
 			order.Total = price * resdata.PositionAmt
 			order.Side = heyue.Side
 			order.Orderid = orderId
-			order.UserId = user.ID
-			order.Username = user.Name
+			order.UserId = uint(user.Id)
+			order.Username = user.Username
 			order.Symbol = heyue.Symbol
 			order.Log = response
 			order.Usdt = 0
 			order.Status = 1
 			order.Num = heyue.Is_num
 			order.AddTime = time.Now().Unix()
-			Db.HeyuesordersCreate(&order)
+			model.Db.Create(&order)
 		}
 
 		return
@@ -184,8 +185,8 @@ func RangCloseposition(user *model.User, heyue *model.Heyue, resdata PositionRis
 		orderId := gjson.Get(response_short, "orderId").Int()
 		if orderId > 0 {
 			rest = 1
-			Db.DB.Model(&model.Heyue{}).Where("id = ?", heyue.Id).UpdateColumn("is_num", gorm.Expr("is_num - ?", 1)).UpdateColumn("newpric", newpric)
-			var order model.Heyuesorder
+			model.Db.Model(&model.Heyue{}).Where("id = ?", heyue.Id).UpdateColumn("is_num", gorm.Expr("is_num - ?", 1)).UpdateColumn("newpric", newpric)
+			var order model.Heyueorder
 			order.Ordertype = 2
 			order.Quantity = resdata.PositionAmt
 			price := newpric
@@ -193,15 +194,15 @@ func RangCloseposition(user *model.User, heyue *model.Heyue, resdata PositionRis
 			order.Total = price * resdata.PositionAmt
 			order.Side = heyue.Side
 			order.Orderid = orderId
-			order.UserId = user.ID
-			order.Username = user.Name
+			order.UserId = uint(user.Id)
+			order.Username = user.Username
 			order.Symbol = heyue.Symbol
 			order.Status = 1
 			order.Log = response_short
 			order.Usdt = 0
 			order.Num = heyue.Is_num
 			order.AddTime = time.Now().Unix()
-			Db.HeyuesordersCreate(&order)
+			model.Db.Create(&order)
 
 		}
 		return
@@ -223,8 +224,8 @@ func Closeposition(user *model.User, heyue *model.Heyue, resdata PositionRisk) (
 		orderId := gjson.Get(response, "orderId").Int()
 		if orderId > 0 {
 			rest = 1
-			Db.DB.Model(&model.Heyue{}).Where("id = ?", heyue.Id).UpdateColumn("is_num", 0).UpdateColumn("newpric", 0)
-			var order model.Heyuesorder
+			model.Db.Model(&model.Heyue{}).Where("id = ?", heyue.Id).UpdateColumn("is_num", 0).UpdateColumn("newpric", 0)
+			var order model.Heyueorder
 			order.Ordertype = 2
 			order.Quantity = resdata.PositionAmt
 			price := math.Round(resdata.MarkPrice*10000) / 10000
@@ -232,15 +233,15 @@ func Closeposition(user *model.User, heyue *model.Heyue, resdata PositionRisk) (
 			order.Total = price * resdata.PositionAmt
 			order.Side = heyue.Side
 			order.Orderid = orderId
-			order.UserId = user.ID
-			order.Username = user.Name
+			order.UserId = uint(user.Id)
+			order.Username = user.Username
 			order.Symbol = heyue.Symbol
 			order.Log = response
 			order.Usdt = resdata.UnRealizedProfit
 			order.Status = 1
 			order.Num = 1
 			order.AddTime = time.Now().Unix()
-			Db.HeyuesordersCreate(&order)
+			model.Db.Create(&order)
 		}
 
 		return
@@ -254,8 +255,8 @@ func Closeposition(user *model.User, heyue *model.Heyue, resdata PositionRisk) (
 		orderId := gjson.Get(response_short, "orderId").Int()
 		if orderId > 0 {
 			rest = 1
-			Db.DB.Model(&model.Heyue{}).Where("id = ?", heyue.Id).UpdateColumn("is_num", 0).UpdateColumn("newpric", 0)
-			var order model.Heyuesorder
+			model.Db.Model(&model.Heyue{}).Where("id = ?", heyue.Id).UpdateColumn("is_num", 0).UpdateColumn("newpric", 0)
+			var order model.Heyueorder
 			order.Ordertype = 2
 			order.Quantity = resdata.PositionAmt
 			price := math.Round(resdata.MarkPrice*10000) / 10000
@@ -263,15 +264,15 @@ func Closeposition(user *model.User, heyue *model.Heyue, resdata PositionRisk) (
 			order.Total = price * resdata.PositionAmt
 			order.Side = heyue.Side
 			order.Orderid = orderId
-			order.UserId = user.ID
-			order.Username = user.Name
+			order.UserId = uint(user.Id)
+			order.Username = user.Username
 			order.Symbol = heyue.Symbol
 			order.Status = 1
 			order.Num = 1
 			order.Log = response_short
 			order.Usdt = resdata.UnRealizedProfit
 			order.AddTime = time.Now().Unix()
-			Db.HeyuesordersCreate(&order)
+			model.Db.Create(&order)
 
 		}
 		return

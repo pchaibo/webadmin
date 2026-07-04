@@ -37,12 +37,12 @@ func StartCli() {
 
 	})
 
-	c.AddFunc("0 * * * *", func() {
-		fmt.Println("执行:", time.Now())
-		AddMin()
-		AddMax()
+	// c.AddFunc("0 * * * *", func() {
+	// 	fmt.Println("执行:", time.Now())
+	// 	AddMin()
+	// 	AddMax()
 
-	})
+	// })
 
 	c.Start()
 	select {}

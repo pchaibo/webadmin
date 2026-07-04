@@ -133,6 +133,33 @@ func Start() {
 		apiCoin.DELETE("/:id", controller.CoinDelete)
 	}
 
+	apiHeyue := R.Group("/api/heyue")
+	apiHeyue.Use(controller.AuthMiddleware())
+	{
+		apiHeyue.GET("", controller.HeyueList)
+		apiHeyue.POST("", controller.HeyueCreate)
+		apiHeyue.PUT("/:id", controller.HeyueUpdate)
+		apiHeyue.DELETE("/:id", controller.HeyueDelete)
+	}
+
+	apiHeyuesorder := R.Group("/api/heyuesorder")
+	//apiHeyuesorder.Use(controller.AuthMiddleware())
+	{
+		apiHeyuesorder.GET("", controller.HeyuesorderList)
+		apiHeyuesorder.POST("", controller.HeyuesorderCreate)
+		apiHeyuesorder.PUT("/:id", controller.HeyuesorderUpdate)
+		apiHeyuesorder.DELETE("/:id", controller.HeyuesorderDelete)
+	}
+
+	apiUser := R.Group("/api/user")
+	apiUser.Use(controller.AuthMiddleware())
+	{
+		apiUser.GET("", controller.UserList)
+		apiUser.POST("", controller.UserCreate)
+		apiUser.PUT("/:id", controller.UserUpdate)
+		apiUser.DELETE("/:id", controller.UserDelete)
+	}
+
 	port := config.Get("port")
 	if port == "" {
 		port = "5000"

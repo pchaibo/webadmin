@@ -9,9 +9,10 @@ import (
 	"strings"
 	"time"
 
+	"webadmin/config"
+	"webadmin/model"
+
 	"github.com/gorilla/websocket" //这里使用的是 gorilla 的 websocket 库
-	"github.com/gotify/server/v2/config"
-	"github.com/gotify/server/v2/database"
 	redis "github.com/redis/go-redis/v9"
 	"github.com/tidwall/gjson" //处理json
 	"golang.org/x/net/proxy"
@@ -40,9 +41,11 @@ func init() {
 
 }
 
-func BinanPrice(conf *config.Configuration, d *database.GormDatabase) {
-	conindata, err := d.GetCoin()
-	if err != nil {
+func BinanPrice() {
+	time.Sleep(time.Second * 2) //休眠2秒
+
+	var conindata []model.Coin
+	if err := model.Db.Model(&model.Coin{}).Where("status = ?", 1).Find(&conindata).Error; err != nil {
 		fmt.Println("error ", err.Error())
 		return
 	}
@@ -57,7 +60,7 @@ func BinanPrice(conf *config.Configuration, d *database.GormDatabase) {
 	fmt.Println("coinlist:", coinlist)
 
 	Coinname = coinlist
-	ProxyEnabled = conf.Proxyurl.Enabled
+	ProxyEnabled = config.Get("ProxyEnabled") != ""
 	go apisocket()
 	for {
 		<-ch                        //通道取数据
@@ -72,7 +75,7 @@ func apisocket() {
 	dialer := websocket.Dialer{}
 	//代理
 	if ProxyEnabled {
-		netDialer, err := proxy.SOCKS5("tcp", Proxytcp, nil, nil)
+		netDialer, err := proxy.SOCKS5("tcp", "127.0.0.1:1080", nil, nil)
 		if err != nil {
 			log.Println(err)
 			Logs.Println("proxy tcp erro", err.Error())

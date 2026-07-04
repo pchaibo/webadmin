@@ -54,9 +54,25 @@ const router = createRouter({
      {
        path: 'coin',
        name: 'coin',
-       component: () => import('@/views/Coin.vue'),
+     component: () => import('@/views/Coin.vue'),
+   },
+    {
+      path: 'heyue',
+      name: 'heyue',
+      component: () => import('@/views/Heyue.vue'),
+    },
+    //Heyueorder
+    {
+      path: 'heyueorder',
+      name: 'heyueorder',
+      component: () => import('@/views/Heyueorder.vue'),
+    },
+    {
+      path: 'user',
+       name: 'user',
+       component: () => import('@/views/user.vue'),
      },
-    
+   
   ],
     },
     {

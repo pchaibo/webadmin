@@ -25,6 +25,9 @@
         <el-menu-item index="/index">
           首页
         </el-menu-item>
+        <el-menu-item index="/user">
+          用户管理
+        </el-menu-item>
         <el-menu-item index="/admin">
           管理员
         </el-menu-item>
@@ -38,9 +41,16 @@
         <el-menu-item index="/shell">
           Shell列表
         </el-menu-item>
-        <el-menu-item index="/coin">
-          Coin列表
-        </el-menu-item>
+       <el-menu-item index="/coin">
+        Coin列表
+      </el-menu-item>
+        <el-menu-item index="/heyue">
+         合约列表
+       </el-menu-item>
+       <el-menu-item index="/heyueorder">
+         合约日志
+       </el-menu-item>
+        
       </el-menu>
     </aside>
 
