@@ -141,7 +141,7 @@
               <el-switch
                 v-model="form.status"
                 :active-value="1"
-                :inactive-value="0"
+                :inactive-value="2"
                 active-text="正常"
                 inactive-text="暂停"
               />

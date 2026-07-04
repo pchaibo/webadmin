@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div class="coin-page">
     <div class="toolbar">
       <el-input
@@ -37,13 +37,13 @@
       <el-table-column type="selection" width="55" />
       <el-table-column prop="id" label="ID" width="60" />
       <el-table-column prop="name" label="名称" min-width="120" />
-      <el-table-column prop="symbol" label="合约代码" min-width="100" />
-      <el-table-column prop="close" label="最新价" width="100">
+      <el-table-column prop="symbol" label="合约代码" min-width="120" />
+      <el-table-column prop="close" label="最新价" width="120">
         <template #default="{ row }">
-          {{ row.close }}
+          <span class="price-cell" :class="{ 'price-updated': row['_priceUpdated'], 'price-up': row['_priceDirection'] === 'up', 'price-down': row['_priceDirection'] === 'down' }">{{ row.close }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="open" label="开盘价" width="100" />
+      <!-- <el-table-column prop="open" label="开盘价" width="100" /> -->
       <el-table-column prop="high" label="最高价" width="100" />
       <el-table-column prop="low" label="最低价" width="100" />
       <el-table-column prop="priceprecision" label="价格精度" width="90" />
@@ -138,7 +138,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, onMounted, onUnmounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import {
   getCoins,
@@ -181,16 +181,95 @@ const formRules = {
 
 const formRef = ref()
 
+// ── WebSocket ──
+let ws: WebSocket | null = null
+let wsReconnectTimer: ReturnType<typeof setTimeout> | null = null
+
+function connectWebSocket() {
+  if (ws) {
+    ws.close()
+    ws = null
+  }
+
+  //const protocol = location.protocol === 'https:' ? 'wss:' : 'ws:'
+  //const wsUrl = `${protocol}//${location.host}/api/ws`
+  const wsUrl = `ws://127.0.0.1:4000/api/ws`
+
+  ws = new WebSocket(wsUrl)
+
+  ws.onopen = () => {
+    console.log('[WS] coin price connected')
+  }
+
+  ws.onmessage = (event: MessageEvent) => {
+    try {
+      const raw = JSON.parse(event.data)
+      if (raw.status !== 1 || !Array.isArray(raw.data)) return
+
+      for (const itemStr of raw.data) {
+        let priceData: any
+        try {
+          priceData = JSON.parse(itemStr)
+        } catch {
+          continue
+        }
+
+        const symbol = (priceData.Symbol || '').toLowerCase()
+        if (!symbol) continue
+
+        const row = items.value.find((r) => r.symbol.toLowerCase() === symbol)
+        if (row) {
+          row['_priceDirection'] = ''
+          if (priceData.Change > 0) {
+            row['_priceDirection'] = 'up'
+          } else if (priceData.Change < 0) {
+            row['_priceDirection'] = 'down'
+          }
+          if (priceData.C !== undefined) row.close = priceData.C
+          if (priceData.H !== undefined) row.high = priceData.H
+          if (priceData.I !== undefined) row.low = priceData.I
+          // flash indicator
+          row['_priceUpdated'] = true
+          setTimeout(() => { row['_priceUpdated'] = false }, 600)
+        }
+      }
+    } catch {
+      // ignore malformed messages
+    }
+  }
+
+  ws.onclose = () => {
+    console.log('[WS] disconnected, reconnecting in 3s')
+    wsReconnectTimer = setTimeout(() => connectWebSocket(), 3000)
+  }
+
+  ws.onerror = () => {
+    ws?.close()
+  }
+}
+
+onMounted(() => {
+  fetchItems()
+  connectWebSocket()
+})
+
+onUnmounted(() => {
+  if (ws) {
+    ws.close()
+    ws = null
+  }
+  if (wsReconnectTimer) {
+    clearTimeout(wsReconnectTimer)
+    wsReconnectTimer = null
+  }
+})
+
 function formatTime(ts: number): string {
   if (!ts) return '-'
   const d = new Date(ts * 1000)
   const pad = (n: number) => String(n).padStart(2, '0')
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`
 }
-
-onMounted(() => {
-  fetchItems()
-})
 
 async function fetchItems() {
   loading.value = true
@@ -367,5 +446,23 @@ async function handleBatchDelete() {
   margin-top: 16px;
   display: flex;
   justify-content: flex-end;
+}
+
+.price-cell {
+  transition: background-color 0.3s ease;
+  display: inline-block;
+  padding: 0 4px;
+  border-radius: 3px;
+}
+
+.price-cell.price-updated {
+	/* background-color: #e6f7ff; */
+}
+.price-cell.price-up {
+  color: #00a854;
+}
+
+.price-cell.price-down {
+  color: #f04134;
 }
 </style>

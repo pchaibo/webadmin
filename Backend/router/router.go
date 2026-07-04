@@ -159,6 +159,12 @@ func Start() {
 		apiUser.PUT("/:id", controller.UserUpdate)
 		apiUser.DELETE("/:id", controller.UserDelete)
 	}
+	//ws
+	apiWs := R.Group("/api/ws")
+	//apiWs.Use(controller.AuthMiddleware())
+	{
+		apiWs.GET("", controller.WsHandler)
+	}
 
 	port := config.Get("port")
 	if port == "" {

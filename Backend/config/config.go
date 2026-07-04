@@ -9,6 +9,7 @@ import (
 )
 
 var Env = loadEnv()
+var Logs *log.Logger
 
 func Get(key string) string {
 	return Env[key]
@@ -21,8 +22,10 @@ func init() {
 		fmt.Println("open log file failed, err:", err)
 		return
 	}
+
 	log.SetOutput(io.MultiWriter(logFile, os.Stdout))
 	log.SetFlags(log.Llongfile | log.Lmicroseconds | log.Ldate)
+	Logs = log.New(logFile, "", log.Llongfile|log.Lmicroseconds|log.Ldate)
 }
 
 func loadEnv() map[string]string {

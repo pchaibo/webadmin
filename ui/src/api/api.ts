@@ -1,4 +1,4 @@
-﻿export interface LoginRequest {
+export interface LoginRequest {
   username?: string
   email?: string
   password: string
@@ -459,19 +459,21 @@ export async function getShellMin(
 }
  /* 鈹€鈹€ Coin CRUD 鈹€鈹€ */
  
- export interface CoinItem {
-   id: number
-   name: string
-   symbol: string
-   close: number
-   priceprecision: number
-   open: number
-   low: number
-   high: number
-   status: number
-   addtime: number
-   updatetime: number
- }
+export interface CoinItem {
+  id: number
+  name: string
+  symbol: string
+  close: number
+  priceprecision: number
+  open: number
+  low: number
+  high: number
+  status: number
+  addtime: number
+  updatetime: number
+  _priceDirection?: string
+  _priceUpdated?: boolean
+}
  
  export interface CoinListResponse {
    status: number
