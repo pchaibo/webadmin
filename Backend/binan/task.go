@@ -9,6 +9,7 @@ import (
 	"sync"
 	"time"
 
+	"webadmin/config"
 	"webadmin/model"
 
 	"github.com/tidwall/gjson"
@@ -62,18 +63,17 @@ func Updtecoinpric() {
 		coinup.Close = symbol.C
 		coinup.High = symbol.H
 		coinup.Low = symbol.I
-
-		model.Db.Model(&coin).Where("id=?", v.Id).Updates(coinup)
+		model.Db.Model(&model.Coin{}).Where("id=?", v.Id).Updates(coinup)
 
 	}
 }
-
+func init() {
+	ProxyEnabled = config.Get("Proxyurl") != ""
+}
 func Task() {
-	//Db = db
-	//Updateuser(db)
 	//Proxyurl = "http://" + config.Get("Proxyurl")
-	//Proxytcp = config.Get("Proxyurl")
-	//ProxyEnabled = config.Get("Proxyurl") != ""
+	//Updateuser()
+	time.Sleep(2 * time.Second)
 	for true {
 
 		for _, v := range Users {
@@ -163,7 +163,7 @@ type Balance struct {
 	//Asset              string // 资产 usdt 类型
 	TotalWalletBalance      float64
 	TotalCrossWalletBalance float64 //全仓余额
-	TotalCrossUnPnl         float64 //全仓持仓未实现盈亏
+	TotalCrossUnPnl         float64 //全仓持仓未实现盈利
 	AvailableBalance        float64 //下单可用余额
 	MaxWithdrawAmount       float64 //最大可转出余额
 }
@@ -259,7 +259,7 @@ func Checkadd(user *model.User, heyue *model.Heyue) {
 	if heyue.Risk == 2 && heyue.Is_num > 1 && heyue.NewTime > 100 {
 		risk := Ckeckrisk(heyue)
 		if risk != 1 {
-			Logs.Println("风控时间内: ", user.Username, heyue.Symbol, heyue.Repeatprice, heyue.Side)
+			Logs.Println("风控时间写 ", user.Username, heyue.Symbol, heyue.Repeatprice, heyue.Side)
 			return
 		}
 	}
@@ -283,7 +283,7 @@ func Checkheyun(user *model.User, heyue *model.Heyue, resdata []PositionRisk) (r
 		if v.Symbol == strings.ToUpper(heyue.Symbol) && v.positionSide == positionSide {
 			res = 1
 			sell := heyue.Sellprice * 1e-2
-			Rangepercent := float64(heyue.Rangepercent) * 1e-2 * float64(heyue.Is_num) //百分比 * 0.01 * 次数
+			Rangepercent := float64(heyue.Rangepercent) * 1e-2 * float64(heyue.Is_num) //百分比* 0.01 * 次数
 			Marginpercentage := math.Abs(v.UnRealizedProfit) / v.InitialMargin
 			//收益平仓
 			if v.UnRealizedProfit > 0 && (v.UnRealizedProfit/v.InitialMargin) > sell {
@@ -298,7 +298,7 @@ func Checkheyun(user *model.User, heyue *model.Heyue, resdata []PositionRisk) (r
 					}
 					return
 				} else {
-					Logs.Println("仓位过重， 平仓 id: ", heyue.Id, heyue.Symbol)
+					Logs.Println("仓位过重，平仓 id: ", heyue.Id, heyue.Symbol)
 					return
 				}
 
@@ -358,7 +358,7 @@ func Rangclosing(user *model.User, heyue *model.Heyue, resdata []PositionRisk) {
 			}
 
 			Quantityprice := order.Quantity * order.Price                                     //原价
-			user_LONG := Quantityprice + Quantityprice/20*float64(heyue.Rangeclosingpct)*1e-2 //除20倍 * 百分比
+			user_LONG := Quantityprice + Quantityprice/20*float64(heyue.Rangeclosingpct)*1e-2 //除0倍* 百分比
 			user_SHORT := Quantityprice - Quantityprice/20*float64(heyue.Rangeclosingpct)*1e-2
 
 			newprcie := v.MarkPrice * order.Quantity

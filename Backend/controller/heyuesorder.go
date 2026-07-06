@@ -40,7 +40,7 @@ func HeyuesorderList(c *gin.Context) {
 		query = query.Where("symbol LIKE ?", "%"+symbol+"%")
 	}
 	if username != "" {
-		query = query.Where("user_name LIKE ?", "%"+username+"%")
+		query = query.Where("username LIKE ?", "%"+username+"%")
 	}
 	if statusStr != "" {
 		if s, err := strconv.Atoi(statusStr); err == nil {

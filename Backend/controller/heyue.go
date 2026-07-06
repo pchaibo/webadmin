@@ -78,6 +78,14 @@ func HeyueCreate(c *gin.Context) {
 
 	item.UserName = strings.TrimSpace(item.UserName)
 	item.Symbol = strings.TrimSpace(item.Symbol)
+	if item.UserId == 0 {
+		var user model.User
+		if err := model.Db.Where("username = ?", item.UserName).First(&user).Error; err != nil {
+			errorResponse(c, 400, "user not found")
+			return
+		}
+		item.UserId = uint(user.Id)
+	}
 
 	if item.Symbol == "" {
 		errorResponse(c, 400, "symbol is required")

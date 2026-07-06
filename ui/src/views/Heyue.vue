@@ -44,6 +44,7 @@
     >
       <el-table-column type="selection" width="55" />
       <el-table-column prop="id" label="ID" width="60" />
+      <el-table-column prop="userid" label="用户ID" min-width="50" />
       <el-table-column prop="username" label="用户名" min-width="100" />
       <el-table-column prop="symbol" label="合约代码" width="120" />
       <el-table-column prop="side" label="方向" width="70">
@@ -136,41 +137,21 @@
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
-            <el-form-item label="状态">
-              <el-switch
-                v-model="form.status"
-                :active-value="1"
-                :inactive-value="2"
-                active-text="正常"
-                inactive-text="暂停"
-              />
-            </el-form-item>
-          </el-col>
         </el-row>
+       
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item label="最大次数">
-              <el-input-number v-model="form.num" :min="1" :precision="0" :step="1" style="width: 100%" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="收益百分比">
+            <el-form-item label="平仓收益%">
               <el-input-number v-model="form.sellprice" :min="0" :step="0.1" :precision="2" style="width: 100%" />
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="首仓USDT">
               <el-input-number v-model="form.oneprice" :min="0" :step="1" :precision="2" style="width: 100%" />
             </el-form-item>
           </el-col>
-          <el-col :span="12">
-            <el-form-item label="补仓USDT">
-              <el-input-number v-model="form.repeatprice" :min="0" :step="1" :precision="2" style="width: 100%" />
-            </el-form-item>
-          </el-col>
+          
+         
         </el-row>
         <el-row :gutter="20">
           <!-- <el-col :span="12">
@@ -187,6 +168,16 @@
             </el-form-item>
           </el-col> -->
         </el-row>
+        <el-divider>网格设置</el-divider>
+         <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item label="最大次数">
+              <el-input-number v-model="form.num" :min="1" :precision="0" :step="1" style="width: 100%" />
+            </el-form-item>
+          </el-col>
+         
+        </el-row>
+
           <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="网格平仓">
@@ -201,6 +192,12 @@
               <el-input-number v-model="form.closingprice" :min="0" :step="0.001" :precision="6" style="width: 100%" />
             </el-form-item>
           </el-col> -->
+          <el-col :span="12">
+            <el-form-item label="补仓USDT">
+              <el-input-number v-model="form.repeatprice" :min="0" :step="1" :precision="2" style="width: 100%" />
+            </el-form-item>
+          </el-col>
+          
         </el-row>
         <el-row :gutter="20">
           <el-col :span="12">
@@ -231,6 +228,21 @@
             </el-form-item>
           </el-col>
         </el-row>
+        <el-divider></el-divider>
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item label="状态">
+              <el-switch
+                v-model="form.status"
+                :active-value="1"
+                :inactive-value="2"
+                active-text="正常"
+                inactive-text="暂停"
+              />
+            </el-form-item>
+          </el-col>
+        </el-row>
+
       </el-form>
       <template #footer>
         <el-button @click="dialogVisible = false">取消</el-button>
@@ -278,14 +290,14 @@ const form = reactive({
   sellprice: 0,
   oneprice: 0,
   repeatprice: 0,
-  rangetype: 1,
+  rangetype: 2,
   rangeprice: 0,
-  rangepercent: 0,
-  rangeclosingpct: 0,
+  rangepercent: 100,
+  rangeclosingpct: 50,
   rangeclosing: 1,
   closingprice: 0,
-  risk: 1,
-  risktime: 0,
+  risk: 2,
+  risktime: 30,
 })
 
 const formRules = {
@@ -342,19 +354,19 @@ function openCreate() {
   form.username = ''
   form.symbol = ''
   form.side = 1
-  form.num = 5
+  form.num = 2
   form.status = 1
-  form.sellprice = 0
-  form.oneprice = 0
-  form.repeatprice = 0
-  form.rangetype = 1
+  form.sellprice = 30
+  form.oneprice = 100
+  form.repeatprice = 50
+  form.rangetype = 2
   form.rangeprice = 0
-  form.rangepercent = 0
-  form.rangeclosingpct = 0
+  form.rangepercent = 100
+  form.rangeclosingpct = 50
   form.rangeclosing = 1
   form.closingprice = 0
-  form.risk = 1
-  form.risktime = 0
+  form.risk = 2
+  form.risktime = 30
   dialogVisible.value = true
 }
 

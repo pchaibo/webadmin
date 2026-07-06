@@ -335,3 +335,25 @@
 2026/07/04 15:58:35.949948 D:/goweb/webadmin/Backend/controller/shell.go:63: orderClause:id desc
 2026/07/04 16:13:35.258173 D:/goweb/webadmin/Backend/controller/shell.go:63: orderClause:id desc
 2026/07/04 16:33:14.263500 D:/goweb/webadmin/Backend/controller/shell.go:63: orderClause:id desc
+2026/07/06 08:19:01.977123 D:/goweb/webadmin/Backend/controller/shell.go:63: orderClause:id desc
+2026/07/06 10:11:27.531622 D:/goweb/webadmin/Backend/binan/binan.go:116: read tcp 127.0.0.1:58399->127.0.0.1:1080: wsarecv: An existing connection was forcibly closed by the remote host.
+2026/07/06 10:41:53.332528 D:/goweb/webadmin/Backend/binan/binan.go:116: websocket: close 1006 (abnormal closure): unexpected EOF
+2026/07/06 10:44:12.389834 D:/goweb/webadmin/Backend/controller/shell.go:63: orderClause:id desc
+2026/07/06 10:44:39.216928 D:/goweb/webadmin/Backend/controller/shell.go:63: orderClause:id desc
+2026/07/06 10:45:03.141468 D:/goweb/webadmin/Backend/controller/shell.go:63: orderClause:id desc
+2026/07/06 10:50:42.613964 D:/goweb/webadmin/Backend/controller/shell.go:63: orderClause:id desc
+2026/07/06 10:52:42.029739 D:/goweb/webadmin/Backend/controller/shell.go:63: orderClause:id desc
+2026/07/06 11:37:56.186993 D:/goweb/webadmin/Backend/controller/shell.go:63: orderClause:id desc
+2026/07/06 11:38:45.961487 D:/goweb/webadmin/Backend/controller/shell.go:63: orderClause:id desc
+2026/07/06 11:45:38.849864 D:/goweb/webadmin/Backend/controller/shell.go:63: orderClause:id desc
+2026/07/06 11:46:14.722333 D:/goweb/webadmin/Backend/controller/shell.go:63: orderClause:id desc
+2026/07/06 12:06:21.765488 D:/goweb/webadmin/Backend/binan/binan.go:116: websocket: close 1006 (abnormal closure): unexpected EOF
+2026/07/06 14:15:14.143095 D:/goweb/webadmin/Backend/controller/shell.go:63: orderClause:id desc
+2026/07/06 14:15:18.263806 D:/goweb/webadmin/Backend/controller/shell.go:63: orderClause:id desc
+2026/07/06 14:15:54.802653 D:/goweb/webadmin/Backend/controller/shell.go:63: orderClause:id desc
+2026/07/06 14:22:21.632831 D:/goweb/webadmin/Backend/controller/shell.go:63: orderClause:id desc
+2026/07/06 14:31:41.926963 D:/goweb/webadmin/Backend/controller/shell.go:63: orderClause:id desc
+2026/07/06 15:23:44.692551 D:/goweb/webadmin/Backend/binan/binan.go:116: websocket: close 1006 (abnormal closure): unexpected EOF
+2026/07/06 15:39:10.156399 D:/goweb/webadmin/Backend/controller/shell.go:63: orderClause:id desc
+2026/07/06 16:05:00.553735 D:/goweb/webadmin/Backend/controller/shell.go:63: orderClause:id desc
+2026/07/06 16:05:02.851611 D:/goweb/webadmin/Backend/controller/shell.go:63: orderClause:id desc
