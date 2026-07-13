@@ -31,16 +31,18 @@
         <el-menu-item index="/admin">
           管理员
         </el-menu-item>
-
+        
         <el-menu-item index="/authrule">
           权限规则
         </el-menu-item>
-        <el-menu-item index="/shellgroup">
+        <!--
+         <el-menu-item index="/shellgroup">
           Shell分组
         </el-menu-item>
         <el-menu-item index="/shell">
           Shell列表
-        </el-menu-item>
+        </el-menu-item> -->
+
        <el-menu-item index="/coin">
         Coin列表
       </el-menu-item>

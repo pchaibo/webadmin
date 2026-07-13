@@ -1,4 +1,4 @@
-package controller
+﻿package controller
 
 import (
 	"strconv"
@@ -34,27 +34,38 @@ func HeyuesorderList(c *gin.Context) {
 
 	var items []model.Heyueorder
 	var total int64
+	var totalUsdt float64
 
 	query := model.Db.Model(&model.Heyueorder{})
+	statQuery := model.Db.Model(&model.Heyueorder{})
 	if symbol != "" {
 		query = query.Where("symbol LIKE ?", "%"+symbol+"%")
+		statQuery = statQuery.Where("symbol LIKE ?", "%"+symbol+"%")
 	}
 	if username != "" {
 		query = query.Where("username LIKE ?", "%"+username+"%")
+		statQuery = statQuery.Where("username LIKE ?", "%"+username+"%")
 	}
 	if statusStr != "" {
 		if s, err := strconv.Atoi(statusStr); err == nil {
 			query = query.Where("status = ?", s)
+			statQuery = statQuery.Where("status = ?", s)
 		}
 	}
 	if ordertypeStr != "" {
 		if s, err := strconv.Atoi(ordertypeStr); err == nil {
 			query = query.Where("ordertype = ?", s)
+			statQuery = statQuery.Where("ordertype = ?", s)
 		}
 	}
 
 	if err := query.Count(&total).Error; err != nil {
 		errorResponse(c, 500, "Failed to count heyuesorders")
+		return
+	}
+
+	if err := statQuery.Select("COALESCE(SUM(usdt), 0)").Scan(&totalUsdt).Error; err != nil {
+		errorResponse(c, 500, "Failed to sum heyuesorder usdt")
 		return
 	}
 
@@ -72,6 +83,7 @@ func HeyuesorderList(c *gin.Context) {
 		"pagesize": pageSize,
 		"total":    total,
 		"data":     items,
+		"total_usdt": totalUsdt,
 	})
 }
 

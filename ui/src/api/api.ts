@@ -695,6 +695,7 @@ export interface HeyuesorderListResponse {
   page: number
   pagesize: number
   total: number
+  total_usdt: number
   data: HeyuesorderItem[]
   error?: string
 }
@@ -769,6 +770,25 @@ export async function deleteHeyuesorder(
 ): Promise<{ status: number; message?: string; error?: string }> {
   const res = await fetch(`/api/heyuesorder/${id}`, {
     method: 'DELETE',
+    headers: authHeaders(),
+  })
+  return res.json()
+}
+
+/* ── Dashboard Stats ── */
+export interface DashboardStatsResponse {
+  status: number
+  admin_count: number
+  shell_count: number
+  heyueorder_usdt: number
+  coin_count: number
+  heyue_count: number
+  user_count: number
+  error?: string
+}
+
+export async function getDashboardStats(): Promise<DashboardStatsResponse> {
+  const res = await fetch('/api/index', {
     headers: authHeaders(),
   })
   return res.json()

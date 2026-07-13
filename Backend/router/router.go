@@ -1,4 +1,4 @@
-package router
+﻿package router
 
 import (
 	"fmt"
@@ -83,6 +83,12 @@ func Start() {
 		apiAdmins.POST("", controller.AdminCreate)
 		apiAdmins.PUT("/:id", controller.AdminUpdate)
 		apiAdmins.DELETE("/:id", controller.AdminDelete)
+	}
+
+	apiIndex := R.Group("/api/index")
+	apiIndex.Use(controller.AuthMiddleware())
+	{
+		apiIndex.GET("", controller.Index)
 	}
 
 	apiAuthRules := R.Group("/api/auth_rule")

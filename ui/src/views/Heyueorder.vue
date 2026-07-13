@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div class="heyueorder-page">
     <div class="toolbar">
       <el-input
@@ -106,6 +106,9 @@
     </el-table>
 
     <div class="pagination-wrap">
+      <div class="stats-info">
+        统计收益: <span :class="totalUsdt >= 0 ? 'profit' : 'loss'">{{ totalUsdt.toFixed(2) }} USDT</span>
+      </div>
       <el-pagination
         v-model:current-page="currentPage"
         :page-size="pageSize"
@@ -227,6 +230,7 @@ const loading = ref(false)
 const submitting = ref(false)
 const items = ref<HeyuesorderItem[]>([])
 const total = ref(0)
+const totalUsdt = ref(0)
 const currentPage = ref(1)
 const pageSize = Number(import.meta.env.VITE_PAGE_SIZE) || 10
 const selectedIds = ref<number[]>([])
@@ -283,6 +287,7 @@ async function fetchItems() {
     if (res.status === 1) {
       items.value = res.data || []
       total.value = res.total
+      totalUsdt.value = res.total_usdt || 0
     } else {
       ElMessage.error(res.error || '获取订单列表失败')
     }
@@ -457,6 +462,22 @@ async function handleBatchDelete() {
 .pagination-wrap {
   margin-top: 16px;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.stats-info {
+  font-size: 14px;
+  color: #606266;
+}
+
+.stats-info .profit {
+  color: #67c23a;
+  font-weight: 600;
+}
+
+.stats-info .loss {
+  color: #f56c6c;
+  font-weight: 600;
 }
 </style>

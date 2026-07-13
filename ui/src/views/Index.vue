@@ -1,14 +1,32 @@
-<template>
+﻿<template>
   <div class="index-page">
     <h2 class="page-title">系统概览</h2>
     <div class="stats-row">
-      <div class="stat-card clickable" @click="goAdmin">
+      <!-- <div class="stat-card clickable" @click="goAdmin">
         <div class="stat-value">{{ adminCount }}</div>
         <div class="stat-label">管理员</div>
-      </div>
-      <div class="stat-card clickable" @click="goShell">
+      </div> -->
+      <!-- <div class="stat-card clickable" @click="goShell">
         <div class="stat-value">{{ shellCount }}</div>
         <div class="stat-label">Shell 记录</div>
+      </div> -->
+      <div class="stat-card clickable" @click="goUser">
+        <div class="stat-value">{{ userCount }}</div>
+        <div class="stat-label">用户</div>
+      </div>
+      <div class="stat-card clickable" @click="goCoin">
+        <div class="stat-value">{{ coinCount }}</div>
+        <div class="stat-label">币种</div>
+      </div>
+      <div class="stat-card clickable" @click="goHeyue" >
+        <div class="stat-value">{{ heyueCount }}</div>
+        <div class="stat-label">合约</div>
+      </div>
+      <div class="stat-card clickable" @click="goHeyueorder">
+        <div class="stat-value usdt">
+          {{ heyueUsdt.toFixed(2) }}
+        </div>
+        <div class="stat-label">总收益 USDT</div>
       </div>
     </div>
   </div>
@@ -17,27 +35,45 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { getAdmins, getShells } from '@/api/api'
+import { getDashboardStats } from "@/api/api"
 
 const router = useRouter()
 const adminCount = ref(0)
 const shellCount = ref(0)
+const heyueUsdt = ref(0)
+const coinCount = ref(0)
+const heyueCount = ref(0)
+const userCount = ref(0)
 
 function goShell() {
   router.push('/shell')
 }
 function goAdmin() {
-  router.push('/admin')
+  router.push("/admin")
 }
-
+function goUser() {
+  router.push("/user")
+}
+function goHeyue() {
+  router.push("/heyue")
+}
+function goHeyueorder() {
+  router.push("/heyueorder")
+}
+function goCoin() {
+  router.push("/coin")
+}
 onMounted(async () => {
   try {
-    const [admins, shells] = await Promise.all([
-      getAdmins(1),
-      getShells(1),
-    ])
-    if (admins.status === 1) adminCount.value = admins.total
-    if (shells.status === 1) shellCount.value = shells.total
+    const res = await getDashboardStats()
+    if (res.status === 1) {
+      adminCount.value = res.admin_count
+      shellCount.value = res.shell_count
+      userCount.value = res.user_count
+      coinCount.value = res.coin_count
+      heyueCount.value = res.heyue_count
+      heyueUsdt.value = res.heyueorder_usdt
+    }
   } catch {
     // silent
   }
@@ -90,5 +126,9 @@ onMounted(async () => {
   margin-top: 10px;
   font-size: 14px;
   color: #666;
+}
+
+.stat-value.usdt {
+  color: #67c23a;
 }
 </style>
