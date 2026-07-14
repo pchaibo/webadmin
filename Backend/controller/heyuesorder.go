@@ -32,9 +32,11 @@ func HeyuesorderList(c *gin.Context) {
 	statusStr := strings.TrimSpace(c.Query("status"))
 	ordertypeStr := strings.TrimSpace(c.Query("ordertype"))
 
-	var items []model.Heyueorder
+var items []model.Heyueorder
 	var total int64
 	var totalUsdt float64
+	var totalUsdtLong float64
+	var totalUsdtShort float64
 
 	query := model.Db.Model(&model.Heyueorder{})
 	statQuery := model.Db.Model(&model.Heyueorder{})
@@ -64,10 +66,24 @@ func HeyuesorderList(c *gin.Context) {
 		return
 	}
 
-	if err := statQuery.Select("COALESCE(SUM(usdt), 0)").Scan(&totalUsdt).Error; err != nil {
-		errorResponse(c, 500, "Failed to sum heyuesorder usdt")
+	type sideTotal struct {
+		Side  int32
+		Total float64
+	}
+	var sideTotals []sideTotal
+	if err := statQuery.Select("side, COALESCE(SUM(usdt), 0) as total").Where("ordertype = ?", 2).Group("side").Scan(&sideTotals).Error; err != nil {
+		errorResponse(c, 500, "Failed to sum heyuesorder usdt by side")
 		return
 	}
+	for _, st := range sideTotals {
+		if st.Side == 1 {
+			totalUsdtLong = st.Total
+		} else if st.Side == 2 {
+			totalUsdtShort = st.Total
+		}
+	}
+	totalUsdt = totalUsdtLong + totalUsdtShort
+
 
 	if err := query.Order("id desc").Limit(pageSize).Offset(offset).Find(&items).Error; err != nil {
 		errorResponse(c, 500, "Failed to retrieve heyuesorders")
@@ -79,11 +95,13 @@ func HeyuesorderList(c *gin.Context) {
 		status = 1
 	}
 	successResponse(c, 200, status, gin.H{
-		"page":     page,
-		"pagesize": pageSize,
-		"total":    total,
-		"data":     items,
+		"page":       page,
+		"pagesize":   pageSize,
+		"total":      total,
+		"data":       items,
 		"total_usdt": totalUsdt,
+		"total_usdt_long":  totalUsdtLong,
+		"total_usdt_short": totalUsdtShort,
 	})
 }
 

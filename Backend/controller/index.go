@@ -8,12 +8,13 @@ import (
 )
 
 type DashboardStats struct {
-	AdminCount     int64   `json:"admin_count"`
-	ShellCount     int64   `json:"shell_count"`
-	HeyueorderUsdt float64 `json:"heyueorder_usdt"`
-	CoinCount      int64   `json:"coin_count"`
-	HeyueCount     int64   `json:"heyue_count"`
-	UserCount      int64   `json:"user_count"`
+	AdminCount          int64   `json:"admin_count"`
+	ShellCount          int64   `json:"shell_count"`
+	HeyueorderUsdt      float64 `json:"heyueorder_usdt"`
+	HeyueorderShortUsdt float64 `json:"heyueorder_short_usdt"`
+	CoinCount           int64   `json:"coin_count"`
+	HeyueCount          int64   `json:"heyue_count"`
+	UserCount           int64   `json:"user_count"`
 }
 
 func Index(c *gin.Context) {
@@ -43,19 +44,33 @@ func Index(c *gin.Context) {
 		errorResponse(c, 500, "Failed to count heyue")
 		return
 	}
-
-	if err := model.Db.Model(&model.Heyueorder{}).Where("ordertype = ?", 2).Select("COALESCE(SUM(usdt), 0)").Scan(&stats.HeyueorderUsdt).Error; err != nil {
-		errorResponse(c, 500, "Failed to sum heyueorder usdt")
+	//按 side 分组统计做多/做空收益
+	type sideTotal struct {
+		Side  int32
+		Total float64
+	}
+	var sideTotals []sideTotal
+	if err := model.Db.Model(&model.Heyueorder{}).Select("side, COALESCE(SUM(usdt), 0) as total").Where("ordertype = ?", 2).Group("side").Scan(&sideTotals).Error; err != nil {
+		errorResponse(c, 500, "Failed to sum heyueorder usdt by side")
 		return
 	}
+	for _, st := range sideTotals {
+		if st.Side == 1 {
+			stats.HeyueorderUsdt = st.Total
+		} else if st.Side == 2 {
+			stats.HeyueorderShortUsdt = st.Total
+		}
+	}
+
 	log.Printf("Dashboard stats: %+v\n", stats)
 
 	successResponse(c, 200, 1, gin.H{
-		"admin_count":     stats.AdminCount,
-		"shell_count":     stats.ShellCount,
-		"user_count":      stats.UserCount,
-		"coin_count":      stats.CoinCount,
-		"heyue_count":     stats.HeyueCount,
-		"heyueorder_usdt": stats.HeyueorderUsdt,
+		"admin_count":           stats.AdminCount,
+		"shell_count":           stats.ShellCount,
+		"user_count":            stats.UserCount,
+		"coin_count":            stats.CoinCount,
+		"heyue_count":           stats.HeyueCount,
+		"heyueorder_usdt":       stats.HeyueorderUsdt,
+		"heyueorder_short_usdt": stats.HeyueorderShortUsdt,
 	})
 }

@@ -433,3 +433,56 @@
 2026/07/13 15:57:30.816826 D:/goweb/webadmin/Backend/controller/index.go:45: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:1430.51 CoinCount:10 HeyueCount:2}
 2026/07/13 15:57:39.670617 D:/goweb/webadmin/Backend/controller/index.go:45: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:1430.51 CoinCount:10 HeyueCount:2}
 2026/07/13 15:58:49.818651 D:/goweb/webadmin/Backend/controller/index.go:45: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:1430.51 CoinCount:10 HeyueCount:2}
+2026/07/13 15:59:27.685931 D:/goweb/webadmin/Backend/controller/index.go:51: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:1430.51 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/13 15:59:28.779120 D:/goweb/webadmin/Backend/controller/index.go:51: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:1430.51 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/13 16:01:00.321979 D:/goweb/webadmin/Backend/controller/index.go:51: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:1430.51 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/13 16:01:58.461366 D:/goweb/webadmin/Backend/controller/index.go:51: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:1430.51 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/13 16:02:04.170851 D:/goweb/webadmin/Backend/controller/index.go:51: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:1430.51 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/13 16:02:08.807966 D:/goweb/webadmin/Backend/controller/index.go:51: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:1430.51 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/13 16:02:23.609526 D:/goweb/webadmin/Backend/controller/index.go:51: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:1430.51 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/13 16:02:53.453204 D:/goweb/webadmin/Backend/controller/index.go:51: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:1430.51 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/13 16:04:51.006754 D:/goweb/webadmin/Backend/controller/index.go:51: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:1430.51 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/13 16:05:25.073349 D:/goweb/webadmin/Backend/controller/index.go:51: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:1430.51 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/13 16:05:37.364066 D:/goweb/webadmin/Backend/controller/index.go:51: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:1430.51 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/13 16:05:40.381984 D:/goweb/webadmin/Backend/controller/index.go:51: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:1430.51 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/13 16:05:44.849253 D:/goweb/webadmin/Backend/controller/index.go:51: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:1430.51 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/13 16:06:04.256530 D:/goweb/webadmin/Backend/controller/index.go:51: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:1430.51 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/13 16:07:33.882115 D:/goweb/webadmin/Backend/controller/index.go:51: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:1430.51 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/13 16:07:37.396786 D:/goweb/webadmin/Backend/controller/index.go:51: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:1430.51 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/13 16:07:49.680123 D:/goweb/webadmin/Backend/controller/index.go:51: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:1430.51 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/13 16:17:10.122144 D:/goweb/webadmin/Backend/binan/binan.go:116: websocket: close 1006 (abnormal closure): unexpected EOF
+2026/07/13 16:20:28.386800 D:/goweb/webadmin/Backend/controller/index.go:51: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:1430.51 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/13 16:20:49.632628 D:/goweb/webadmin/Backend/controller/index.go:51: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:1430.51 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/13 16:20:57.056853 D:/goweb/webadmin/Backend/controller/index.go:51: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:1430.51 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/13 16:25:33.422238 D:/goweb/webadmin/Backend/controller/index.go:51: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:1430.51 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/13 16:34:40.072047 D:/goweb/webadmin/Backend/controller/index.go:51: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:1430.51 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/14 08:46:17.050650 D:/goweb/webadmin/Backend/controller/index.go:51: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:1430.51 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/14 08:46:35.836537 D:/goweb/webadmin/Backend/controller/index.go:51: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:1430.51 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/14 08:50:27.029973 D:/goweb/webadmin/Backend/binan/binan.go:116: read tcp 127.0.0.1:54345->127.0.0.1:1080: wsarecv: An existing connection was forcibly closed by the remote host.
+2026/07/14 08:58:28.723625 D:/goweb/webadmin/Backend/controller/index.go:58: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:1430.51 HeyueorderShortUsdt:1132.03 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/14 08:58:31.919486 D:/goweb/webadmin/Backend/controller/index.go:58: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:1430.51 HeyueorderShortUsdt:1132.03 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/14 09:01:25.898731 D:/goweb/webadmin/Backend/controller/index.go:60: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:298.48 HeyueorderShortUsdt:1132.03 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/14 09:01:28.328792 D:/goweb/webadmin/Backend/controller/index.go:60: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:298.48 HeyueorderShortUsdt:1132.03 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/14 09:02:30.916793 D:/goweb/webadmin/Backend/controller/index.go:60: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:298.48 HeyueorderShortUsdt:1132.03 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/14 09:02:51.527388 D:/goweb/webadmin/Backend/controller/index.go:60: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:298.48 HeyueorderShortUsdt:1132.03 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/14 09:08:51.492274 D:/goweb/webadmin/Backend/controller/index.go:60: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:298.48 HeyueorderShortUsdt:1132.03 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/14 09:09:40.911404 D:/goweb/webadmin/Backend/controller/index.go:60: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:298.48 HeyueorderShortUsdt:1132.03 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/14 09:10:34.511667 D:/goweb/webadmin/Backend/controller/index.go:60: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:298.48 HeyueorderShortUsdt:1132.03 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/14 09:14:08.887806 D:/goweb/webadmin/Backend/controller/index.go:60: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:298.48 HeyueorderShortUsdt:1132.03 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/14 09:21:16.284950 D:/goweb/webadmin/Backend/binan/binan.go:116: websocket: close 1006 (abnormal closure): unexpected EOF
+2026/07/14 09:27:11.196226 D:/goweb/webadmin/Backend/controller/index.go:60: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:298.48 HeyueorderShortUsdt:1132.03 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/14 09:27:16.405829 D:/goweb/webadmin/Backend/controller/index.go:60: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:298.48 HeyueorderShortUsdt:1132.03 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/14 09:28:04.462842 D:/goweb/webadmin/Backend/controller/index.go:60: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:298.48 HeyueorderShortUsdt:1132.03 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/14 09:29:00.823844 D:/goweb/webadmin/Backend/controller/index.go:60: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:298.48 HeyueorderShortUsdt:1132.03 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/14 09:43:54.123606 D:/goweb/webadmin/Backend/controller/index.go:65: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:298.48 HeyueorderShortUsdt:1132.03 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/14 09:44:03.785018 D:/goweb/webadmin/Backend/controller/index.go:65: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:298.48 HeyueorderShortUsdt:1132.03 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/14 09:44:35.882027 D:/goweb/webadmin/Backend/controller/index.go:65: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:298.48 HeyueorderShortUsdt:1132.03 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/14 09:45:28.118288 D:/goweb/webadmin/Backend/controller/index.go:65: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:298.48 HeyueorderShortUsdt:1132.03 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/14 09:45:47.238144 D:/goweb/webadmin/Backend/controller/index.go:65: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:298.48 HeyueorderShortUsdt:1132.03 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/14 09:46:00.087803 D:/goweb/webadmin/Backend/controller/index.go:65: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:298.48 HeyueorderShortUsdt:1132.03 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/14 09:46:30.971482 D:/goweb/webadmin/Backend/controller/index.go:65: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:298.48 HeyueorderShortUsdt:1132.03 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/14 09:48:29.165998 D:/goweb/webadmin/Backend/controller/index.go:65: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:298.48 HeyueorderShortUsdt:1132.03 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/14 09:48:45.471687 D:/goweb/webadmin/Backend/controller/index.go:65: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:298.48 HeyueorderShortUsdt:1132.03 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/14 09:48:49.036836 D:/goweb/webadmin/Backend/controller/index.go:65: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:298.48 HeyueorderShortUsdt:1132.03 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/14 09:49:54.072630 D:/goweb/webadmin/Backend/controller/index.go:65: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:298.48 HeyueorderShortUsdt:1132.03 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/14 09:50:46.412568 D:/goweb/webadmin/Backend/controller/index.go:65: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:298.48 HeyueorderShortUsdt:1132.03 CoinCount:10 HeyueCount:2 UserCount:4}

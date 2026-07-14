@@ -107,7 +107,11 @@
 
     <div class="pagination-wrap">
       <div class="stats-info">
-        统计收益: <span :class="totalUsdt >= 0 ? 'profit' : 'loss'">{{ totalUsdt.toFixed(2) }} USDT</span>
+       统计收益: <span :class="totalUsdt >= 0 ? 'profit' : 'loss'">{{ totalUsdt.toFixed(2) }} USDT</span>
+        &nbsp;&nbsp;|&nbsp;&nbsp;
+        做多收益: <span :class="totalUsdtLong >= 0 ? 'long-profit' : 'loss'">{{ totalUsdtLong.toFixed(2) }} USDT</span>
+        &nbsp;&nbsp;
+        做空收益: <span :class="totalUsdtShort >= 0 ? 'short-profit' : 'loss'">{{ totalUsdtShort.toFixed(2) }} USDT</span>
       </div>
       <el-pagination
         v-model:current-page="currentPage"
@@ -231,6 +235,8 @@ const submitting = ref(false)
 const items = ref<HeyuesorderItem[]>([])
 const total = ref(0)
 const totalUsdt = ref(0)
+const totalUsdtLong = ref(0)
+const totalUsdtShort = ref(0)
 const currentPage = ref(1)
 const pageSize = Number(import.meta.env.VITE_PAGE_SIZE) || 10
 const selectedIds = ref<number[]>([])
@@ -288,6 +294,8 @@ async function fetchItems() {
       items.value = res.data || []
       total.value = res.total
       totalUsdt.value = res.total_usdt || 0
+      totalUsdtLong.value = res.total_usdt_long || 0
+      totalUsdtShort.value = res.total_usdt_short || 0
     } else {
       ElMessage.error(res.error || '获取订单列表失败')
     }
@@ -478,6 +486,16 @@ async function handleBatchDelete() {
 
 .stats-info .loss {
   color: #f56c6c;
+  font-weight: 600;
+}
+
+.stats-info .long-profit {
+  color: #f56c6c;
+  font-weight: 600;
+}
+
+.stats-info .short-profit {
+  color: #e6a23c;
   font-weight: 600;
 }
 </style>

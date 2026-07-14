@@ -26,7 +26,19 @@
         <div class="stat-value usdt">
           {{ heyueUsdt.toFixed(2) }}
         </div>
-        <div class="stat-label">总收益 USDT</div>
+        <div class="stat-label">做多usdt</div>
+      </div>
+     <div class="stat-card clickable" @click="goHeyueorder">
+       <div class="stat-value short-usdt">
+         {{ heyueShortUsdt.toFixed(2) }}
+       </div>
+       <div class="stat-label">做空usdt</div>
+     </div>
+      <div class="stat-card clickable" @click="goHeyueorder">
+        <div class="stat-value total-usdt">
+          {{ (heyueUsdt + heyueShortUsdt).toFixed(2) }}
+        </div>
+        <div class="stat-label">总收益usdt</div>
       </div>
     </div>
   </div>
@@ -41,6 +53,7 @@ const router = useRouter()
 const adminCount = ref(0)
 const shellCount = ref(0)
 const heyueUsdt = ref(0)
+const heyueShortUsdt = ref(0)
 const coinCount = ref(0)
 const heyueCount = ref(0)
 const userCount = ref(0)
@@ -73,6 +86,7 @@ onMounted(async () => {
       coinCount.value = res.coin_count
       heyueCount.value = res.heyue_count
       heyueUsdt.value = res.heyueorder_usdt
+      heyueShortUsdt.value = res.heyueorder_short_usdt
     }
   } catch {
     // silent
@@ -130,5 +144,13 @@ onMounted(async () => {
 
 .stat-value.usdt {
   color: #67c23a;
+}
+
+.stat-value.short-usdt {
+  color: #e6a23c;
+}
+
+.stat-value.total-usdt {
+  color: #f56c6c;
 }
 </style>

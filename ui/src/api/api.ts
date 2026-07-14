@@ -696,6 +696,8 @@ export interface HeyuesorderListResponse {
   pagesize: number
   total: number
   total_usdt: number
+  total_usdt_long: number
+  total_usdt_short: number
   data: HeyuesorderItem[]
   error?: string
 }
@@ -781,6 +783,7 @@ export interface DashboardStatsResponse {
   admin_count: number
   shell_count: number
   heyueorder_usdt: number
+  heyueorder_short_usdt: number
   coin_count: number
   heyue_count: number
   user_count: number
