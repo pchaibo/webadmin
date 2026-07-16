@@ -107,6 +107,7 @@ onMounted(async () => {
        res = await createHeyue(payload)
      }
      if (res.status === 1) {
+        ElMessage.success({ message: '操作成功', type: 'success' })
        router.push('/heyue')
      } else {
        ElMessage({ message: res.error || '操作失败', type: 'error' })

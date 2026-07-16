@@ -110,9 +110,9 @@ func HeyueCreate(c *gin.Context) {
 		return
 	}
 	item.UserId = uint(uid)
-	if item.UserId == 0 {
+	if item.UserId != 0 {
 		var user model.User
-		if err := model.Db.Where("username = ?", item.UserName).First(&user).Error; err != nil {
+		if err := model.Db.Where("id = ?", item.UserId).First(&user).Error; err != nil {
 			errorResponse(c, 400, "user not found")
 			return
 		}
