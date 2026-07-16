@@ -528,3 +528,6 @@
 2026/07/15 10:41:40.751972 D:/goweb/webadmin/Backend/binan/binan.go:116: websocket: close 1006 (abnormal closure): unexpected EOF
 2026/07/15 14:11:40.317211 D:/goweb/webadmin/Backend/controller/index.go:65: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:298.48 HeyueorderShortUsdt:1132.03 CoinCount:10 HeyueCount:2 UserCount:4}
 2026/07/15 17:59:41.424801 D:/goweb/webadmin/Backend/binan/binan.go:116: read tcp 127.0.0.1:60591->127.0.0.1:1080: wsarecv: An existing connection was forcibly closed by the remote host.
+2026/07/16 08:33:00.255839 D:/goweb/webadmin/Backend/controller/index.go:65: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:298.48 HeyueorderShortUsdt:1132.03 CoinCount:10 HeyueCount:3 UserCount:4}
+2026/07/16 09:33:03.857869 D:/goweb/webadmin/Backend/binan/binan.go:116: websocket: close 1006 (abnormal closure): unexpected EOF
+2026/07/16 10:00:51.409690 D:/goweb/webadmin/Backend/binan/binan.go:116: websocket: close 1006 (abnormal closure): unexpected EOF
