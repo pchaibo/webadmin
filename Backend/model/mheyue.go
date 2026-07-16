@@ -11,6 +11,8 @@ type User struct {
 	Mobile    string   `json:"mobile"`
 	Bnaccess  string   `json:"bnaccess"`
 	Bnasecret string   `json:"bnasecret"`
+	Bnbadd    string   `json:"bnbadd"` //币安usdt地址
+	Bnbkey    string   `json:"bnbkey"` //币安密钥
 	Status    int      `json:"status"`
 	Addtime   int      `json:"addtime"`
 	Heyue     []*Heyue `gorm:"foreignKey:UserId;references:Id" json:"heyue"`
