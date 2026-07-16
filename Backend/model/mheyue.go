@@ -42,7 +42,7 @@ type Heyue struct {
 	UserId          uint    `json:"userid"`
 	UserName        string  `json:"username"`
 	Symbol          string  `json:"symbol"`
-	Side            int32   `json:"side"`
+	Side            int32   `json:"side"` //方向:1=开多,2=开空
 	Num             int32   `json:"num"`
 	Is_num          int32   `json:"is_num"`
 	Status          int32   `json:"status"`

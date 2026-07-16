@@ -124,6 +124,12 @@ func HeyueCreate(c *gin.Context) {
 		errorResponse(c, 400, "symbol is required")
 		return
 	}
+	// 检查是否已存在相同用户、相同币对、相同方向的合约
+	var existing model.Heyue
+	if err := model.Db.Where("user_id = ? AND symbol = ? AND side = ?", item.UserId, item.Symbol, item.Side).First(&existing).Error; err == nil {
+		errorResponse(c, 400, "该币对已有相同方向的合约，请勿重复创建")
+		return
+	}
 
 	item.AddTime = time.Now().Unix()
 	item.UpdateTime = time.Now().Unix()
