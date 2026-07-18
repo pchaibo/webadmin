@@ -1726,3 +1726,24 @@
 2026/07/16 14:24:42.674013 D:/goweb/webadmin/Backend/binan/task.go:131: resdata not null 
 2026/07/16 14:24:49.067748 D:/goweb/webadmin/Backend/binan/task.go:184: body error:  {"code":-2015,"msg":"Invalid API-key, IP, or permissions for action, request ip: 23.151.104.234"}
 2026/07/16 14:24:49.465875 D:/goweb/webadmin/Backend/binan/task.go:131: resdata not null 
+2026/07/16 14:26:35.514239 D:/goweb/webadmin/Backend/binan/task.go:184: body error:  {"code":-2015,"msg":"Invalid API-key, IP, or permissions for action, request ip: 23.151.104.234"}
+2026/07/16 14:26:36.018108 D:/goweb/webadmin/Backend/binan/task.go:131: resdata not null 
+2026/07/16 14:26:42.309403 D:/goweb/webadmin/Backend/binan/task.go:184: body error:  {"code":-2015,"msg":"Invalid API-key, IP, or permissions for action, request ip: 23.151.104.234"}
+2026/07/16 14:26:42.665178 D:/goweb/webadmin/Backend/binan/task.go:131: resdata not null 
+2026/07/16 14:26:49.029855 D:/goweb/webadmin/Backend/binan/task.go:184: body error:  {"code":-2015,"msg":"Invalid API-key, IP, or permissions for action, request ip: 23.151.104.234"}
+2026/07/16 14:26:49.535409 D:/goweb/webadmin/Backend/binan/task.go:131: resdata not null 
+2026/07/16 14:26:55.956809 D:/goweb/webadmin/Backend/binan/task.go:184: body error:  {"code":-2015,"msg":"Invalid API-key, IP, or permissions for action, request ip: 23.151.104.234"}
+2026/07/16 14:26:56.248777 D:/goweb/webadmin/Backend/binan/task.go:131: resdata not null 
+2026/07/16 14:27:27.253346 D:/goweb/webadmin/Backend/binan/task.go:184: body error:  {"code":-2015,"msg":"Invalid API-key, IP, or permissions for action, request ip: 23.151.104.234"}
+2026/07/16 14:27:27.782083 D:/goweb/webadmin/Backend/binan/task.go:131: resdata not null 
+2026/07/16 17:32:26.788728 D:/goweb/webadmin/Backend/controller/index.go:65: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:298.48 HeyueorderShortUsdt:1132.03 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/16 17:49:17.855310 D:/goweb/webadmin/Backend/binan/binan.go:116: read tcp 127.0.0.1:64667->127.0.0.1:1080: wsarecv: An existing connection was forcibly closed by the remote host.
+2026/07/17 11:26:06.543620 D:/goweb/webadmin/Backend/binan/binan.go:116: websocket: close 1006 (abnormal closure): unexpected EOF
+2026/07/17 14:05:18.109837 D:/goweb/webadmin/Backend/controller/index.go:65: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:298.48 HeyueorderShortUsdt:1132.03 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/17 14:08:02.813811 D:/goweb/webadmin/Backend/controller/index.go:65: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:298.48 HeyueorderShortUsdt:1132.03 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/17 14:10:55.500342 D:/goweb/webadmin/Backend/controller/index.go:65: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:298.48 HeyueorderShortUsdt:1132.03 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/17 14:10:59.373405 D:/goweb/webadmin/Backend/controller/index.go:65: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:298.48 HeyueorderShortUsdt:1132.03 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/17 14:14:10.066650 D:/goweb/webadmin/Backend/binan/binan.go:116: websocket: close 1006 (abnormal closure): unexpected EOF
+2026/07/17 14:54:56.354693 D:/goweb/webadmin/Backend/binan/binan.go:116: websocket: close 1006 (abnormal closure): unexpected EOF
+2026/07/17 15:49:45.494663 D:/goweb/webadmin/Backend/binan/binan.go:116: websocket: close 1006 (abnormal closure): unexpected EOF
+2026/07/17 17:56:42.282002 D:/goweb/webadmin/Backend/binan/binan.go:116: read tcp 127.0.0.1:60316->127.0.0.1:1080: wsarecv: An existing connection was forcibly closed by the remote host.
