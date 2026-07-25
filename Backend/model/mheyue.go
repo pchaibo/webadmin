@@ -20,17 +20,18 @@ type User struct {
 
 // heyue:合约
 type Coin struct {
-	Id             int64   `gorm:"primaryKey" json:"id" `
-	Name           string  `json:"name"`           //名称
-	Symbol         string  `json:"symbol"`         //合约代码
-	Close          float64 `json:"close"`          //最新价
-	Priceprecision int     `json:"priceprecision"` //价格精度
-	Open           float64 `json:"open"`
-	Low            float64 `json:"low"`
-	High           float64 `json:"high"`
-	Status         uint    `json:"status"` //状态  1:正常 0:停用
-	AddTime        int64   `json:"addtime"`
-	UpdateTime     int64   `json:"updatetime"`
+	Id                int64   `gorm:"primaryKey" json:"id" `
+	Name              string  `json:"name"`              //名称
+	Symbol            string  `json:"symbol"`            //合约代码
+	Close             float64 `json:"close"`             //最新价
+	Priceprecision    int     `json:"priceprecision"`    //价格精度
+	Quantityprecision int     `json:"quantityprecision"` //数量精度
+	Open              float64 `json:"open"`
+	Low               float64 `json:"low"`
+	High              float64 `json:"high"`
+	Status            uint    `json:"status"` //状态  1:正常 0:停用
+	AddTime           int64   `json:"addtime"`
+	UpdateTime        int64   `json:"updatetime"`
 }
 
 func (Coin) TableName() string {

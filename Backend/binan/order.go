@@ -65,7 +65,9 @@ func Addpositon(user *model.User, heyue *model.Heyue) {
 		total = heyue.Repeatprice
 	}
 	//计算数量
-	quantity := RoundTo(num, int(Coin.Priceprecision)) //数量
+	//quantity := RoundTo(num, int(Coin.Priceprecision)) //数量
+	quantity := RoundTo(num, int(Coin.Quantityprecision)) //数量
+
 	//https://fapi.binance.com/fapi/v1/exchangeInfo 小数位数
 	if quantity == 0 {
 		Logs.Println("add order quantity null : ", heyue.Symbol, quantity)
