@@ -35,30 +35,31 @@ function isActive(name: string) {
  </template>
  
  <style scoped>
- .main-layout {
-   display: flex; flex-direction: column; height: 100vh; background: #f5f5f5;
- }
- .main-content {
-   flex: 1; overflow-y: auto;
- }
- .bottom-tabs {
+.main-layout {
+   display: flex; flex-direction: column; min-height: 100vh; background: #f5f5f5;
+   padding-bottom: 52px; box-sizing: border-box;
+}
+.main-content {
+   flex: 1;
+}
+.bottom-tabs {
+   position: fixed; left: 0; bottom: 0; width: 100%;
    display: flex; border-top: 1px solid #e0e0e0; background: #fff;
-   flex-shrink: 0;
- }
- .tab-btn {
-   text-decoration: none;
-   flex: 1; display: flex; flex-direction: column; align-items: center;
-   justify-content: center; padding: 6px 0 8px; border: none;
-   background: transparent; color: #999; font-size: 11px; cursor: pointer;
-   transition: color 0.2s;
- }
+   z-index: 100;
+}
+.tab-btn {
+  text-decoration: none;
+  flex: 1; display: flex; flex-direction: column; align-items: center;
+  justify-content: center; padding: 6px 0 10px; border: none;
+  background: transparent; color: #999; font-size: 11px; cursor: pointer;
+  transition: color 0.2s;
+}
  .tab-btn.active { color: #4a90d9; }
- .tab-icon {
-   font-size: 20px; font-weight: 700; line-height: 1.2;
-   width: 28px; height: 28px; display: flex; align-items: center;
-   justify-content: center; border-radius: 50%; margin-bottom: 2px;
- }
+.tab-icon {
+  font-size: 20px; font-weight: 700; line-height: 1.2;
+  width: 26px; height: 26px; display: flex; align-items: center;
+  justify-content: center; border-radius: 50%; margin-bottom: 2px;
+}
  .tab-btn.active .tab-icon { background: #eaf2fb; }
  .tab-label { font-size: 11px; }
  </style>
-

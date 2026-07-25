@@ -1747,3 +1747,46 @@
 2026/07/17 14:54:56.354693 D:/goweb/webadmin/Backend/binan/binan.go:116: websocket: close 1006 (abnormal closure): unexpected EOF
 2026/07/17 15:49:45.494663 D:/goweb/webadmin/Backend/binan/binan.go:116: websocket: close 1006 (abnormal closure): unexpected EOF
 2026/07/17 17:56:42.282002 D:/goweb/webadmin/Backend/binan/binan.go:116: read tcp 127.0.0.1:60316->127.0.0.1:1080: wsarecv: An existing connection was forcibly closed by the remote host.
+2026/07/18 08:02:39.969183 D:/goweb/webadmin/Backend/controller/index.go:65: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:298.48 HeyueorderShortUsdt:1132.03 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/18 08:03:50.852872 D:/goweb/webadmin/Backend/controller/index.go:65: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:298.48 HeyueorderShortUsdt:1132.03 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/18 08:07:01.002446 D:/goweb/webadmin/Backend/controller/index.go:65: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:298.48 HeyueorderShortUsdt:1132.03 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/18 08:18:57.583303 D:/goweb/webadmin/Backend/binan/binan.go:116: websocket: close 1006 (abnormal closure): unexpected EOF
+2026/07/18 09:05:09.393664 D:/goweb/webadmin/Backend/binan/binan.go:116: websocket: close 1006 (abnormal closure): unexpected EOF
+2026/07/18 10:26:22.215083 D:/goweb/webadmin/Backend/binan/binan.go:116: websocket: close 1006 (abnormal closure): unexpected EOF
+2026/07/18 13:58:10.039525 D:/goweb/webadmin/Backend/binan/binan.go:116: websocket: close 1006 (abnormal closure): unexpected EOF
+2026/07/18 14:24:36.023604 D:/goweb/webadmin/Backend/controller/index.go:65: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:298.48 HeyueorderShortUsdt:1132.03 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/18 15:27:29.449106 D:/goweb/webadmin/Backend/controller/index.go:65: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:298.48 HeyueorderShortUsdt:1132.03 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/18 15:57:43.265164 D:/goweb/webadmin/Backend/binan/binan.go:116: websocket: close 1006 (abnormal closure): unexpected EOF
+2026/07/18 16:04:30.571699 D:/goweb/webadmin/Backend/binan/binan.go:116: websocket: close 1006 (abnormal closure): unexpected EOF
+2026/07/18 17:56:11.424346 D:/goweb/webadmin/Backend/binan/binan.go:116: read tcp 127.0.0.1:55026->127.0.0.1:1080: wsarecv: An existing connection was forcibly closed by the remote host.
+2026/07/20 08:03:16.711545 D:/goweb/webadmin/Backend/controller/index.go:65: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:298.48 HeyueorderShortUsdt:1132.03 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/20 08:04:10.807917 D:/goweb/webadmin/Backend/controller/index.go:65: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:298.48 HeyueorderShortUsdt:1132.03 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/20 08:04:38.468725 D:/goweb/webadmin/Backend/controller/index.go:65: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:298.48 HeyueorderShortUsdt:1132.03 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/20 09:12:40.117361 D:/goweb/webadmin/Backend/controller/index.go:65: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:298.48 HeyueorderShortUsdt:1132.03 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/20 09:18:04.530772 D:/goweb/webadmin/Backend/controller/index.go:65: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:298.48 HeyueorderShortUsdt:1132.03 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/20 09:18:33.510418 D:/goweb/webadmin/Backend/controller/index.go:65: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:298.48 HeyueorderShortUsdt:1132.03 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/20 09:18:35.716735 D:/goweb/webadmin/Backend/controller/index.go:65: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:298.48 HeyueorderShortUsdt:1132.03 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/20 09:18:40.938187 D:/goweb/webadmin/Backend/controller/index.go:65: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:298.48 HeyueorderShortUsdt:1132.03 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/20 09:26:04.440411 D:/goweb/webadmin/Backend/controller/index.go:65: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:298.48 HeyueorderShortUsdt:1132.03 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/20 09:49:47.532983 D:/goweb/webadmin/Backend/controller/index.go:65: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:298.48 HeyueorderShortUsdt:1132.03 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/20 10:06:44.555201 D:/goweb/webadmin/Backend/binan/binan.go:116: websocket: close 1006 (abnormal closure): unexpected EOF
+2026/07/20 10:28:06.762971 D:/goweb/webadmin/Backend/binan/binan.go:116: websocket: close 1006 (abnormal closure): unexpected EOF
+2026/07/20 10:50:23.166034 D:/goweb/webadmin/Backend/controller/index.go:65: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:298.48 HeyueorderShortUsdt:1132.03 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/20 10:50:34.600043 D:/goweb/webadmin/Backend/controller/index.go:65: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:298.48 HeyueorderShortUsdt:1132.03 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/20 10:50:37.754851 D:/goweb/webadmin/Backend/controller/index.go:65: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:298.48 HeyueorderShortUsdt:1132.03 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/20 10:50:39.007923 D:/goweb/webadmin/Backend/controller/index.go:65: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:298.48 HeyueorderShortUsdt:1132.03 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/20 10:57:15.903438 D:/goweb/webadmin/Backend/controller/index.go:65: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:298.48 HeyueorderShortUsdt:1132.03 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/20 11:26:33.321389 D:/goweb/webadmin/Backend/binan/binan.go:116: websocket: close 1006 (abnormal closure): unexpected EOF
+2026/07/20 11:46:09.828553 D:/goweb/webadmin/Backend/controller/index.go:65: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:298.48 HeyueorderShortUsdt:1132.03 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/20 14:07:54.708544 D:/goweb/webadmin/Backend/controller/index.go:65: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:298.48 HeyueorderShortUsdt:1132.03 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/20 14:13:37.959242 D:/goweb/webadmin/Backend/binan/binan.go:116: websocket: close 1006 (abnormal closure): unexpected EOF
+2026/07/20 15:06:00.097893 D:/goweb/webadmin/Backend/binan/binan.go:116: websocket: close 1006 (abnormal closure): unexpected EOF
+2026/07/20 15:54:23.114479 D:/goweb/webadmin/Backend/controller/index.go:65: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:298.48 HeyueorderShortUsdt:1132.03 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/20 15:54:26.326619 D:/goweb/webadmin/Backend/controller/index.go:65: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:298.48 HeyueorderShortUsdt:1132.03 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/20 16:02:32.942999 D:/goweb/webadmin/Backend/controller/index.go:65: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:298.48 HeyueorderShortUsdt:1132.03 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/20 16:02:35.972264 D:/goweb/webadmin/Backend/controller/index.go:65: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:298.48 HeyueorderShortUsdt:1132.03 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/20 16:02:37.998229 D:/goweb/webadmin/Backend/controller/index.go:65: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:298.48 HeyueorderShortUsdt:1132.03 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/20 16:03:16.293571 D:/goweb/webadmin/Backend/controller/index.go:65: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:298.48 HeyueorderShortUsdt:1132.03 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/20 16:10:17.791302 D:/goweb/webadmin/Backend/controller/index.go:65: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:298.48 HeyueorderShortUsdt:1132.03 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/20 17:33:33.232907 D:/goweb/webadmin/Backend/controller/index.go:65: Dashboard stats: {AdminCount:2 ShellCount:15 HeyueorderUsdt:298.48 HeyueorderShortUsdt:1132.03 CoinCount:10 HeyueCount:2 UserCount:4}
+2026/07/20 17:58:42.159472 D:/goweb/webadmin/Backend/binan/binan.go:116: read tcp 127.0.0.1:50708->127.0.0.1:1080: wsarecv: An existing connection was forcibly closed by the remote host.
