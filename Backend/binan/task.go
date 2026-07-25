@@ -127,10 +127,10 @@ func Userinfo(u *userHeyue) {
 		Logs.Println("resdata error: ", err.Error())
 		return
 	}
-	if len(resdata) < 1 {
-		Logs.Println("resdata not null ") //查询无交易停用
-		return
-	}
+	// if len(resdata) < 1 {
+	// 	Logs.Println("resdata not null ") //查询无交易停用
+	// 	return
+	// }
 
 	user := u.User
 	heyues := u.Heyues
