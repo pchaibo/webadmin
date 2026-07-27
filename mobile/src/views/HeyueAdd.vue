@@ -15,7 +15,7 @@ const submitting = ref(false)
    username: '',
    symbol: '',
    side: 1,
-   num: 3,
+   num: 2,
    status: 1,
    sellprice: 30,
    oneprice: 100,
@@ -69,10 +69,18 @@ onMounted(async () => {
  
   loading.value = false
  })
- 
- function goBack() {
-   router.push('/heyue')
- }
+
+function decNum() {
+  if (form.num > 1) form.num--
+}
+
+function incNum() {
+  form.num++
+}
+
+function goBack() {
+  router.push('/heyue')
+}
  
  async function submitForm() {
    if (!form.symbol.trim()) {
@@ -160,8 +168,12 @@ onMounted(async () => {
        <div class="form-divider">网格设置</div>
        <div class="form-row">
          <div class="form-group flex-half">
-           <label class="form-label">最大次数</label>
-           <input v-model.number="form.num" type="number" class="form-input" />
+          <label class="form-label">最大次数</label>
+          <div class="stepper">
+            <button class="stepper-btn" @click="decNum" :disabled="form.num <= 1">−</button>
+            <input v-model.number="form.num" type="number" class="form-input stepper-input" />
+            <button class="stepper-btn" @click="incNum">+</button>
+          </div>
          </div>
          <div class="form-group flex-half">
            <label class="form-label">补仓USDT</label>
@@ -206,19 +218,23 @@ onMounted(async () => {
        </div> -->
 
 
-       <div class="form-divider">风控设置</div>
-       <div class="form-row">
-         <div class="form-group flex-half">
-           <label class="form-label">风控</label>
-           <select v-model="form.risk" class="form-input">
-             <option :value="1">关闭</option>
-             <option :value="2">开启</option>
-           </select>
+      <div class="form-divider">风控设置</div>
+       <div class="form-group flex-half">
+         <label class="form-label">风控</label>
+         <div class="status-radios">
+           <label class="radio-option" :class="{ active: form.risk === 1 }">
+             <input type="radio" v-model="form.risk" :value="1" />
+             <span>关闭</span>
+           </label>
+           <label class="radio-option" :class="{ active: form.risk === 2 }">
+             <input type="radio" v-model="form.risk" :value="2" />
+             <span>开启</span>
+           </label>
          </div>
-         <div class="form-group flex-half">
-           <label class="form-label">风控时间(分)</label>
-           <input v-model.number="form.risktime" type="number" class="form-input" />
-         </div>
+       </div>
+       <div class="form-group">
+          <label class="form-label">风控时间(分)</label>
+          <input v-model.number="form.risktime" type="number" class="form-input" />
        </div>
        <div class="form-divider">状态</div>
        <div class="status-radios">
@@ -346,6 +362,50 @@ onMounted(async () => {
    font-weight: 500;
    cursor: pointer;
  }
- .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
- </style>
+.submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.stepper {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+.stepper-btn {
+  width: 36px;
+  height: 40px;
+  border: 1px solid #ddd;
+  background: #f9f9f9;
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+}
+.stepper-btn:first-child {
+  border-radius: 8px 0 0 8px;
+  border-right: none;
+}
+.stepper-btn:last-child {
+  border-radius: 0 8px 8px 0;
+  border-left: none;
+}
+.stepper-btn:disabled {
+  color: #ccc;
+  cursor: not-allowed;
+  background: #f0f0f0;
+}
+.stepper-input {
+  width: 60px;
+  text-align: center;
+  border-radius: 0 !important;
+  -moz-appearance: textfield;
+}
+.stepper-input::-webkit-outer-spin-button,
+.stepper-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+</style>
 

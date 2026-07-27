@@ -94,10 +94,17 @@ async function fetchItems() {
    return risk === 2 ? '开启' : '关闭'
  }
  
- function statusLabel(status: number): string {
-   return status === 1 ? '正常' : '暂停'
- }
- 
+function statusLabel(status: number): string {
+  return status === 1 ? '正常' : '暂停'
+}
+
+function formatTime(ts: number): string {
+  if (!ts) return '-'
+  const d = new Date(ts * 1000)
+  const pad = (n: number) => n.toString().padStart(2, '0')
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`
+}
+
 </script>
 
 <template>
@@ -125,18 +132,7 @@ async function fetchItems() {
            </div>
          </div>
          <div class="heyue-grid">
-           <div class="grid-item">
-             <span class="grid-label">用户ID</span>
-             <span class="grid-value">{{ item.userid }}</span>
-           </div>
-           <div class="grid-item">
-             <span class="grid-label">已加仓</span>
-             <span class="grid-value">{{ item.is_num }}/{{ item.num }}</span>
-           </div>
-           <div class="grid-item">
-             <span class="grid-label">收益%</span>
-             <span class="grid-value profit" :class="item.sellprice >= 0 ? 'profit-up' : 'profit-down'">{{ item.sellprice }}%</span>
-           </div>
+        
            <div class="grid-item">
              <span class="grid-label">首仓</span>
              <span class="grid-value">{{ item.oneprice }}</span>
@@ -146,11 +142,27 @@ async function fetchItems() {
              <span class="grid-value">{{ item.repeatprice }}</span>
            </div>
            <div class="grid-item">
-             <span class="grid-label">风控</span>
-             <span class="grid-value" :class="{ 'risk-on': item.risk === 2 }">{{ riskLabel(item.risk) }}</span>
+             <span class="grid-label">收益%</span>
+             <span class="grid-value profit" :class="item.sellprice >= 0 ? 'profit-up' : 'profit-down'">{{ item.sellprice }}%</span>
            </div>
-         </div>
-         <div class="heyue-actions">
+          <div class="grid-item">
+            <span class="grid-label">交易价格</span>
+            <span class="grid-value">{{ item.newprice }} </span>
+           </div>
+           <div class="grid-item">
+             <span class="grid-label">已加仓</span>
+             <span class="grid-value">{{ item.is_num }}/{{ item.num }}</span>
+           </div>
+          <div class="grid-item">
+            <span class="grid-label">风控</span>
+            <span class="grid-value" :class="{ 'risk-on': item.risk === 2 }">{{ riskLabel(item.risk) }}</span>
+          </div>
+        </div>
+        <div class="heyue-time">
+          <span class="grid-label">交易时间 </span>
+          <span class="grid-value">{{ formatTime(item.newtime) }}</span>
+        </div>
+        <div class="heyue-actions">
            <button class="btn-edit" @click="handleEdit(item)">编辑</button>
            <button class="btn-delete" @click="handleDelete(item)">删除</button>
          </div>
@@ -217,13 +229,31 @@ async function fetchItems() {
  .grid-value { font-size: 13px; font-weight: 600; color: #333; }
  .profit-up { color: #27ae60; }
  .profit-down { color: #e74c3c; }
- .risk-on { color: #e6a23c; }
- .heyue-actions {
+.risk-on { color: #e6a23c; }
+.heyue-time {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+  padding: 6px 0 0;
+  border-top: 1px solid #f0f0f0;
+}
+.heyue-time .grid-label {
+  font-size: 11px;
+  color: #999;
+  white-space: nowrap;
+}
+.heyue-time .grid-value {
+  font-size: 12px;
+  font-weight: 400;
+  color: #999;
+}
+.heyue-actions {
    display: flex;
    gap: 8px;
    margin-top: 8px;
    padding-top: 8px;
-   border-top: 1px solid #f0f0f0;
+  /* border-top: 1px solid #f0f0f0;*/
  }
  .btn-edit, .btn-delete {
    flex: 1;

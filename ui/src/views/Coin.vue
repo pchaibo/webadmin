@@ -194,7 +194,7 @@ function connectWebSocket() {
   //const protocol = location.protocol === 'https:' ? 'wss:' : 'ws:'
   //const wsUrl = `${protocol}//${location.host}/api/ws`
   //const wsUrl = `ws://127.0.0.1:4000/api/ws`
-  const wsUrl='ws://admin.liangcoin.com/api/ws'
+  const wsUrl='wss://admin.liangcoin.com/api/ws'
 
   ws = new WebSocket(wsUrl)
 

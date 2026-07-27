@@ -29,7 +29,7 @@ import { fetchCoinList } from '../api'
    //const protocol = location.protocol === 'https:' ? 'wss:' : 'ws:'
    //const wsUrl = `${protocol}//${location.host}/user/ws`
    //const wsUrl = `ws://127.0.0.1:4000/user/ws`
-   const wsUrl = `ws://admin.liangcoin.com/user/ws`
+   const wsUrl = `wss://admin.liangcoin.com/user/ws`
  
    ws = new WebSocket(wsUrl)
  
