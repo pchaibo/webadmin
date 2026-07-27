@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+	"sync"
+	"time"
 
 	"webadmin/model"
 
@@ -30,6 +32,52 @@ func errorResponse(c *gin.Context, code int, message string) {
 func md5Password(password string) string {
 	sum := md5.Sum([]byte(password))
 	return fmt.Sprintf("%x", sum)
+}
+
+type loginAttempt struct {
+	failCount   int
+	lockedUntil time.Time
+}
+
+var (
+	loginAttempts   = make(map[string]*loginAttempt)
+	loginAttemptsMu sync.RWMutex
+)
+
+func recordFailedLogin(username string) (int, time.Duration) {
+	loginAttemptsMu.Lock()
+	defer loginAttemptsMu.Unlock()
+	attempt, exists := loginAttempts[username]
+	if !exists {
+		attempt = &loginAttempt{}
+		loginAttempts[username] = attempt
+	}
+	attempt.failCount++
+	if attempt.failCount >= 3 {
+		attempt.lockedUntil = time.Now().Add(30 * time.Minute)
+		return attempt.failCount, 30 * time.Minute
+	}
+	return attempt.failCount, 0
+}
+
+func clearLoginAttempts(username string) {
+	loginAttemptsMu.Lock()
+	delete(loginAttempts, username)
+	loginAttemptsMu.Unlock()
+}
+
+func isLoginLocked(username string) (bool, time.Duration) {
+	loginAttemptsMu.RLock()
+	defer loginAttemptsMu.RUnlock()
+	attempt, exists := loginAttempts[username]
+	if !exists {
+		return false, 0
+	}
+	remaining := time.Until(attempt.lockedUntil)
+	if remaining > 0 {
+		return true, remaining
+	}
+	return false, 0
 }
 
 func AdminList(c *gin.Context) {
@@ -78,7 +126,7 @@ func UserCreate(c *gin.Context) {
 	admin.Username = strings.TrimSpace(admin.Username)
 	admin.Email = strings.TrimSpace(admin.Email)
 	admin.Password = strings.TrimSpace(admin.Password)
- 	admin.Mobile = strings.TrimSpace(admin.Mobile)
+	admin.Mobile = strings.TrimSpace(admin.Mobile)
 
 	if admin.Username == "" {
 		errorResponse(c, 400, "username is required")
@@ -92,9 +140,9 @@ func UserCreate(c *gin.Context) {
 		errorResponse(c, 400, "password is required")
 		return
 	}
- 	if admin.Mobile == "" {
- 		admin.Mobile = ""
- 	}
+	if admin.Mobile == "" {
+		admin.Mobile = ""
+	}
 
 	admin.Password = md5Password(admin.Password)
 
@@ -176,11 +224,23 @@ func UserLogin(c *gin.Context) {
 	req.Password = strings.TrimSpace(req.Password)
 
 	if req.Password == "" {
-		errorResponse(c, 400, "password is required")
+		errorResponse(c, 400, "密码不能为空")
 		return
 	}
 	if req.Username == "" && req.Email == "" {
-		errorResponse(c, 400, "username or email is required")
+		errorResponse(c, 400, "用户名或邮箱不能为空")
+		return
+	}
+
+	loginKey := req.Username
+	if loginKey == "" {
+		loginKey = req.Email
+	}
+
+	locked, remaining := isLoginLocked(loginKey)
+	if locked {
+		minutes := int(remaining.Minutes()) + 1
+		errorResponse(c, 429, fmt.Sprintf("登录失败次数过多，请在%d分钟后重试", minutes))
 		return
 	}
 
@@ -195,18 +255,22 @@ func UserLogin(c *gin.Context) {
 	}
 
 	if err := query.First(&admin).Error; err != nil {
-		errorResponse(c, 401, "invalid username/email or password")
+		recordFailedLogin(loginKey)
+		errorResponse(c, 401, "用户不存在或密码不正确")
 		return
 	}
 
 	if admin.Password != req.Password {
-		errorResponse(c, 401, "invalid username/email or password")
+		recordFailedLogin(loginKey)
+		errorResponse(c, 401, "用户密码不正确")
 		return
 	}
 
+	clearLoginAttempts(loginKey)
+
 	token, err := GenerateToken(admin.Id, admin.Username, admin.Email)
 	if err != nil {
-		errorResponse(c, 500, "Failed to generate token")
+		errorResponse(c, 500, "生成令牌失败")
 		return
 	}
 

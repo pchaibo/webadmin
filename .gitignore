@@ -16,6 +16,8 @@ Thumbs.db
 *.exe
 *.test
 *.out
+#py
+*.py
 
 # Node
 node_modules/
