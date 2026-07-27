@@ -23,7 +23,7 @@
  const totalUsdtLong = ref(0)
  const totalUsdtShort = ref(0)
 const currentPage = ref(1)
-const pageSize = 20
+const pageSize = 10
  
  const searchSymbol = ref('')
  const searchOrdertype = ref<number | undefined>()

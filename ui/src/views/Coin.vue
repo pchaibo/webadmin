@@ -47,6 +47,7 @@
       <el-table-column prop="high" label="最高价" width="100" />
       <el-table-column prop="low" label="最低价" width="100" />
       <el-table-column prop="priceprecision" label="价格精度" width="90" />
+      <el-table-column prop="quantityprecision" label="数量精度" width="90" />
       <el-table-column prop="status" label="状态" width="70">
         <template #default="{ row }">
           <el-tag :type="row.status === 1 ? 'success' : 'danger'" size="small">
@@ -114,10 +115,13 @@
         <el-form-item label="最低价">
           <el-input-number v-model="form.low" :min="0" style="width: 100%" />
         </el-form-item>
-        <el-form-item label="价格精度">
-          <el-input-number v-model="form.priceprecision" :min="0" :precision="0" :step="1" style="width: 100%" />
+       <el-form-item label="价格精度">
+         <el-input-number v-model="form.priceprecision" :min="0" :precision="0" :step="1" style="width: 100%" />
+       </el-form-item>
+        <el-form-item label="数量精度">
+          <el-input-number v-model="form.quantityprecision" :min="0" :precision="0" :step="1" style="width: 100%" />
         </el-form-item>
-        <el-form-item label="状态">
+       <el-form-item label="状态">
           <el-switch
             v-model="form.status"
             :active-value="1"
@@ -167,7 +171,8 @@ const form = reactive({
   name: '',
   symbol: '',
   close: 0,
-  priceprecision: 0,
+ priceprecision: 0,
+  quantityprecision: 0,
   open: 0,
   low: 0,
   high: 0,
@@ -305,6 +310,7 @@ function openCreate() {
   form.symbol = ''
   form.close = 0
   form.priceprecision = 1
+  form.quantityprecision = 0
   form.open = 0
   form.low = 0
   form.high = 0
@@ -319,6 +325,7 @@ function openEdit(row: CoinItem) {
   form.symbol = row.symbol
   form.close = row.close
   form.priceprecision = row.priceprecision
+  form.quantityprecision = row.quantityprecision
   form.open = row.open
   form.low = row.low
   form.high = row.high
@@ -338,8 +345,9 @@ async function submitForm() {
         name: form.name,
         symbol: form.symbol,
         close: form.close,
-        priceprecision: form.priceprecision,
-        open: form.open,
+  priceprecision: form.priceprecision,
+  quantityprecision: form.quantityprecision,
+  open: form.open,
         low: form.low,
         high: form.high,
         status: form.status,

@@ -465,6 +465,7 @@ export interface CoinItem {
   symbol: string
   close: number
   priceprecision: number
+  quantityprecision: number
   open: number
   low: number
   high: number
@@ -503,6 +504,7 @@ export async function getCoins(page: number = 1, symbol?: string, status?: numbe
    symbol: string
    close?: number
    priceprecision?: number
+   quantityprecision?: number
    open?: number
    low?: number
    high?: number
@@ -523,6 +525,7 @@ export async function getCoins(page: number = 1, symbol?: string, status?: numbe
      symbol?: string
      close?: number
      priceprecision?: number
+     quantityprecision?: number
      open?: number
      low?: number
      high?: number
