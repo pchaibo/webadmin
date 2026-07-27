@@ -89,7 +89,7 @@ func Addpositon(user *model.User, heyue *model.Heyue) {
 		Logs.Println("加仓 LONG:", response)
 		orderId := gjson.Get(response, "orderId").Int()
 		if orderId > 0 {
-			model.Db.Model(&model.Heyue{}).Where("id = ?", heyue.Id).Select("is_num", "newpric", "new_time").Updates(&newheyue)
+			model.Db.Model(&model.Heyue{}).Where("id = ?", heyue.Id).Select("is_num", "newprice", "new_time").Updates(&newheyue)
 			var order model.Heyueorder
 			order.Total = total
 			order.Ordertype = 1
@@ -118,7 +118,7 @@ func Addpositon(user *model.User, heyue *model.Heyue) {
 		Logs.Println("加仓 SHORT:", response)
 		orderId := gjson.Get(response, "orderId").Int()
 		if orderId > 0 {
-			model.Db.Model(&model.Heyue{}).Where("id = ?", heyue.Id).Select("is_num", "newpric", "new_time").Updates(&newheyue)
+			model.Db.Model(&model.Heyue{}).Where("id = ?", heyue.Id).Select("is_num", "newprice", "new_time").Updates(&newheyue)
 			var order model.Heyueorder
 			order.Total = total
 			order.Ordertype = 1
@@ -156,7 +156,7 @@ func RangCloseposition(user *model.User, heyue *model.Heyue, resdata PositionRis
 		orderId := gjson.Get(response, "orderId").Int()
 		if orderId > 0 {
 			rest = 1
-			model.Db.Model(&model.Heyue{}).Where("id = ?", heyue.Id).UpdateColumn("is_num", gorm.Expr("is_num - ?", 1)).UpdateColumn("newpric", newpric)
+			model.Db.Model(&model.Heyue{}).Where("id = ?", heyue.Id).UpdateColumn("is_num", gorm.Expr("is_num - ?", 1)).UpdateColumn("newprice", newpric)
 			var order model.Heyueorder
 			order.Ordertype = 2
 			order.Quantity = resdata.PositionAmt
@@ -187,7 +187,7 @@ func RangCloseposition(user *model.User, heyue *model.Heyue, resdata PositionRis
 		orderId := gjson.Get(response_short, "orderId").Int()
 		if orderId > 0 {
 			rest = 1
-			model.Db.Model(&model.Heyue{}).Where("id = ?", heyue.Id).UpdateColumn("is_num", gorm.Expr("is_num - ?", 1)).UpdateColumn("newpric", newpric)
+			model.Db.Model(&model.Heyue{}).Where("id = ?", heyue.Id).UpdateColumn("is_num", gorm.Expr("is_num - ?", 1)).UpdateColumn("newprice", newpric)
 			var order model.Heyueorder
 			order.Ordertype = 2
 			order.Quantity = resdata.PositionAmt
@@ -226,7 +226,7 @@ func Closeposition(user *model.User, heyue *model.Heyue, resdata PositionRisk) (
 		orderId := gjson.Get(response, "orderId").Int()
 		if orderId > 0 {
 			rest = 1
-			model.Db.Model(&model.Heyue{}).Where("id = ?", heyue.Id).UpdateColumn("is_num", 0).UpdateColumn("newpric", 0)
+			model.Db.Model(&model.Heyue{}).Where("id = ?", heyue.Id).UpdateColumn("is_num", 0).UpdateColumn("newprice", 0)
 			var order model.Heyueorder
 			order.Ordertype = 2
 			order.Quantity = resdata.PositionAmt
@@ -257,7 +257,7 @@ func Closeposition(user *model.User, heyue *model.Heyue, resdata PositionRisk) (
 		orderId := gjson.Get(response_short, "orderId").Int()
 		if orderId > 0 {
 			rest = 1
-			model.Db.Model(&model.Heyue{}).Where("id = ?", heyue.Id).UpdateColumn("is_num", 0).UpdateColumn("newpric", 0)
+			model.Db.Model(&model.Heyue{}).Where("id = ?", heyue.Id).UpdateColumn("is_num", 0).UpdateColumn("newprice", 0)
 			var order model.Heyueorder
 			order.Ordertype = 2
 			order.Quantity = resdata.PositionAmt
