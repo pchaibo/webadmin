@@ -26,7 +26,7 @@ func HeyuesorderList(c *gin.Context) {
 		}
 	}
 
-	pageSize := 20
+	pageSize := 10
 	if ps := config.Get("pageSize"); ps != "" {
 		if p, err := strconv.Atoi(ps); err == nil && p > 0 {
 			pageSize = p

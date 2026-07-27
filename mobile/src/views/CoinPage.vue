@@ -1,4 +1,4 @@
-<script setup lang="ts">
+﻿<script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
  import { useRouter } from 'vue-router'
 import { fetchCoinList } from '../api'
@@ -16,10 +16,13 @@ import { fetchCoinList } from '../api'
    [key: string]: unknown
  }
  
- const list = ref<CoinItem[]>([])
- const loading = ref(true)
- 
- // ── WebSocket ──
+const list = ref<CoinItem[]>([])
+const loading = ref(true)
+const total = ref(0)
+const currentPage = ref(1)
+const pageSize = 10
+
+// ── WebSocket ──
  let ws: WebSocket | null = null
  let wsReconnectTimer: ReturnType<typeof setTimeout> | null = null
  
@@ -79,19 +82,32 @@ import { fetchCoinList } from '../api'
    ws.onerror = () => { ws?.close() }
  }
  
- onMounted(async () => {
-   try {
-     const res = await fetchCoinList()
-     if (res.status === 1 && Array.isArray(res.data)) {
-       list.value = res.data as CoinItem[]
-     }
-   } catch { /* ignore */ } finally {
-     loading.value = false
-   }
-   connectWebSocket()
- })
- 
- onUnmounted(() => {
+onMounted(async () => {
+  await fetchItems()
+  connectWebSocket()
+})
+
+async function fetchItems() {
+  loading.value = true
+  try {
+    const res = await fetchCoinList(currentPage.value)
+    if (res.status === 1 && Array.isArray(res.data)) {
+      list.value = res.data as CoinItem[]
+      total.value = res.total || 0
+    }
+  } catch { /* ignore */ } finally {
+    loading.value = false
+  }
+}
+
+function goPage(p: number) {
+  const tp = Math.ceil(total.value / pageSize) || 1
+  if (p < 1 || p > tp) return
+  currentPage.value = p
+  fetchItems()
+}
+
+onUnmounted(() => {
    if (ws) { ws.close(); ws = null }
    if (wsReconnectTimer) { clearTimeout(wsReconnectTimer); wsReconnectTimer = null }
  })
@@ -130,8 +146,13 @@ import { fetchCoinList } from '../api'
            </div>
          </div>
        </div>
-     </div>
-   </div>
+    </div>
+    <div v-if="total > pageSize" class="pagination">
+      <button :disabled="currentPage <= 1" @click="goPage(currentPage - 1)">上一页</button>
+      <span class="page-info">{{ currentPage }} / {{ Math.ceil(total / pageSize) || 1 }}</span>
+      <button :disabled="currentPage >= (Math.ceil(total / pageSize) || 1)" @click="goPage(currentPage + 1)">下一页</button>
+    </div>
+  </div>
  </template>
  
  <style scoped>
@@ -166,5 +187,26 @@ import { fetchCoinList } from '../api'
  .price-value.price-up { color: #27ae60; }
  .price-value.price-down { color: #e74c3c; }
  .price-value.high { color: #27ae60; }
- .price-value.low { color: #e74c3c; }
- </style>
+.price-value.low { color: #e74c3c; }
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 14px;
+  padding: 12px 0;
+}
+.pagination button {
+  height: 32px;
+  padding: 0 14px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background: #fff;
+  color: #333;
+  font-size: 13px;
+  cursor: pointer;
+}
+.pagination button:disabled { color: #ccc; cursor: not-allowed; }
+.page-info { font-size: 13px; color: #666; }
+</style>

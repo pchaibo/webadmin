@@ -50,11 +50,11 @@ export async function login(params: LoginParams) {
    return post<{ status: number; error?: string }>('/user/register', params)
  }
  
- export async function fetchCoinList() {
-   return get<ApiResponse>('/user/coin')
- }
- 
- export async function fetchHeyueList(page?: number, symbol?: string, username?: string, status?: number) {
+ export async function fetchCoinList(page?: number) {
+  return get<{ status: number; data?: unknown[]; total?: number; page?: number; pagesize?: number; error?: string }>('/user/coin' + (page ? '?page=' + page : ''))
+}
+
+export async function fetchHeyueList(page?: number, symbol?: string, username?: string, status?: number) {
    let url = '/user/heyue'
    const params: string[] = []
    if (page) params.push('page=' + page)
