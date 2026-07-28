@@ -276,6 +276,7 @@ func Checkadd(user *model.User, heyue *model.Heyue, num int32) {
 
 // 查询持仓
 func Checkheyun(user *model.User, heyue *model.Heyue, resdata []PositionRisk) (res int) {
+	Logs.Println("Checkheyun resdata  : ", resdata)
 	var positionSide string
 	res = 0
 	for _, v := range resdata {
