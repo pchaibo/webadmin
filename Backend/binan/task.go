@@ -291,6 +291,7 @@ func Checkheyun(user *model.User, heyue *model.Heyue, resdata []PositionRisk) (r
 			sell := heyue.Sellprice * 1e-2
 			Rangepercent := float64(heyue.Rangepercent) * 1e-2 * float64(heyue.Is_num) //百分比* 0.01 * 次数
 			Marginpercentage := math.Abs(v.UnRealizedProfit) / v.InitialMargin
+			Logs.Println("Checkheyun  : ", Rangepercent, Marginpercentage)
 			//收益平仓
 			if v.UnRealizedProfit > 0 && (v.UnRealizedProfit/v.InitialMargin) > sell {
 				Logs.Println("平仓 id: ", heyue.Id)
