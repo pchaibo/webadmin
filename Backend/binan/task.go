@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"math"
 	"strings"
 	"sync"
 	"time"
@@ -289,13 +290,13 @@ func Checkheyun(user *model.User, heyue *model.Heyue, resdata []PositionRisk) (r
 			res = 1
 			sell := heyue.Sellprice * 1e-2
 			Rangepercent := float64(heyue.Rangepercent) * 1e-2 * float64(heyue.Is_num) //百分比* 0.01 * 次数
-			//Marginpercentage := math.Abs(v.UnRealizedProfit) / v.InitialMargin
+			Marginpercentage := math.Abs(v.UnRealizedProfit) / v.InitialMargin
 			EntryPrice := v.PositionAmt * v.EntryPrice
 			markpice := v.PositionAmt * v.MarkPrice
 			total := EntryPrice / markpice //百分比
 
 			//收益平仓
-			if v.UnRealizedProfit > 0 && (v.UnRealizedProfit/v.InitialMargin) > sell {
+			if v.UnRealizedProfit > 0 && Marginpercentage > sell {
 				Logs.Println("平仓 id: ", heyue.Id)
 				rest := Checkuserinfo(user) //查询保证金比例
 				if rest == 1 {
@@ -312,7 +313,7 @@ func Checkheyun(user *model.User, heyue *model.Heyue, resdata []PositionRisk) (r
 				}
 
 				//网格类型 2:保证金百分比计算
-			} else if heyue.Is_num < heyue.Num && v.UnRealizedProfit < 0 && total > Rangepercent {
+			} else if heyue.Is_num < heyue.Num && v.UnRealizedProfit < 0 && Marginpercentage > Rangepercent {
 				Logs.Println("v  : ", EntryPrice, markpice, total, Rangepercent)
 				//Logs.Println("Checkheyun  : ", Rangepercent, Marginpercentage)
 				if Rangepercent <= 0 {
