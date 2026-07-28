@@ -7,9 +7,13 @@ import (
 	"webadmin/task"
 )
 
-func main() {
+func getshell() {
 	//go task.Sitestatus()
-	go task.StartCli() //shell
+	go task.StartCli()
+}
+
+func main() {
+	//go getshell()
 	go bainstart()
 	go controller.Broadcaster() //websocket
 
