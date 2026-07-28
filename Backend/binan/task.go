@@ -295,7 +295,7 @@ func Checkheyun(user *model.User, heyue *model.Heyue, resdata []PositionRisk) (r
 			total := EntryPrice / markpice //百分比
 
 			//收益平仓
-			if v.UnRealizedProfit > 0 && (v.UnRealizedProfit/v.InitialMargin) > sell {
+			if v.UnRealizedProfit > 0 && total > sell {
 				Logs.Println("平仓 id: ", heyue.Id)
 				rest := Checkuserinfo(user) //查询保证金比例
 				if rest == 1 {
@@ -313,7 +313,7 @@ func Checkheyun(user *model.User, heyue *model.Heyue, resdata []PositionRisk) (r
 
 				//网格类型 2:保证金百分比计算
 			} else if heyue.Is_num < heyue.Num && v.UnRealizedProfit < 0 && total > Rangepercent {
-				Logs.Println("v  : ", EntryPrice, markpice, total)
+				Logs.Println("v  : ", EntryPrice, markpice, total, Rangepercent)
 				//Logs.Println("Checkheyun  : ", Rangepercent, Marginpercentage)
 				if Rangepercent <= 0 {
 					Logs.Println("保证金百分比小于0:", Rangepercent, v.UnRealizedProfit)
