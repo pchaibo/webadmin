@@ -276,7 +276,7 @@ func Checkadd(user *model.User, heyue *model.Heyue, num int32) {
 
 // 查询持仓
 func Checkheyun(user *model.User, heyue *model.Heyue, resdata []PositionRisk) (res int) {
-	Logs.Println("Checkheyun resdata  : ", resdata)
+	//Logs.Println("Checkheyun resdata  : ", resdata)
 	var positionSide string
 	res = 0
 	for _, v := range resdata {
@@ -309,7 +309,7 @@ func Checkheyun(user *model.User, heyue *model.Heyue, resdata []PositionRisk) (r
 				}
 
 				//网格类型 2:保证金百分比计算
-			} else if heyue.Is_num < heyue.Num && v.UnRealizedProfit < 0 && Marginpercentage > Rangepercent {
+			} else if heyue.Is_num < heyue.Num && Marginpercentage > Rangepercent {
 				if Rangepercent <= 0 {
 					Logs.Println("保证金百分比小于0:", Rangepercent, v.UnRealizedProfit, Marginpercentage)
 					continue
