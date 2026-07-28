@@ -1,7 +1,6 @@
 ﻿package controller
 
 import (
-	"log"
 	"webadmin/model"
 
 	"github.com/gin-gonic/gin"
@@ -62,7 +61,7 @@ func Index(c *gin.Context) {
 		}
 	}
 
-	log.Printf("Dashboard stats: %+v\n", stats)
+	//log.Printf("Dashboard stats: %+v\n", stats)
 
 	successResponse(c, 200, 1, gin.H{
 		"admin_count":           stats.AdminCount,

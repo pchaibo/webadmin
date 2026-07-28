@@ -141,7 +141,8 @@ func Userinfo(u *userHeyue) {
 			res := Checkheyun(user, hey, resdata)
 			if res != 1 {
 				Logs.Println("symbol  null: ", hey.Symbol)
-				Addpositon(user, hey)
+				//Addpositon(user, hey)
+				Checkadd(user, hey, 1)
 				continue
 
 				//网格平仓
@@ -152,7 +153,7 @@ func Userinfo(u *userHeyue) {
 
 		} else {
 			//无持仓
-			Checkadd(user, hey)
+			Checkadd(user, hey, 1)
 			continue
 		}
 	}
@@ -248,8 +249,12 @@ func Ckeckrisk(heyue *model.Heyue) (rest int) {
 }
 
 // checkuserinfo 加仓
-func Checkadd(user *model.User, heyue *model.Heyue) {
+func Checkadd(user *model.User, heyue *model.Heyue, num int32) {
 
+	if num == 1 && heyue.Is_num >= 1 {
+		Logs.Println("已超过1次数 ", user.Username, heyue.Symbol, heyue.Repeatprice, heyue.Side)
+		return
+	}
 	//保证金比例限制
 	rest := Checkuserinfo(user)
 	if rest != 1 {
@@ -302,18 +307,8 @@ func Checkheyun(user *model.User, heyue *model.Heyue, resdata []PositionRisk) (r
 					return
 				}
 
-				//网格类型 1:差价usdt计算
-			} else if heyue.Rangetype == 1 && heyue.Newprice > 0 && heyue.Rangeprice > 0 && heyue.Is_num < heyue.Num {
-				//网格加仓做多
-				if positionSide == "LONG" && (heyue.Newprice-heyue.Rangeprice) > v.MarkPrice {
-					Checkadd(user, heyue)
-					//网格做空
-				} else if positionSide == "SHORT" && (heyue.Newprice+heyue.Rangeprice) < v.MarkPrice {
-					Checkadd(user, heyue)
-				}
-
 				//网格类型 2:保证金百分比计算
-			} else if heyue.Rangetype == 2 && heyue.Is_num < heyue.Num && v.UnRealizedProfit < 0 && Marginpercentage > Rangepercent {
+			} else if heyue.Is_num < heyue.Num && v.UnRealizedProfit < 0 && Marginpercentage > Rangepercent {
 				if Rangepercent <= 0 {
 					Logs.Println("保证金百分比小于0:", Rangepercent, v.UnRealizedProfit, Marginpercentage)
 					continue
@@ -321,11 +316,11 @@ func Checkheyun(user *model.User, heyue *model.Heyue, resdata []PositionRisk) (r
 				//v.MarkPrice < heyue.Newprice
 				if positionSide == "LONG" {
 					Logs.Println("保证金百分比计算LONG:", Rangepercent, v.UnRealizedProfit, Marginpercentage, v.MarkPrice)
-					Checkadd(user, heyue)
+					Checkadd(user, heyue, 2)
 					//&& v.MarkPrice > heyue.Newprice
 				} else if positionSide == "SHORT" {
 					Logs.Println("保证金百分比计算SHORT:", Rangepercent, v.UnRealizedProfit, Marginpercentage, v.MarkPrice)
-					Checkadd(user, heyue)
+					Checkadd(user, heyue, 2)
 				}
 
 			}
