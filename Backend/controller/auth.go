@@ -36,7 +36,7 @@ func GenerateToken(userID int, username, email string) (string, error) {
 		Username: username,
 		Email:    email,
 		Iat:      time.Now().Unix(),
-		Exp:      time.Now().Add(24 * time.Hour).Unix(),
+		Exp:      time.Now().Add(24 * 7 * time.Hour).Unix(),
 	}
 
 	payload, err := json.Marshal(claims)
@@ -103,7 +103,8 @@ func AuthMiddleware() gin.HandlerFunc {
 
 		claims, err := ParseToken(token)
 		if err != nil {
-			c.JSON(401, gin.H{"error": "invalid or expired token"})
+			//c.JSON(401, gin.H{"error": "invalid or expired token"})
+			errorResponse(c, 500, "token 解析失败 请重新登录")
 			c.Abort()
 			return
 		}
