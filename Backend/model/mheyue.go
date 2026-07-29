@@ -6,16 +6,17 @@ type User struct {
 	Password string  `json:"password"`
 	Margin   float64 `json:"margin"` //保证金
 	//Money     float64 `json:"money"`
-	Usdt      float64  `json:"usdt"`
-	Email     string   `json:"email"`
-	Mobile    string   `json:"mobile"`
-	Bnaccess  string   `json:"bnaccess"`
-	Bnasecret string   `json:"bnasecret"`
-	Bnbadd    string   `json:"bnbadd"` //币安usdt地址
-	Bnbkey    string   `json:"bnbkey"` //币安密钥
-	Status    int      `json:"status"`
-	Addtime   int      `json:"addtime"`
-	Heyue     []*Heyue `gorm:"foreignKey:UserId;references:Id" json:"heyue"`
+	Usdt       float64  `json:"usdt"`
+	Email      string   `json:"email"`
+	Mobile     string   `json:"mobile"`
+	Bnaccess   string   `json:"bnaccess"`
+	Bnasecret  string   `json:"bnasecret"`
+	Bnbadd     string   `json:"bnbadd"` //币安usdt地址
+	Bnbkey     string   `json:"bnbkey"` //币安密钥
+	Status     int      `json:"status"`
+	Addtime    int      `json:"addtime"`
+	Updatetime int      `json:"updatetime"`
+	Heyue      []*Heyue `gorm:"foreignKey:UserId;references:Id" json:"heyue"`
 }
 
 // heyue:合约

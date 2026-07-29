@@ -128,6 +128,7 @@ func UserCreate(c *gin.Context) {
 	admin.Password = strings.TrimSpace(admin.Password)
 	admin.Mobile = strings.TrimSpace(admin.Mobile)
 	admin.Status = 1 // 默认启用
+	admin.Addtime = int(time.Now().Unix())
 
 	if admin.Username == "" {
 		errorResponse(c, 400, "username is required")
