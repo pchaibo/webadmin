@@ -97,6 +97,9 @@ async function fetchItems() {
 function statusLabel(status: number): string {
   return status === 1 ? '正常' : '暂停'
 }
+function closingLabel(closing: number): string {
+  return closing === 2 ? '开启' : '关闭'
+}
 
 function formatTime(ts: number): string {
   if (!ts) return '-'
@@ -143,7 +146,7 @@ function formatTime(ts: number): string {
            </div>
            <div class="grid-item">
              <span class="grid-label">收益%</span>
-             <span class="grid-value profit" :class="item.sellprice >= 0 ? 'profit-up' : 'profit-down'">{{ item.sellprice }}%</span>
+             <span class="grid-value profit" :class="item.sellprice >= 0 ? 'profit-up' : 'profit-down'">{{ item.sellprice }}</span>
            </div>
           <div class="grid-item">
             <span class="grid-label">交易价格</span>
@@ -157,6 +160,19 @@ function formatTime(ts: number): string {
             <span class="grid-label">风控</span>
             <span class="grid-value" :class="{ 'risk-on': item.risk === 2 }">{{ riskLabel(item.risk) }}</span>
           </div>
+          <div class="grid-item">
+            <span class="grid-label">网格平仓</span>
+            <span class="grid-value" :class="{ 'risk-on': item.rangeclosing === 2 }">{{ closingLabel(item.rangeclosing) }}</span>
+          </div>
+          <div class="grid-item">
+            <span class="grid-label">网格%</span>
+            <span class="grid-value">{{ item.rangepercent }}</span>
+          </div>
+          <div class="grid-item">
+            <span class="grid-label">网格平仓%</span>
+            <span class="grid-value">{{ item.rangeclosingpct }}</span>
+          </div>
+
         </div>
         <div class="heyue-time">
           <span class="grid-label">交易时间 </span>
