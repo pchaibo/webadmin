@@ -48,6 +48,7 @@
       <el-table-column prop="low" label="最低价" width="100" />
       <el-table-column prop="priceprecision" label="价格精度" width="90" />
       <el-table-column prop="quantityprecision" label="数量精度" width="90" />
+      <el-table-column prop="sort" label="排序" width="80" />
       <el-table-column prop="status" label="状态" width="70">
         <template #default="{ row }">
           <el-tag :type="row.status === 1 ? 'success' : 'danger'" size="small">
@@ -121,6 +122,9 @@
         <el-form-item label="数量精度">
           <el-input-number v-model="form.quantityprecision" :min="0" :precision="0" :step="1" style="width: 100%" />
         </el-form-item>
+        <el-form-item label="排序">
+          <el-input-number v-model="form.sort" :min="0" :precision="0" :step="1" style="width: 100%" />
+        </el-form-item>
        <el-form-item label="状态">
           <el-switch
             v-model="form.status"
@@ -177,6 +181,7 @@ const form = reactive({
   low: 0,
   high: 0,
   status: 1,
+  sort: 100,
 })
 
 const formRules = {
@@ -315,6 +320,7 @@ function openCreate() {
   form.low = 0
   form.high = 0
   form.status = 1
+  form.sort = 100
   dialogVisible.value = true
 }
 
@@ -330,6 +336,7 @@ function openEdit(row: CoinItem) {
   form.low = row.low
   form.high = row.high
   form.status = row.status
+  form.sort = row.sort
   dialogVisible.value = true
 }
 
@@ -351,6 +358,7 @@ async function submitForm() {
         low: form.low,
         high: form.high,
         status: form.status,
+        sort: form.sort,
       })
       if (res.status === 1) {
         ElMessage.success('更新成功')
@@ -369,6 +377,7 @@ async function submitForm() {
         low: form.low,
         high: form.high,
         status: form.status,
+        sort: form.sort,
       })
       if (res.status === 1) {
         ElMessage.success('创建成功')

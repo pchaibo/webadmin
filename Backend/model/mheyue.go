@@ -33,6 +33,7 @@ type Coin struct {
 	Status            uint    `json:"status"` //状态  1:正常 0:停用
 	AddTime           int64   `json:"addtime"`
 	UpdateTime        int64   `json:"updatetime"`
+	Sort              int     `json:"sort"` //排序
 }
 
 func (Coin) TableName() string {

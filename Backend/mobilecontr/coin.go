@@ -50,7 +50,7 @@ func CoinList(c *gin.Context) {
 		return
 	}
 
-	if err := query.Order("id asc").Limit(pageSize).Offset(offset).Find(&items).Error; err != nil {
+	if err := query.Order("sort asc, id asc").Limit(pageSize).Offset(offset).Find(&items).Error; err != nil {
 		errorResponse(c, 500, "Failed to retrieve coins")
 		return
 	}
@@ -125,6 +125,7 @@ func CoinUpdate(c *gin.Context) {
 	updates["low"] = req.Low
 	updates["high"] = req.High
 	updates["status"] = req.Status
+	updates["sort"] = req.Sort
 	updates["update_time"] = time.Now().Unix()
 
 	result := model.Db.Model(&model.Coin{}).Where("id = ?", id).Updates(updates)

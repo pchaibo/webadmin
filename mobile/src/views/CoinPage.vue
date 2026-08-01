@@ -67,6 +67,7 @@ const pageSize = 10
            if (priceData.C !== undefined) row.close = priceData.C
            if (priceData.H !== undefined) row.high = priceData.H
            if (priceData.I !== undefined) row.low = priceData.I
+           if (priceData.Changepercent !== undefined) row.Changepercent = priceData.Changepercent
            row._priceUpdated = true
            setTimeout(() => { row._priceUpdated = false }, 600)
          }
@@ -136,6 +137,14 @@ onUnmounted(() => {
                  'price-down': item._priceDirection === 'down',
                }">{{ item.close }}</span>
            </div>
+          <div class="price-row">
+             <span class="price-label">涨跌</span>
+             <span class="price-value change-percent"
+               :class="{
+                 'price-up': item._priceDirection === 'up',
+                 'price-down': item._priceDirection === 'down',
+               }">{{ item.Changepercent }}%</span>
+           </div>
            <div class="price-row">
              <span class="price-label">最高</span>
              <span class="price-value high">{{ item.high }}</span>
@@ -144,6 +153,7 @@ onUnmounted(() => {
              <span class="price-label">最低</span>
              <span class="price-value low">{{ item.low }}</span>
            </div>
+         
          </div>
        </div>
     </div>
@@ -186,9 +196,8 @@ onUnmounted(() => {
  .price-value.close { color: #e67e22; }
  .price-value.price-up { color: #27ae60; }
  .price-value.price-down { color: #e74c3c; }
- .price-value.high { color: #27ae60; }
-.price-value.low { color: #e74c3c; }
-
+ /* .price-value.high { color: #27ae60; }
+.price-value.low { color: #e74c3c; } */
 .pagination {
   display: flex;
   align-items: center;

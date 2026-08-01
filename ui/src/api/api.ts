@@ -472,6 +472,7 @@ export interface CoinItem {
   status: number
   addtime: number
   updatetime: number
+  sort: number
   _priceDirection?: string
   _priceUpdated?: boolean
 }
@@ -509,6 +510,7 @@ export async function getCoins(page: number = 1, symbol?: string, status?: numbe
    low?: number
    high?: number
    status?: number
+   sort?: number
  }): Promise<{ status: number; coin?: CoinItem; error?: string }> {
    const res = await fetch('/api/coin', {
      method: 'POST',
@@ -530,6 +532,7 @@ export async function getCoins(page: number = 1, symbol?: string, status?: numbe
      low?: number
      high?: number
      status?: number
+     sort?: number
    }
  ): Promise<{ status: number; coin?: CoinItem; error?: string }> {
    const res = await fetch(`/api/coin/${id}`, {
