@@ -1,14 +1,14 @@
-﻿<template>
-  <div class="admin-page">
+<template>
+  <div class="admingroup-page">
     <div class="toolbar">
-      <el-button type="primary" @click="openCreate">新增管理员</el-button>
+      <el-button type="primary" @click="openCreate">新增用户组</el-button>
       <el-button type="danger" :disabled="!selectedIds.length" @click="handleBatchDelete">
         批量删除
       </el-button>
     </div>
 
     <el-table
-      :data="admins"
+      :data="groups"
       stripe
       border
       v-loading="loading"
@@ -17,13 +17,7 @@
     >
       <el-table-column type="selection" width="55" />
       <el-table-column prop="id" label="ID" width="60" />
-      <el-table-column prop="username" label="用户名" min-width="120" />
-      <el-table-column prop="email" label="邮箱" min-width="180" />
-      <el-table-column label="分组" min-width="120">
-        <template #default="{ row }">
-          {{ groupTitle(row.auth_group) }}
-        </template>
-      </el-table-column>
+      <el-table-column prop="title" label="用户组名称" min-width="140" />
       <el-table-column prop="status" label="状态" width="80">
         <template #default="{ row }">
           <el-tag :type="row.status === 1 ? 'success' : 'danger'" size="small">
@@ -31,7 +25,7 @@
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column prop="register_time" label="注册时间" min-width="160" />
+      <el-table-column prop="rules" label="权限规则" min-width="240" show-overflow-tooltip />
       <el-table-column label="操作" width="180" fixed="right">
         <template #default="{ row }">
           <el-button size="small" @click="openEdit(row)">编辑</el-button>
@@ -47,53 +41,37 @@
         :total="total"
         layout="total, prev, pager, next, jumper"
         background
-        @current-change="fetchAdmins"
+        @current-change="fetchGroups"
       />
     </div>
 
     <el-dialog
       v-model="dialogVisible"
-      :title="isEditing ? '编辑管理员' : '新增管理员'"
-      width="500px"
+      :title="isEditing ? '编辑用户组' : '新增用户组'"
+      width="520px"
       :close-on-click-modal="false"
     >
       <el-form
         ref="formRef"
         :model="form"
-        :rules="rules"
+        :rules="formRules"
         label-width="90px"
         @keyup.enter="submitForm"
       >
-        <el-form-item label="用户名" prop="username">
-          <el-input v-model="form.username" placeholder="请输入用户名" />
+        <el-form-item label="组名" prop="title">
+          <el-input v-model="form.title" placeholder="请输入用户组名称" />
         </el-form-item>
-        <el-form-item label="邮箱" prop="email">
-          <el-input v-model="form.email" placeholder="请输入邮箱" />
+        <el-form-item label="权限规则">
+          <el-checkbox-group v-model="form.ruleIds" class="rules-checkbox-group">
+            <el-checkbox
+              v-for="rule in authRules"
+              :key="rule.id"
+              :value="rule.id"
+            >
+              {{ rule.title }}
+            </el-checkbox>
+          </el-checkbox-group>
         </el-form-item>
-          <el-form-item label="密码" prop="password">
-          <el-input
-            v-model="form.password"
-            type="password"
-            show-password
-            :placeholder="isEditing ? '留空则不修改密码' : '请输入密码'"
-          />
-        </el-form-item>
-        <el-form-item label="分组">
-          <el-select
-            v-model="form.auth_group"
-            placeholder="请选择分组"
-            clearable
-            style="width: 100%"
-          >
-            <el-option
-              v-for="group in authGroups"
-              :key="group.id"
-              :label="group.title"
-              :value="group.id"
-            />
-          </el-select>
-        </el-form-item>
-      
         <el-form-item label="状态">
           <el-switch
             v-model="form.status"
@@ -118,19 +96,19 @@
 import { ref, reactive, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import {
-  getAdmins,
-  createAdmin,
-  updateAdmin,
-  deleteAdmin,
-  getAuthGroupsAll,
-  type AdminItem,
+  getAuthGroups,
+  createAuthGroup,
+  updateAuthGroup,
+  deleteAuthGroup,
+  getAuthRulesAll,
   type AuthGroupItem,
+  type AuthRuleItem,
 } from '@/api/api'
 
 const loading = ref(false)
 const submitting = ref(false)
-const admins = ref<AdminItem[]>([])
-const authGroups = ref<AuthGroupItem[]>([])
+const groups = ref<AuthGroupItem[]>([])
+const authRules = ref<AuthRuleItem[]>([])
 const total = ref(0)
 const currentPage = ref(1)
 const pageSize = Number(import.meta.env.VITE_PAGE_SIZE) || 20
@@ -141,47 +119,43 @@ const isEditing = ref(false)
 const editingId = ref<number | null>(null)
 
 const form = reactive({
-  username: '',
-  email: '',
-  password: '',
+  title: '',
   status: 1,
-  auth_group: 0,
+  ruleIds: [] as number[],
 })
 
-const rules = {
-  username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
-  email: [{ required: true, message: '请输入邮箱', trigger: 'blur' }],
+const formRules = {
+  title: [{ required: true, message: '请输入用户组名称', trigger: 'blur' }],
 }
 
 const formRef = ref()
 
 onMounted(() => {
-  fetchAdmins()
-  fetchAuthGroups()
+  fetchGroups()
 })
 
-async function fetchAuthGroups() {
+async function fetchAuthRules() {
   try {
-    const res = await getAuthGroupsAll()
+    const res = await getAuthRulesAll()
     if (res.status === 1) {
-      authGroups.value = res.data || []
+      authRules.value = res.data || []
     } else {
-      ElMessage.error(res.error || '获取分组列表失败')
+      ElMessage.error(res.error || '获取权限规则失败')
     }
   } catch {
     ElMessage.error('网络错误')
   }
 }
 
-async function fetchAdmins() {
+async function fetchGroups() {
   loading.value = true
   try {
-    const res = await getAdmins(currentPage.value)
+    const res = await getAuthGroups(currentPage.value)
     if (res.status === 1) {
-      admins.value = res.data || []
+      groups.value = res.data || []
       total.value = res.total
     } else {
-      ElMessage.error(res.error || '获取管理员列表失败')
+      ElMessage.error(res.error || '获取用户组列表失败')
     }
   } catch {
     ElMessage.error('网络错误')
@@ -190,36 +164,34 @@ async function fetchAdmins() {
   }
 }
 
-function onSelectionChange(rows: AdminItem[]) {
+function onSelectionChange(rows: AuthGroupItem[]) {
   selectedIds.value = rows.map((r) => r.id)
 }
 
-function groupTitle(authGroup: number | undefined): string {
-  const group = authGroups.value.find((g) => g.id === authGroup)
-  return group ? group.title : authGroup ? String(authGroup) : '-'
-}
-
 async function openCreate() {
-  await fetchAuthGroups()
+  await fetchAuthRules()
   isEditing.value = false
   editingId.value = null
-  form.username = ''
-  form.email = ''
-  form.password = ''
+  form.title = ''
   form.status = 1
-  form.auth_group = authGroups.value[0]?.id ?? 0
+  form.ruleIds = []
   dialogVisible.value = true
 }
 
-async function openEdit(row: AdminItem) {
-  await fetchAuthGroups()
+async function openEdit(row: AuthGroupItem) {
+  await fetchAuthRules()
   isEditing.value = true
   editingId.value = row.id
-  form.username = row.username
-  form.email = row.email
-  form.password = ''
+  form.title = row.title
   form.status = row.status
-  form.auth_group = row.auth_group || 0
+  form.ruleIds = Array.from(
+    new Set(
+      String(row.rules || '')
+        .split(',')
+        .map((id) => Number(id))
+        .filter((id) => id > 0)
+    )
+  )
   dialogVisible.value = true
 }
 
@@ -231,35 +203,28 @@ async function submitForm() {
   submitting.value = true
   try {
     if (isEditing.value && editingId.value !== null) {
-      const payload: Record<string, unknown> = {
-        username: form.username,
-        email: form.email,
+      const res = await updateAuthGroup(editingId.value, {
+        title: form.title,
         status: form.status,
-        auth_group: form.auth_group,
-      }
-      if (form.password) {
-        payload.password = form.password
-      }
-      const res = await updateAdmin(editingId.value, payload)
+        rules: form.ruleIds.join(','),
+      })
       if (res.status === 1) {
         ElMessage.success('更新成功')
         dialogVisible.value = false
-        fetchAdmins()
+        fetchGroups()
       } else {
         ElMessage.error(res.error || '更新失败')
       }
     } else {
-      const res = await createAdmin({
-        username: form.username,
-        email: form.email,
-        password: form.password,
+      const res = await createAuthGroup({
+        title: form.title,
         status: form.status,
-        auth_group: form.auth_group,
+        rules: form.ruleIds.join(','),
       })
       if (res.status === 1) {
         ElMessage.success('创建成功')
         dialogVisible.value = false
-        fetchAdmins()
+        fetchGroups()
       } else {
         ElMessage.error(res.error || '创建失败')
       }
@@ -271,9 +236,9 @@ async function submitForm() {
   }
 }
 
-async function handleDelete(row: AdminItem) {
+async function handleDelete(row: AuthGroupItem) {
   try {
-    await ElMessageBox.confirm(`确定要删除管理员「${row.username}」吗？`, '确认删除', {
+    await ElMessageBox.confirm(`确定要删除用户组「${row.title}」吗？`, '确认删除', {
       type: 'warning',
       confirmButtonText: '删除',
       cancelButtonText: '取消',
@@ -283,10 +248,10 @@ async function handleDelete(row: AdminItem) {
   }
 
   try {
-    const res = await deleteAdmin(row.id)
+    const res = await deleteAuthGroup(row.id)
     if (res.status === 1) {
       ElMessage.success('删除成功')
-      fetchAdmins()
+      fetchGroups()
     } else {
       ElMessage.error(res.error || '删除失败')
     }
@@ -299,7 +264,7 @@ async function handleBatchDelete() {
   if (!selectedIds.value.length) return
   try {
     await ElMessageBox.confirm(
-      `确定要删除选中的 ${selectedIds.value.length} 个管理员吗？`,
+      `确定要删除选中的 ${selectedIds.value.length} 个用户组吗？`,
       '批量删除',
       { type: 'warning', confirmButtonText: '删除', cancelButtonText: '取消' }
     )
@@ -310,12 +275,12 @@ async function handleBatchDelete() {
   loading.value = true
   try {
     const results = await Promise.allSettled(
-      selectedIds.value.map((id) => deleteAdmin(id))
+      selectedIds.value.map((id) => deleteAuthGroup(id))
     )
     const failCount = results.filter((r) => r.status === 'rejected').length
-    ElMessage.success(`成功删除 ${selectedIds.value.length - failCount} 个管理员`)
+    ElMessage.success(`成功删除 ${selectedIds.value.length - failCount} 个用户组`)
     selectedIds.value = []
-    fetchAdmins()
+    fetchGroups()
   } catch {
     ElMessage.error('批量删除时发生网络错误')
   } finally {
@@ -325,7 +290,7 @@ async function handleBatchDelete() {
 </script>
 
 <style scoped>
-.admin-page {
+.admingroup-page {
   background: #fff;
   border-radius: 8px;
   padding: 20px;
@@ -341,5 +306,15 @@ async function handleBatchDelete() {
   margin-top: 16px;
   display: flex;
   justify-content: flex-end;
+}
+
+.rules-checkbox-group {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 4px 16px;
+  width: 100%;
+  max-height: 220px;
+  overflow-y: auto;
+  padding: 4px 0;
 }
 </style>

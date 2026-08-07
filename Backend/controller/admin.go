@@ -203,9 +203,10 @@ func AdminUpdate(c *gin.Context) {
 	}
 
 	updates := map[string]any{
-		"username": admin.Username,
-		"email":    admin.Email,
-		"status":   admin.Status,
+		"username":   admin.Username,
+		"email":      admin.Email,
+		"status":     admin.Status,
+		"auth_group": admin.Auth_group,
 	}
 	if admin.Password != "" {
 		updates["password"] = md5Password(admin.Password)

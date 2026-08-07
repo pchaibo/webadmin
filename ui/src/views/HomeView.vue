@@ -31,6 +31,9 @@
         <el-menu-item index="/admin">
           管理员
         </el-menu-item>
+        <el-menu-item index="/admingroup">
+          用户组管理
+        </el-menu-item>
         
         <el-menu-item index="/authrule">
           权限规则

@@ -32,6 +32,11 @@ const router = createRouter({
         component: () => import('@/views/admin.vue'),
       },
       {
+        path: 'admingroup',
+        name: 'admin-group',
+        component: () => import('@/views/admingroup.vue'),
+      },
+      {
         path: 'authrule',
         name: 'auth-rule',
         component: () => import('@/views/authrule.vue'),

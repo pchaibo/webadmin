@@ -174,6 +174,7 @@ export interface AdminItem {
   username: string
   email: string
   status: number
+  auth_group?: number
   register_time: string
 }
 
@@ -203,6 +204,7 @@ export async function createAdmin(data: {
   email: string
   password: string
   status?: number
+  auth_group?: number
 }): Promise<{ status: number; admin?: AdminItem; error?: string }> {
   const res = await fetch('/api/admin', {
     method: 'POST',
@@ -214,7 +216,7 @@ export async function createAdmin(data: {
 
 export async function updateAdmin(
   id: number,
-  data: { username?: string; email?: string; password?: string; status?: number }
+  data: { username?: string; email?: string; password?: string; status?: number; auth_group?: number }
 ): Promise<{ status: number; admin?: AdminItem; error?: string }> {
   const res = await fetch(`/api/admin/${id}`, {
     method: 'PUT',
@@ -228,6 +230,77 @@ export async function deleteAdmin(
   id: number
 ): Promise<{ status: number; message?: string; error?: string }> {
   const res = await fetch(`/api/admin/${id}`, {
+    method: 'DELETE',
+    headers: authHeaders(),
+  })
+  return res.json()
+}
+
+/* ---- AuthGroup CRUD ---- */
+
+export interface AuthGroupItem {
+  id: number
+  title: string
+  status: number
+  rules: string
+}
+
+export interface AuthGroupListResponse {
+  status: number
+  page: number
+  pagesize: number
+  total: number
+  data: AuthGroupItem[]
+  error?: string
+}
+
+export async function getAuthGroups(page: number = 1): Promise<AuthGroupListResponse> {
+  const res = await fetch(`/api/auth_group?page=${page}`, {
+    headers: authHeaders(),
+  })
+  return res.json()
+}
+
+export async function getAuthGroupsAll(): Promise<{
+  status: number
+  data: AuthGroupItem[]
+  error?: string
+}> {
+  const res = await fetch('/api/auth_group/all', {
+    headers: authHeaders(),
+  })
+  return res.json()
+}
+
+export async function createAuthGroup(data: {
+  title: string
+  status?: number
+  rules?: string
+}): Promise<{ status: number; auth_group?: AuthGroupItem; error?: string }> {
+  const res = await fetch('/api/auth_group', {
+    method: 'POST',
+    headers: { ...authHeaders(), 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  })
+  return res.json()
+}
+
+export async function updateAuthGroup(
+  id: number,
+  data: { title?: string; status?: number; rules?: string }
+): Promise<{ status: number; auth_group?: AuthGroupItem; error?: string }> {
+  const res = await fetch(`/api/auth_group/${id}`, {
+    method: 'PUT',
+    headers: { ...authHeaders(), 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  })
+  return res.json()
+}
+
+export async function deleteAuthGroup(
+  id: number
+): Promise<{ status: number; message?: string; error?: string }> {
+  const res = await fetch(`/api/auth_group/${id}`, {
     method: 'DELETE',
     headers: authHeaders(),
   })
@@ -258,6 +331,17 @@ export interface AuthRuleListResponse {
 
 export async function getAuthRules(page: number = 1): Promise<AuthRuleListResponse> {
   const res = await fetch(`/api/auth_rule?page=${page}`, {
+    headers: authHeaders(),
+  })
+  return res.json()
+}
+
+export async function getAuthRulesAll(): Promise<{
+  status: number
+  data: AuthRuleItem[]
+  error?: string
+}> {
+  const res = await fetch('/api/auth_rule/all', {
     headers: authHeaders(),
   })
   return res.json()

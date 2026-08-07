@@ -1,4 +1,4 @@
-﻿package router
+package router
 
 import (
 	"webadmin/controller"
@@ -62,6 +62,16 @@ func Admin(R *gin.Engine) {
 		apiAdmins.DELETE("/:id", controller.AdminDelete)
 	}
 
+	apiAuthGroups := R.Group("/api/auth_group")
+	apiAuthGroups.Use(controller.AuthMiddleware())
+	{
+		apiAuthGroups.GET("/all", controller.AuthGroupAll)
+		apiAuthGroups.GET("", controller.AuthGroupList)
+		apiAuthGroups.POST("", controller.AuthGroupCreate)
+		apiAuthGroups.PUT("/:id", controller.AuthGroupUpdate)
+		apiAuthGroups.DELETE("/:id", controller.AuthGroupDelete)
+	}
+
 	apiIndex := R.Group("/api/index")
 	apiIndex.Use(controller.AuthMiddleware())
 	{
@@ -71,6 +81,7 @@ func Admin(R *gin.Engine) {
 	apiAuthRules := R.Group("/api/auth_rule")
 	apiAuthRules.Use(controller.AuthMiddleware())
 	{
+		apiAuthRules.GET("/all", controller.AuthRuleAll)
 		apiAuthRules.GET("", controller.AuthRuleList)
 		apiAuthRules.POST("", controller.AuthRuleCreate)
 		apiAuthRules.PUT("/:id", controller.AuthRuleUpdate)

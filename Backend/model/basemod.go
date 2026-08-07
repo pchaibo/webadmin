@@ -1,4 +1,4 @@
-﻿package model
+package model
 
 type Admin struct {
 	Id           int    `gorm:"primaryKey" json:"id" `
@@ -7,6 +7,7 @@ type Admin struct {
 	Password     string `json:"password"`
 	Status       int    `json:"status"`
 	Registertime string `json:"register_time"`
+	Auth_group   int    `gorm:"column:auth_group" json:"auth_group"` //tu_auth_group id
 }
 
 type AuthGroup struct {

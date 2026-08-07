@@ -17,7 +17,7 @@
     >
       <el-table-column type="selection" width="55" />
       <el-table-column prop="id" label="ID" width="60" />
-      <el-table-column prop="pid" label="PID" width="60" />
+      <!-- <el-table-column prop="pid" label="PID" width="60" /> -->
       <el-table-column prop="name" label="路由名称" min-width="130" />
       <el-table-column prop="title" label="标题" min-width="130" />
       <el-table-column prop="icon" label="图标" width="80">
@@ -70,9 +70,9 @@
         label-width="90px"
         @keyup.enter="submitForm"
       >
-        <el-form-item label="PID">
+        <!-- <el-form-item label="PID">
           <el-input-number v-model="form.pid" :min="0" controls-position="right" />
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="规则名" prop="name">
           <el-input v-model="form.name" placeholder="请输入规则路由名称" />
         </el-form-item>

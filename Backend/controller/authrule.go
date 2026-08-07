@@ -61,6 +61,16 @@ func AuthRuleList(c *gin.Context) {
 	})
 }
 
+func AuthRuleAll(c *gin.Context) {
+	var rules []model.AuthRule
+	if err := model.Db.Where("status = ?", 1).Order("id asc").Find(&rules).Error; err != nil {
+		errorResponse(c, 500, "Failed to retrieve auth rules")
+		return
+	}
+
+	successResponse(c, 200, 1, gin.H{"data": rules})
+}
+
 func AuthRuleCreate(c *gin.Context) {
 	var req authRuleRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
