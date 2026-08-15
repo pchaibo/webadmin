@@ -1,0 +1,12 @@
+2026/08/15 08:45:46.149072 D:/go/webadmin/Backend/binan/task.go:185: body error:  {"code":-2015,"msg":"Invalid API-key, IP, or permissions for action, request ip: 203.10.98.186"}
+2026/08/15 08:45:46.363598 D:/go/webadmin/Backend/binan/task.go:255: 已超过1次数  user uniusdt 20 2
+2026/08/15 08:45:46.364638 D:/go/webadmin/Backend/binan/task.go:255: 已超过1次数  user uniusdt 100 1
+2026/08/15 08:53:41.855606 D:/go/webadmin/Backend/binan/task.go:185: body error:  {"code":-2015,"msg":"Invalid API-key, IP, or permissions for action, request ip: 203.10.98.186"}
+2026/08/15 08:53:42.069975 D:/go/webadmin/Backend/binan/task.go:255: 已超过1次数  user uniusdt 20 2
+2026/08/15 08:53:42.069975 D:/go/webadmin/Backend/binan/task.go:255: 已超过1次数  user uniusdt 100 1
+2026/08/15 08:56:25.648775 D:/go/webadmin/Backend/binan/task.go:185: body error:  {"code":-2015,"msg":"Invalid API-key, IP, or permissions for action, request ip: 203.10.98.186"}
+2026/08/15 08:56:25.870279 D:/go/webadmin/Backend/binan/task.go:255: 已超过1次数  user uniusdt 20 2
+2026/08/15 08:56:25.870794 D:/go/webadmin/Backend/binan/task.go:255: 已超过1次数  user uniusdt 100 1
+2026/08/15 09:00:17.994263 D:/go/webadmin/Backend/binan/task.go:185: body error:  {"code":-2015,"msg":"Invalid API-key, IP, or permissions for action, request ip: 203.10.98.186"}
+2026/08/15 09:00:18.208445 D:/go/webadmin/Backend/binan/task.go:255: 已超过1次数  user uniusdt 20 2
+2026/08/15 09:00:18.208996 D:/go/webadmin/Backend/binan/task.go:255: 已超过1次数  user uniusdt 100 1

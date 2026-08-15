@@ -12,7 +12,12 @@ func getshell() {
 	go task.StartCli()
 }
 
+func main_test() {
+	//binan.TestSendSMS()
+	binan.PostEmail()
+}
 func main() {
+
 	//go getshell()
 	go bainstart()
 	go controller.Broadcaster() //websocket
