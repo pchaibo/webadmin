@@ -2,36 +2,9 @@
  import { ref, onMounted } from 'vue'
  import { useRouter } from 'vue-router'
  import { ElMessage, ElMessageBox } from 'element-plus'
-import { fetchHeyueList, deleteHeyue } from '../api'
+import { fetchHeyueList, deleteHeyue, type HeyueItem } from '../api'
  
  const router = useRouter()
- 
- interface HeyueItem {
-   id: number
-   userid: number
-   username: string
-   symbol: string
-   side: number
-   num: number
-   is_num: number
-   status: number
-   sellprice: number
-   oneprice: number
-   repeatprice: number
-   rangetype: number
-   rangeprice: number
-   rangepercent: number
-   rangeclosingpct: number
-   rangeclosing: number
-   closingprice: number
-   risk: number
-   risktime: number
-   newprice: number
-   newtime: number
-   addtime: number
-   updatetime: number
-   [key: string]: unknown
- }
  
 const list = ref<HeyueItem[]>([])
 const loading = ref(false)
@@ -144,11 +117,19 @@ function formatTime(ts: number): string {
              <span class="grid-label">补仓</span>
              <span class="grid-value">{{ item.repeatprice }}</span>
            </div>
-           <div class="grid-item">
-             <span class="grid-label">收益%</span>
-             <span class="grid-value profit" :class="item.sellprice >= 0 ? 'profit-up' : 'profit-down'">{{ item.sellprice }}</span>
-           </div>
           <div class="grid-item">
+            <span class="grid-label">收益%</span>
+            <span class="grid-value profit" :class="item.sellprice >= 0 ? 'profit-up' : 'profit-down'">{{ item.sellprice }}</span>
+          </div>
+          <div class="grid-item">
+            <span class="grid-label">预估价格</span>
+            <span class="grid-value">{{ item.topprice }}</span>
+          </div>
+          <div class="grid-item">
+            <span class="grid-label">减仓比例%</span>
+            <span class="grid-value">{{ item.reductionratio }}</span>
+          </div>
+         <div class="grid-item">
             <span class="grid-label">交易价格</span>
             <span class="grid-value">{{ item.newprice }} </span>
            </div>

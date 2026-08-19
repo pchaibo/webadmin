@@ -661,6 +661,8 @@ export interface HeyueItem {
   risktime: number
   newprice: number
   newtime: number
+  topprice: number
+  reductionratio: number
   addtime: number
   updatetime: number
 }
@@ -710,6 +712,8 @@ export async function createHeyue(data: {
   closingprice?: number
   risk?: number
   risktime?: number
+  topprice?: number
+  reductionratio?: number
 }): Promise<{ status: number; heyue?: HeyueItem; error?: string }> {
   const res = await fetch('/api/heyue', {
     method: 'POST',
@@ -739,6 +743,8 @@ export async function updateHeyue(
     closingprice?: number
     risk?: number
     risktime?: number
+    topprice?: number
+    reductionratio?: number
   }
 ): Promise<{ status: number; heyue?: HeyueItem; error?: string }> {
   const res = await fetch(`/api/heyue/${id}`, {
@@ -867,6 +873,102 @@ export async function deleteHeyuesorder(
   return res.json()
 }
 
+/* ---- Task CRUD ---- */
+
+export interface TaskItem {
+  id: number
+  coinid: number
+  symbol: string
+  userid: number
+  username: string
+  price: number
+  condition: number
+  status: number
+  addtime: number
+  updatetime: number
+}
+
+export interface TaskListResponse {
+  status: number
+  page: number
+  pagesize: number
+  total: number
+  data: TaskItem[]
+  error?: string
+}
+
+export async function getTasks(
+  page: number = 1,
+  symbol?: string,
+  username?: string,
+  status?: number,
+  condition?: number
+): Promise<TaskListResponse> {
+  let url = `/api/task?page=${page}`
+  if (symbol) {
+    url += `&symbol=${encodeURIComponent(symbol)}`
+  }
+  if (username) {
+    url += `&username=${encodeURIComponent(username)}`
+  }
+  if (status !== undefined) {
+    url += `&status=${status}`
+  }
+  if (condition !== undefined) {
+    url += `&condition=${condition}`
+  }
+  const res = await fetch(url, {
+    headers: authHeaders(),
+  })
+  return res.json()
+}
+
+export async function createTask(data: {
+  coinid?: number
+  symbol: string
+  userid?: number
+  username?: string
+  price?: number
+  condition?: number
+  status?: number
+}): Promise<{ status: number; task?: TaskItem; error?: string }> {
+  const res = await fetch('/api/task', {
+    method: 'POST',
+    headers: { ...authHeaders(), 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  })
+  return res.json()
+}
+
+export async function updateTask(
+  id: number,
+  data: {
+    coinid?: number
+    symbol?: string
+    userid?: number
+    username?: string
+    price?: number
+    condition?: number
+    status?: number
+  }
+): Promise<{ status: number; task?: TaskItem; error?: string }> {
+  const res = await fetch(`/api/task/${id}`, {
+    method: 'PUT',
+    headers: { ...authHeaders(), 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  })
+  return res.json()
+}
+
+export async function deleteTask(
+  id: number
+): Promise<{ status: number; message?: string; error?: string }> {
+  const res = await fetch(`/api/task/${id}`, {
+    method: 'DELETE',
+    headers: authHeaders(),
+  })
+  return res.json()
+}
 /* ── Dashboard Stats ── */
 export interface DashboardStatsResponse {
   status: number

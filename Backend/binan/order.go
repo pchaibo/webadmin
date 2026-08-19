@@ -58,8 +58,20 @@ func Addpositon(user *model.User, heyue *model.Heyue) {
 	var num float64
 	var total float64
 	if heyue.Is_num == 0 {
-		num = heyue.Oneprice / Coin.Close
-		total = heyue.Oneprice
+		//预估价格-做多减仓
+		if heyue.Side == 1 && Coin.Close > heyue.TopPrice && heyue.TopPrice > 0 {
+			num = (heyue.Oneprice - heyue.Oneprice*float64(heyue.ReductionRatio)*0.01) / Coin.Close
+			total = heyue.Oneprice
+			//预估价格-做空减仓
+		} else if heyue.Side == 2 && Coin.Close < heyue.TopPrice && heyue.TopPrice > 0 {
+			num = (heyue.Oneprice - heyue.Oneprice*float64(heyue.ReductionRatio)*0.01) / Coin.Close
+			total = heyue.Oneprice
+
+		} else {
+			num = heyue.Oneprice / Coin.Close
+			total = heyue.Oneprice
+		}
+
 	} else {
 		num = heyue.Repeatprice / Coin.Close
 		total = heyue.Repeatprice

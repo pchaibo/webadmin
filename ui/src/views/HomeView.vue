@@ -55,6 +55,9 @@
        <el-menu-item index="/heyueorder">
          合约日志
        </el-menu-item>
+       <el-menu-item index="/task">
+         价格提示
+       </el-menu-item>
         
       </el-menu>
     </aside>

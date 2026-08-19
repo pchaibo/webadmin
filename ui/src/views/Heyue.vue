@@ -63,6 +63,8 @@
       </el-table-column>
       <el-table-column prop="oneprice" label="首仓USDT" width="100" />
       <el-table-column prop="repeatprice" label="补仓USDT" width="100" />
+      <el-table-column prop="topprice" label="预估价格" width="100" />
+      <el-table-column prop="reductionratio" label="减仓比例%" width="100" />
       <el-table-column prop="newprice" label="最新价" width="100" />
       <el-table-column prop="is_num" label="已加仓" width="70" />
        <el-table-column prop="risk" label="风控" width="70">
@@ -152,6 +154,18 @@
           </el-col>
           
          
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item label="预估价格">
+              <el-input-number v-model="form.topprice" :min="0" :step="0.001" :precision="3" style="width: 100%" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="减仓比例%">
+              <el-input-number v-model="form.reductionratio" :min="0" :max="100" :precision="0" :step="1" style="width: 100%" />
+            </el-form-item>
+          </el-col>
         </el-row>
         <el-row :gutter="20">
           <!-- <el-col :span="12">
@@ -298,6 +312,8 @@ const form = reactive({
   closingprice: 0,
   risk: 2,
   risktime: 30,
+  topprice: 0,
+  reductionratio: 50,
 })
 
 const formRules = {
@@ -367,6 +383,8 @@ function openCreate() {
   form.closingprice = 0
   form.risk = 2
   form.risktime = 30
+  form.topprice = 0
+  form.reductionratio = 50
   dialogVisible.value = true
 }
 
@@ -389,6 +407,8 @@ function openEdit(row: HeyueItem) {
   form.closingprice = row.closingprice
   form.risk = row.risk
   form.risktime = row.risktime
+  form.topprice = row.topprice
+  form.reductionratio = row.reductionratio
   dialogVisible.value = true
 }
 
@@ -417,6 +437,8 @@ async function submitForm() {
         closingprice: form.closingprice,
         risk: form.risk,
         risktime: form.risktime,
+        topprice: form.topprice,
+        reductionratio: form.reductionratio,
       })
       if (res.status === 1) {
         ElMessage.success('更新成功')
@@ -443,6 +465,8 @@ async function submitForm() {
         closingprice: form.closingprice,
         risk: form.risk,
         risktime: form.risktime,
+        topprice: form.topprice,
+        reductionratio: form.reductionratio,
       })
       if (res.status === 1) {
         ElMessage.success('创建成功')

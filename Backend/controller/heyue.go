@@ -142,6 +142,8 @@ func HeyueUpdate(c *gin.Context) {
 	updates["closingprice"] = req.Closingprice
 	updates["risk"] = req.Risk
 	updates["risk_time"] = req.RiskTime
+	updates["top_price"] = req.TopPrice
+	updates["reduction_ratio"] = req.ReductionRatio
 	updates["update_time"] = time.Now().Unix()
 
 	result := model.Db.Model(&model.Heyue{}).Where("id = ?", id).Updates(updates)

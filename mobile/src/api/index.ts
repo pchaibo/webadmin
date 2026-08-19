@@ -1,4 +1,4 @@
- import type { ApiResponse, UserInfo, LoginParams } from './types'
+ import type { ApiResponse, UserInfo, LoginParams, HeyueItem } from './types'
  
  const BASE = ''
  
@@ -36,7 +36,7 @@
    return request<T>('POST', url, body)
  }
  
- export type { ApiResponse, UserInfo, LoginParams }
+ export type { ApiResponse, UserInfo, LoginParams, HeyueItem }
  
 export async function login(params: LoginParams) {
   const res = await post<{ status: number; token?: string; id?: number; username?: string; email?: string }>('/user/login', params)
@@ -62,14 +62,14 @@ export async function fetchHeyueList(page?: number, symbol?: string, username?: 
    if (username) params.push('username=' + encodeURIComponent(username))
    if (status !== undefined) params.push('status=' + status)
    if (params.length) url += '?' + params.join('&')
-   return get<{ status: number; data?: unknown[]; total?: number; page?: number; pagesize?: number; error?: string }>(url)
+   return get<{ status: number; data?: HeyueItem[]; total?: number; page?: number; pagesize?: number; error?: string }>(url)
  }
 
-export async function createHeyue(data: Record<string, unknown>) {
+export async function createHeyue(data: Partial<HeyueItem>) {
    return post<ApiResponse>('/user/heyue', data)
  }
  
- export async function updateHeyue(id: number, data: Record<string, unknown>) {
+ export async function updateHeyue(id: number, data: Partial<HeyueItem>) {
    return fetch(`${BASE}/user/heyue/${id}`, {
      method: 'PUT',
      headers: { 'Content-Type': 'application/json', ...authHeaders() },
@@ -86,7 +86,7 @@ export async function deleteHeyue(id: number) {
 }
  
  export async function fetchHeyueById(id: number) {
-   return get<{ status: number; heyue?: Record<string, unknown>; error?: string }>('/user/heyue/' + id)
+   return get<{ status: number; heyue?: HeyueItem; error?: string }>('/user/heyue/' + id)
  }
 
 export async function fetchUserInfo() {

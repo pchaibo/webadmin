@@ -28,6 +28,8 @@ const submitting = ref(false)
    closingprice: 0,
    risk: 2,
    risktime: 30,
+   topprice: 0,
+   reductionratio: 50,
  })
  
 onMounted(async () => {
@@ -55,6 +57,8 @@ onMounted(async () => {
          form.closingprice = (d.closingprice as number) || 0
          form.risk = (d.risk as number) || 2
          form.risktime = (d.risktime as number) || 30
+         form.topprice = (d.topprice as number) || 0
+         form.reductionratio = (d.reductionratio as number) || 50
       }
     } catch { /* ignore */ }
   }
@@ -103,10 +107,12 @@ function goBack() {
        rangepercent: form.rangepercent,
        rangeclosingpct: form.rangeclosingpct,
        rangeclosing: form.rangeclosing,
-       closingprice: form.closingprice,
-       risk: form.risk,
-       risktime: form.risktime,
-     } as Record<string, unknown>
+         closingprice: form.closingprice,
+         risk: form.risk,
+         risktime: form.risktime,
+         topprice: form.topprice,
+         reductionratio: form.reductionratio,
+     }
  
      let res: { status: number; error?: string }
      if (isEditing.value && editingId.value !== null) {
@@ -163,6 +169,16 @@ function goBack() {
          <div class="form-group flex-half">
            <label class="form-label">首仓USDT</label>
            <input v-model.number="form.oneprice" type="number" step="0.01" class="form-input" />
+         </div>
+       </div>
+       <div class="form-row">
+         <div class="form-group flex-half">
+           <label class="form-label">预估价格</label>
+           <input v-model.number="form.topprice" type="number" step="0.001" class="form-input" />
+         </div>
+         <div class="form-group flex-half">
+           <label class="form-label">减仓比例%</label>
+           <input v-model.number="form.reductionratio" type="number" step="1" class="form-input" />
          </div>
        </div>
        <div class="form-divider">网格设置</div>

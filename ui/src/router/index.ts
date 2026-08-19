@@ -73,6 +73,11 @@ const router = createRouter({
       component: () => import('@/views/Heyueorder.vue'),
     },
     {
+      path: 'task',
+      name: 'task',
+      component: () => import('@/views/Task.vue'),
+    },
+    {
       path: 'user',
        name: 'user',
        component: () => import('@/views/user.vue'),

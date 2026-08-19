@@ -136,6 +136,15 @@ func Admin(R *gin.Engine) {
 		apiHeyue.DELETE("/:id", controller.HeyueDelete)
 	}
 
+	apiTask := R.Group("/api/task")
+	apiTask.Use(controller.AuthMiddleware())
+	{
+		apiTask.GET("", controller.TaskList)
+		apiTask.POST("", controller.TaskCreate)
+		apiTask.PUT("/:id", controller.TaskUpdate)
+		apiTask.DELETE("/:id", controller.TaskDelete)
+	}
+
 	apiHeyuesorder := R.Group("/api/heyuesorder")
 	//apiHeyuesorder.Use(controller.AuthMiddleware())
 	{
