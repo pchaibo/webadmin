@@ -298,7 +298,7 @@ func Checkheyun(user *model.User, heyue *model.Heyue, resdata []PositionRisk) (r
 			//收益平仓:  73 1.0400769876046316 0.3
 
 			income := v.InitialMargin * sell
-			Logs.Println("收益平仓: ", heyue.Id, v.UnRealizedProfit, income)
+			Logs.Println("收益平仓: ", heyue.Id, v.UnRealizedProfit, v.InitialMargin, income)
 			//收益平仓
 			if v.UnRealizedProfit > 0 && v.UnRealizedProfit > income {
 				//if v.UnRealizedProfit > 0 && Marginpercentage > sell {
