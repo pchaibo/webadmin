@@ -71,7 +71,6 @@ func init() {
 	ProxyEnabled = config.Get("Proxyurl") != ""
 }
 func Task() {
-	//Proxyurl = "http://" + config.Get("Proxyurl")
 	//Updateuser()
 	time.Sleep(2 * time.Second)
 	for true {
@@ -277,16 +276,10 @@ func Checkadd(user *model.User, heyue *model.Heyue, num int32) {
 // 查询持仓
 func Checkheyun(user *model.User, heyue *model.Heyue, resdata []PositionRisk) (res int) {
 	//Logs.Println("Checkheyun resdata  : ", resdata)
-	var positionSide string
 	res = 0
 	for _, v := range resdata {
-		if heyue.Side == 1 {
-			positionSide = "LONG"
-		} else {
-			positionSide = "SHORT"
-		}
 
-		if v.Symbol == strings.ToUpper(heyue.Symbol) && v.positionSide == positionSide {
+		if v.Symbol == strings.ToUpper(heyue.Symbol) {
 			res = 1
 			sell := heyue.Sellprice * 1e-2
 			Rangepercent := float64(heyue.Rangepercent) * 1e-2 * float64(heyue.Is_num) //百分比* 0.01 * 次数
@@ -294,12 +287,9 @@ func Checkheyun(user *model.User, heyue *model.Heyue, resdata []PositionRisk) (r
 			EntryPrice := v.PositionAmt * v.EntryPrice
 			markpice := v.PositionAmt * v.MarkPrice
 			total := EntryPrice / markpice //百分比
-			//Logs.Println("UnRealizedProfit: ", v.UnRealizedProfit)
-
 			income := v.InitialMargin * sell
 			//收益平仓
 			if v.UnRealizedProfit > 0 && v.UnRealizedProfit > income {
-				//if v.UnRealizedProfit > 0 && Marginpercentage > sell {
 				Logs.Println("收益平仓: ", heyue.Id, v.UnRealizedProfit, v.InitialMargin, income)
 				rest := Checkuserinfo(user) //查询保证金比例
 				if rest == 1 {
@@ -315,7 +305,7 @@ func Checkheyun(user *model.User, heyue *model.Heyue, resdata []PositionRisk) (r
 					return
 				}
 
-				//网格类型 2:保证金百分比计算
+				//网格补仓 2:保证金百分比计算
 			} else if heyue.Is_num < heyue.Num && v.UnRealizedProfit < 0 && Marginpercentage > Rangepercent {
 				Logs.Println("v  : ", EntryPrice, markpice, total, Rangepercent)
 				//Logs.Println("Checkheyun  : ", Rangepercent, Marginpercentage)
@@ -323,15 +313,9 @@ func Checkheyun(user *model.User, heyue *model.Heyue, resdata []PositionRisk) (r
 					Logs.Println("保证金百分比小于0:", Rangepercent, v.UnRealizedProfit)
 					continue
 				}
-				//v.MarkPrice < heyue.Newprice
-				if positionSide == "LONG" {
-					Logs.Println("保证金百分比计算LONG:", Rangepercent, v.UnRealizedProfit, v.MarkPrice)
-					Checkadd(user, heyue, 2)
-					//&& v.MarkPrice > heyue.Newprice
-				} else if positionSide == "SHORT" {
-					Logs.Println("保证金百分比计算SHORT:", Rangepercent, v.UnRealizedProfit, v.MarkPrice)
-					Checkadd(user, heyue, 2)
-				}
+
+				Logs.Println("保证金百分比计算SHORT:", v.positionSide, Rangepercent, v.UnRealizedProfit, v.MarkPrice)
+				Checkadd(user, heyue, 2)
 
 			}
 
