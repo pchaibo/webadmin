@@ -350,13 +350,14 @@ func Rangclosing(user *model.User, heyue *model.Heyue, resdata []PositionRisk) {
 				continue
 			}
 
-			Quantityprice := order.Quantity * order.Price                                     //原价
-			user_LONG := Quantityprice + Quantityprice/20*float64(heyue.Rangeclosingpct)*1e-2 //除0倍* 百分比
-			user_SHORT := Quantityprice - Quantityprice/20*float64(heyue.Rangeclosingpct)*1e-2
+			Quantity := order.Quantity * order.Price                                //原价
+			user_LONG := Quantity + Quantity/20*float64(heyue.Rangeclosingpct)*1e-2 //除0倍* 百分比
+			user_SHORT := Quantity - Quantity/20*float64(heyue.Rangeclosingpct)*1e-2
 
 			newprcie := v.MarkPrice * order.Quantity
 			v.PositionAmt = order.Quantity
 			v.UnRealizedProfit = 0
+			Logs.Println("Quantity:", Quantity)
 			Logs.Println("newprcie:", newprcie)
 			Logs.Println("user_SHORT:", user_SHORT)
 			Logs.Println("网格平空 log: ", order)
@@ -370,14 +371,14 @@ func Rangclosing(user *model.User, heyue *model.Heyue, resdata []PositionRisk) {
 				if rest == 1 {
 					RangCloseposition(user, heyue, v)
 				}
-
-			} else if heyue.Side == 2 && newprcie < user_SHORT && v.MarkPrice < order.Price && v.MarkPrice < heyue.Newprice {
+				//做空
+			} else if heyue.Side == 2 && newprcie > user_SHORT && v.MarkPrice < order.Price && v.MarkPrice < heyue.Newprice {
 				Logs.Println("newprcie:", newprcie)
 				Logs.Println("user_SHORT:", user_SHORT)
 				Logs.Println("网格平空 log: ", order)
 				rest := Checkuserinfo(user)
 				if rest == 1 {
-					RangCloseposition(user, heyue, v)
+					//RangCloseposition(user, heyue, v)
 				}
 			}
 		}
