@@ -288,6 +288,10 @@ func Checkheyun(user *model.User, heyue *model.Heyue, resdata []PositionRisk) (r
 			markpice := v.PositionAmt * v.MarkPrice
 			total := EntryPrice / markpice //百分比
 			income := v.InitialMargin * sell
+			Debug := config.Get("debug")
+			if Debug == "true" {
+				Logs.Println("收益平仓: ", heyue.Id, v.UnRealizedProfit, v.InitialMargin, income)
+			}
 			//收益平仓
 			if v.UnRealizedProfit > 0 && v.UnRealizedProfit > income {
 				Logs.Println("收益平仓: ", heyue.Id, v.UnRealizedProfit, v.InitialMargin, income)
@@ -353,6 +357,10 @@ func Rangclosing(user *model.User, heyue *model.Heyue, resdata []PositionRisk) {
 			newprcie := v.MarkPrice * order.Quantity
 			v.PositionAmt = order.Quantity
 			v.UnRealizedProfit = 0
+			Logs.Println("newprcie:", newprcie)
+			Logs.Println("user_SHORT:", user_SHORT)
+			Logs.Println("网格平空 log: ", order)
+
 			//做多
 			if heyue.Side == 1 && newprcie > user_LONG && v.MarkPrice > order.Price && v.MarkPrice > heyue.Newprice {
 				Logs.Println("newprcie:", newprcie)
