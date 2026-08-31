@@ -275,11 +275,17 @@ func Checkadd(user *model.User, heyue *model.Heyue, num int32) {
 
 // 查询持仓
 func Checkheyun(user *model.User, heyue *model.Heyue, resdata []PositionRisk) (res int) {
-	//Logs.Println("Checkheyun resdata  : ", resdata)
+	var positionSide string
+	if heyue.Side == 1 {
+		positionSide = "LONG"
+	} else {
+		positionSide = "SHORT"
+	}
+
 	res = 0
 	for _, v := range resdata {
-
-		if v.Symbol == strings.ToUpper(heyue.Symbol) {
+		if v.Symbol == strings.ToUpper(heyue.Symbol) && v.positionSide == positionSide {
+			Logs.Println("Checkheyun resdata  : ", resdata)
 			res = 1
 			sell := heyue.Sellprice * 1e-2
 			Rangepercent := float64(heyue.Rangepercent) * 1e-2 * float64(heyue.Is_num) //百分比* 0.01 * 次数
@@ -357,10 +363,6 @@ func Rangclosing(user *model.User, heyue *model.Heyue, resdata []PositionRisk) {
 			newprcie := v.MarkPrice * order.Quantity
 			v.PositionAmt = order.Quantity
 			v.UnRealizedProfit = 0
-			// Logs.Println("Quantity:", Quantity)
-			// Logs.Println("newprcie:", newprcie)
-			// Logs.Println("user_SHORT:", user_SHORT)
-			// Logs.Println("网格平空 log: ", order)
 
 			//做多
 			if heyue.Side == 1 && newprcie > user_LONG && v.MarkPrice > order.Price && v.MarkPrice > heyue.Newprice {
