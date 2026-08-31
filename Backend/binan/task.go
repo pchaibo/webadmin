@@ -285,7 +285,7 @@ func Checkheyun(user *model.User, heyue *model.Heyue, resdata []PositionRisk) (r
 	res = 0
 	for _, v := range resdata {
 		if v.Symbol == strings.ToUpper(heyue.Symbol) && v.positionSide == positionSide {
-			Logs.Println("Checkheyun resdata  : ", resdata)
+			//Logs.Println("Checkheyun resdata  : ", resdata)
 			res = 1
 			sell := heyue.Sellprice * 1e-2
 			Rangepercent := float64(heyue.Rangepercent) * 1e-2 * float64(heyue.Is_num) //百分比* 0.01 * 次数
