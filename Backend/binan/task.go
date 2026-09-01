@@ -299,11 +299,12 @@ func Checkheyun(user *model.User, heyue *model.Heyue, resdata []PositionRisk) (r
 			if Debug == "true" {
 				Logs.Println("收益平仓: ", heyue.Id, v.UnRealizedProfit, v.InitialMargin, income)
 			}
-			Logs.Println("收益平仓: ", v, heyue.Id, v.UnRealizedProfit, v.InitialMargin, income)
+			//Logs.Println("收益平仓: ", v, heyue.Id, v.UnRealizedProfit, v.InitialMargin, income)
 			//收益平仓多
 			if v.UnRealizedProfit > 0 && v.UnRealizedProfit > income && heyue.Side == 1 && heyue.Newprice < v.MarkPrice {
-				Logs.Println("收益平仓多: ", heyue.Id, v.UnRealizedProfit, v.InitialMargin, income)
-				Logs.Println("收益平仓v: ", v)
+				//Logs.Println("收益平仓多: ", heyue.Id, v.UnRealizedProfit, v.InitialMargin, income)
+				//Logs.Println("收益平仓v: ", v)
+				Logs.Println("收益平仓: ", v, heyue.Id, v.UnRealizedProfit, v.InitialMargin, income)
 				rest := Checkuserinfo(user) //查询保证金比例
 				if rest == 1 {
 					posite_red := Closeposition(user, heyue, v)
@@ -321,8 +322,9 @@ func Checkheyun(user *model.User, heyue *model.Heyue, resdata []PositionRisk) (r
 			}
 			//收益平仓空
 			if v.UnRealizedProfit > 0 && v.UnRealizedProfit > income && heyue.Side == 2 && heyue.Newprice > v.MarkPrice {
-				Logs.Println("收益平仓空: ", heyue.Id, v.UnRealizedProfit, v.InitialMargin, income)
-				Logs.Println("收益平仓空v: ", v)
+				//Logs.Println("收益平仓空: ", heyue.Id, v.UnRealizedProfit, v.InitialMargin, income)
+				//Logs.Println("收益平仓空v: ", v)
+				Logs.Println("收益平仓空v: ", v, heyue.Id, v.UnRealizedProfit, v.InitialMargin, income)
 				rest := Checkuserinfo(user) //查询保证金比例
 				if rest == 1 {
 					posite_red := Closeposition(user, heyue, v)
