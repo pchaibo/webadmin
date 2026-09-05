@@ -402,7 +402,7 @@ func Rangclosing(user *model.User, heyue *model.Heyue, resdata []PositionRisk) {
 				Logs.Println("网格平空 log: ", order)
 				rest := Checkuserinfo(user)
 				if rest == 1 {
-					//RangCloseposition(user, heyue, v)
+					RangCloseposition(user, heyue, v)
 				}
 			}
 		}
