@@ -43,6 +43,11 @@
           <span class="price-cell" :class="{ 'price-updated': row['_priceUpdated'], 'price-up': row['_priceDirection'] === 'up', 'price-down': row['_priceDirection'] === 'down' }">{{ row.close }}</span>
         </template>
       </el-table-column>
+        <el-table-column prop="Changepercent" label="涨跌%" width="100">
+        <template #default="{ row }">
+          <span class="price-cell" :class="{ 'price-updated': row['_priceUpdated'], 'price-up': row['_priceDirection'] === 'up', 'price-down': row['_priceDirection'] === 'down' }">{{ row.Changepercent }}%</span>
+        </template>
+      </el-table-column>
       <!-- <el-table-column prop="open" label="开盘价" width="100" /> -->
       <el-table-column prop="high" label="最高价" width="100" />
       <el-table-column prop="low" label="最低价" width="100" />
@@ -239,6 +244,7 @@ function connectWebSocket() {
           if (priceData.C !== undefined) row.close = priceData.C
           if (priceData.H !== undefined) row.high = priceData.H
           if (priceData.I !== undefined) row.low = priceData.I
+          if (priceData.Changepercent !== undefined) row.Changepercent = priceData.Changepercent
           // flash indicator
           row['_priceUpdated'] = true
           setTimeout(() => { row['_priceUpdated'] = false }, 600)

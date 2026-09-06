@@ -557,6 +557,7 @@ export interface CoinItem {
   addtime: number
   updatetime: number
   sort: number
+  Changepercent:number
   _priceDirection?: string
   _priceUpdated?: boolean
 }
