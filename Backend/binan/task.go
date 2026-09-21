@@ -338,7 +338,7 @@ func Checkheyun(user *model.User, heyue *model.Heyue, resdata []PositionRisk) (r
 			if heyue.Is_num < heyue.Num && heyue.Newprice > 0 {
 				//Marginpercentage := math.Abs(v.UnRealizedProfit) / margin
 				totalincome := math.Abs(newmargin) - margin*20
-				Marginpercentage := margin / math.Abs(totalincome) //计算在原保证金的比例
+				Marginpercentage := math.Abs(totalincome) / (math.Abs(newmargin) / 20) //计算在新保证金的比例
 				Logs.Println("v  : ", v)
 				Logs.Println("totalincome", newmargin, margin, totalincome)
 				Logs.Println("Checkadd : ", v.UnRealizedProfit, Marginpercentage, Rangepercent)
