@@ -339,6 +339,7 @@ func Checkheyun(user *model.User, heyue *model.Heyue, resdata []PositionRisk) (r
 				//margin
 				//Marginpercentage := math.Abs(v.UnRealizedProfit) / margin
 				Marginpercentage := math.Abs((newmargin - margin)) / margin
+				Logs.Println("v  : ", v)
 				Logs.Println("margin", newmargin, margin)
 				Logs.Println("Checkadd : ", v.UnRealizedProfit, Marginpercentage, Rangepercent)
 
