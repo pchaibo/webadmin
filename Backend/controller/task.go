@@ -1,15 +1,26 @@
 package controller
 
 import (
+	"encoding/json"
 	"strconv"
 	"strings"
 	"time"
 
+	"webadmin/binan"
 	"webadmin/config"
 	"webadmin/model"
 
 	"github.com/gin-gonic/gin"
 )
+
+type TaskPriceAlert struct {
+	Id           uint    `json:"id"`
+	Symbol       string  `json:"symbol"`
+	Username     string  `json:"username"`
+	Price        float64 `json:"price"`
+	Condition    int     `json:"condition"`
+	CurrentPrice float64 `json:"currentprice"`
+}
 
 func TaskList(c *gin.Context) {
 	page := 1
@@ -72,6 +83,58 @@ func TaskList(c *gin.Context) {
 		"pagesize": pageSize,
 		"total":    total,
 		"data":     items,
+	})
+}
+
+func TaskCheck(c *gin.Context) {
+	var tasks []model.HeyueTask
+	if err := model.Db.Where("status = ?", 1).Order("id asc").Find(&tasks).Error; err != nil {
+		errorResponse(c, 500, "Failed to retrieve tasks")
+		return
+	}
+
+	priceData, err := binan.Redisclinet.HGetAll(binan.Ctx, "coinprice").Result()
+	if err != nil {
+		errorResponse(c, 500, "Failed to retrieve coin prices")
+		return
+	}
+
+	triggered := make([]TaskPriceAlert, 0)
+	for _, task := range tasks {
+		rawPrice, ok := priceData[strings.ToLower(strings.TrimSpace(task.Symbol))]
+		if !ok {
+			continue
+		}
+
+		var current binan.Symbol
+		if err := json.Unmarshal([]byte(rawPrice), &current); err != nil {
+			continue
+		}
+
+		reached := false
+		switch task.Condition {
+		case 1:
+			reached = current.C <= task.Price
+		case 2:
+			reached = current.C >= task.Price
+		}
+		if !reached {
+			continue
+		}
+
+		triggered = append(triggered, TaskPriceAlert{
+			Id:           task.Id,
+			Symbol:       task.Symbol,
+			Username:     task.Username,
+			Price:        task.Price,
+			Condition:    task.Condition,
+			CurrentPrice: current.C,
+		})
+	}
+
+	successResponse(c, 200, 1, gin.H{
+		"count": len(triggered),
+		"data":  triggered,
 	})
 }
 

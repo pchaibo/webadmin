@@ -924,6 +924,29 @@ export async function getTasks(
   return res.json()
 }
 
+export interface TaskPriceAlertItem {
+  id: number
+  symbol: string
+  username: string
+  price: number
+  condition: number
+  currentprice: number
+}
+
+export interface TaskPriceCheckResponse {
+  status: number
+  count: number
+  data: TaskPriceAlertItem[]
+  error?: string
+}
+
+export async function checkTaskPrices(): Promise<TaskPriceCheckResponse> {
+  const res = await fetch('/api/task/check', {
+    headers: authHeaders(),
+  })
+  return res.json()
+}
+
 export async function createTask(data: {
   coinid?: number
   symbol: string

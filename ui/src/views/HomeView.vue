@@ -76,12 +76,115 @@
 </template>
 
 <script setup lang="ts">
+import { onBeforeUnmount, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { checkTaskPrices } from '@/api/api'
 
 const route = useRoute()
 const router = useRouter()
 const username = localStorage.getItem('admin_username') || 'Admin'
 const year = new Date().getFullYear()
+const triggeredTaskIds = new Set<number>()
+const priceAudio = new Audio(`${import.meta.env.BASE_URL}price.mp3`)
+priceAudio.preload = 'auto'
+const PRICE_ALERT_REPEAT_COUNT = 3
+
+let checkTimer: number | undefined
+let checkingPrices = false
+let audioUnlocked = false
+let unlockingAudio = false
+let pendingPriceAlert = false
+
+function removeAudioUnlockListeners() {
+  document.removeEventListener('click', unlockPriceAudio)
+  document.removeEventListener('keydown', unlockPriceAudio)
+}
+
+async function unlockPriceAudio() {
+  if (audioUnlocked || unlockingAudio) return
+
+  unlockingAudio = true
+  try {
+    priceAudio.muted = false
+    priceAudio.currentTime = 0
+    await priceAudio.play()
+    priceAudio.pause()
+    priceAudio.currentTime = 0
+    audioUnlocked = true
+    removeAudioUnlockListeners()
+
+    if (pendingPriceAlert) {
+      pendingPriceAlert = false
+      await playPriceAlert()
+    }
+  } catch {
+    // Keep the listeners installed so the next user gesture retries unlocking.
+  } finally {
+    unlockingAudio = false
+  }
+}
+
+async function playPriceAlert(): Promise<boolean> {
+  try {
+    for (let index = 0; index < PRICE_ALERT_REPEAT_COUNT; index += 1) {
+      await new Promise<void>((resolve, reject) => {
+        const cleanup = () => {
+          priceAudio.removeEventListener('ended', handleEnded)
+          priceAudio.removeEventListener('error', handleError)
+        }
+        const handleEnded = () => {
+          cleanup()
+          resolve()
+        }
+        const handleError = () => {
+          cleanup()
+          reject(new Error('Failed to play price alert'))
+        }
+
+        priceAudio.addEventListener('ended', handleEnded)
+        priceAudio.addEventListener('error', handleError)
+        priceAudio.currentTime = 0
+        priceAudio.muted = false
+        void priceAudio.play().catch((error) => {
+          cleanup()
+          reject(error)
+        })
+      })
+    }
+    return true
+  } catch {
+    return false
+  }
+}
+
+async function pollPriceAlerts() {
+  if (checkingPrices) return
+  checkingPrices = true
+
+  try {
+    const res = await checkTaskPrices()
+    if (res.status !== 1 || !Array.isArray(res.data)) return
+
+    const currentIds = new Set(res.data.map((item) => item.id))
+    const newIds = [...currentIds].filter((id) => !triggeredTaskIds.has(id))
+
+    triggeredTaskIds.clear()
+    currentIds.forEach((id) => triggeredTaskIds.add(id))
+
+    if (newIds.length > 0) {
+      pendingPriceAlert = true
+      if (await playPriceAlert()) {
+        pendingPriceAlert = false
+      } else {
+        newIds.forEach((id) => triggeredTaskIds.delete(id))
+      }
+    }
+  } catch {
+    // Ignore transient polling errors and retry on the next interval.
+  } finally {
+    checkingPrices = false
+  }
+}
 
 function handleLogout() {
   localStorage.removeItem('admin_token')
@@ -90,6 +193,21 @@ function handleLogout() {
   localStorage.removeItem('admin_email')
   router.push('/login')
 }
+
+onMounted(() => {
+  document.addEventListener('click', unlockPriceAudio)
+  document.addEventListener('keydown', unlockPriceAudio)
+  pollPriceAlerts()
+  checkTimer = window.setInterval(pollPriceAlerts, 5000)
+})
+
+onBeforeUnmount(() => {
+  removeAudioUnlockListeners()
+  if (checkTimer !== undefined) {
+    window.clearInterval(checkTimer)
+  }
+  priceAudio.pause()
+})
 </script>
 
 <style scoped>

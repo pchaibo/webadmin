@@ -23,6 +23,7 @@ func Admin(R *gin.Engine) {
 	})
 	R.Static("/ul/assets", "./frontend/assets")
 	R.StaticFile("/ul/favicon.ico", "./frontend/favicon.ico")
+	R.StaticFile("/ul/price.mp3", "./frontend/price.mp3")
 
 	// SPA 回退 ── 所有未匹配 API 的路径都返回 index.html
 	R.NoRoute(func(c *gin.Context) {
@@ -141,6 +142,7 @@ func Admin(R *gin.Engine) {
 	{
 		apiTask.GET("", controller.TaskList)
 		apiTask.POST("", controller.TaskCreate)
+		apiTask.GET("/check", controller.TaskCheck)
 		apiTask.PUT("/:id", controller.TaskUpdate)
 		apiTask.DELETE("/:id", controller.TaskDelete)
 	}
