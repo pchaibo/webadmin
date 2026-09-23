@@ -346,7 +346,7 @@ func Checkheyun(user *model.User, heyue *model.Heyue, resdata []PositionRisk) (r
 				//Logs.Println("Checkadd : ", v.UnRealizedProfit, Marginpercentage, Rangepercent)
 
 				//调用风控
-				if heyue.Risk == 2 && heyue.Is_num > 1 && heyue.NewTime > 100 {
+				if heyue.Risk == 2 && heyue.Is_num >= 1 && heyue.NewTime > 100 {
 					risk := Ckeckrisk(heyue)
 					Logs.Println("风控 ", risk)
 					if risk != 1 {
