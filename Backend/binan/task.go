@@ -274,7 +274,7 @@ func Checkadd(user *model.User, heyue *model.Heyue, num int32) {
 	}
 
 	Logs.Println("Checkadd  : ", user.Username, heyue.Symbol, heyue.Oneprice, heyue.Repeatprice)
-	//Addpositon(user, heyue)
+	Addpositon(user, heyue)
 
 }
 
