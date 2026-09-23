@@ -345,7 +345,7 @@ func Checkheyun(user *model.User, heyue *model.Heyue, resdata []PositionRisk) (r
 				risk := Ckeckrisk(heyue)
 				if risk != 1 {
 					Logs.Println("风控时间写 ", user.Username, heyue.Symbol, heyue.Repeatprice, heyue.Side)
-					return
+					continue
 				}
 
 				if v.UnRealizedProfit < 0 && Marginpercentage > Rangepercent {
