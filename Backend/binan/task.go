@@ -266,7 +266,7 @@ func Checkadd(user *model.User, heyue *model.Heyue, num int32) {
 	//调用风控
 	if heyue.Risk == 2 && heyue.Is_num >= 1 && heyue.NewTime > 100 && num == 2 {
 		risk := Ckeckrisk(heyue)
-		Logs.Println("风控 ", risk)
+		//Logs.Println("风控 ", risk)
 		if risk != 1 {
 			Logs.Println("风控时间写 ", user.Username, heyue.Symbol, heyue.Repeatprice, heyue.Side)
 			return
