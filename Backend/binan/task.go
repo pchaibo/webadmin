@@ -270,7 +270,7 @@ func Checkadd(user *model.User, heyue *model.Heyue, num int32) {
 	}
 
 	Logs.Println("Checkadd  : ", user.Username, heyue.Symbol, heyue.Oneprice, heyue.Repeatprice)
-	Addpositon(user, heyue)
+	//Addpositon(user, heyue)
 
 }
 
@@ -362,7 +362,7 @@ func Checkheyun(user *model.User, heyue *model.Heyue, resdata []PositionRisk) (r
 					}
 
 					Logs.Println("保证金百分比计算SHORT:", v.positionSide, Rangepercent, v.UnRealizedProfit, v.MarkPrice)
-					//Checkadd(user, heyue, 2)
+					Checkadd(user, heyue, 2)
 				}
 			}
 
