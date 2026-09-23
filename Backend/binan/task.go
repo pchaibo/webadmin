@@ -262,7 +262,7 @@ func Checkadd(user *model.User, heyue *model.Heyue, num int32) {
 	}
 
 	//调用风控
-	if heyue.Risk == 2 && heyue.Is_num > 1 && heyue.NewTime > 100 {
+	if heyue.Risk == 2 && heyue.Is_num >= 1 && heyue.NewTime > 100 {
 		risk := Ckeckrisk(heyue)
 		Logs.Println("风控 ", risk)
 		if risk != 1 {
@@ -345,17 +345,18 @@ func Checkheyun(user *model.User, heyue *model.Heyue, resdata []PositionRisk) (r
 				//Logs.Println("totalincome", newmargin, margin, totalincome)
 				//Logs.Println("Checkadd : ", v.UnRealizedProfit, Marginpercentage, Rangepercent)
 
-				//调用风控
-				if heyue.Risk == 2 && heyue.Is_num >= 1 && heyue.NewTime > 100 {
-					risk := Ckeckrisk(heyue)
-					Logs.Println("风控 ", risk)
-					if risk != 1 {
-						Logs.Println("风控时间写 ", user.Username, heyue.Symbol, heyue.Repeatprice, heyue.Side)
-						continue
-					}
-				}
-
 				if v.UnRealizedProfit < 0 && Marginpercentage > Rangepercent {
+
+					//调用风控
+					if heyue.Risk == 2 && heyue.Is_num >= 1 && heyue.NewTime > 100 {
+						risk := Ckeckrisk(heyue)
+						Logs.Println("风控 ", risk)
+						if risk != 1 {
+							Logs.Println("风控时间写 ", user.Username, heyue.Symbol, heyue.Repeatprice, heyue.Side)
+							continue
+						}
+					}
+
 					Logs.Println("v  : ", v)
 					Logs.Println("totalincome", newmargin, margin, totalincome)
 					Logs.Println("Checkadd : ", v.UnRealizedProfit, Marginpercentage, Rangepercent)
