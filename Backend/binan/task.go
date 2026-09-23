@@ -272,7 +272,7 @@ func Checkadd(user *model.User, heyue *model.Heyue, num int32) {
 	}
 
 	Logs.Println("Checkadd  : ", user.Username, heyue.Symbol, heyue.Oneprice, heyue.Repeatprice)
-	//Addpositon(user, heyue)
+	Addpositon(user, heyue)
 
 }
 
@@ -346,13 +346,14 @@ func Checkheyun(user *model.User, heyue *model.Heyue, resdata []PositionRisk) (r
 				//Logs.Println("Checkadd : ", v.UnRealizedProfit, Marginpercentage, Rangepercent)
 
 				//调用风控
-				// if heyue.Risk == 2 && heyue.NewTime > 100 {
-				// 	risk := Ckeckrisk(heyue)
-				// 	if risk != 1 {
-				// 		Logs.Println("风控时间写 ", user.Username, heyue.Symbol, heyue.Repeatprice, heyue.Side)
-				// 		continue
-				// 	}
-				// }
+				if heyue.Risk == 2 && heyue.Is_num > 1 && heyue.NewTime > 100 {
+					risk := Ckeckrisk(heyue)
+					Logs.Println("风控 ", risk)
+					if risk != 1 {
+						Logs.Println("风控时间写 ", user.Username, heyue.Symbol, heyue.Repeatprice, heyue.Side)
+						return
+					}
+				}
 
 				if v.UnRealizedProfit < 0 && Marginpercentage > Rangepercent {
 					Logs.Println("v  : ", v)
@@ -364,7 +365,7 @@ func Checkheyun(user *model.User, heyue *model.Heyue, resdata []PositionRisk) (r
 					}
 
 					Logs.Println("保证金百分比计算SHORT:", v.positionSide, Rangepercent, v.UnRealizedProfit, v.MarkPrice)
-					Checkadd(user, heyue, 2)
+					//Checkadd(user, heyue, 2)
 				}
 			}
 
