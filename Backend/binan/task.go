@@ -336,7 +336,6 @@ func Checkheyun(user *model.User, heyue *model.Heyue, resdata []PositionRisk) (r
 
 			//网格补仓 2:保证金百分比计算
 			if heyue.Is_num < heyue.Num && heyue.Newprice > 0 {
-				//Marginpercentage := math.Abs(v.UnRealizedProfit) / margin
 				totalincome := math.Abs(newmargin) - margin*20
 				Marginpercentage := math.Abs(totalincome) / (math.Abs(newmargin) / 20) //计算在新保证金的比例
 				//Logs.Println("v  : ", v)
@@ -350,7 +349,6 @@ func Checkheyun(user *model.User, heyue *model.Heyue, resdata []PositionRisk) (r
 
 				if v.UnRealizedProfit < 0 && Marginpercentage > Rangepercent {
 					Logs.Println("v  : ", v)
-					//Logs.Println("Checkadd : ", v.UnRealizedProfit, Marginpercentage, Rangepercent)
 					Logs.Println("totalincome", newmargin, margin, totalincome)
 					Logs.Println("Checkadd : ", v.UnRealizedProfit, Marginpercentage, Rangepercent)
 					if Rangepercent <= 0 {
