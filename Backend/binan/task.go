@@ -235,7 +235,7 @@ func Checkuserinfo(user *model.User) (rest int) {
 // 风控
 func Ckeckrisk(heyue *model.Heyue) (rest int) {
 	rest = 0
-	if heyue.Is_num > 1 && heyue.Risk == 2 && heyue.NewTime > 1000 {
+	if heyue.Is_num >= 1 && heyue.Risk == 2 && heyue.NewTime > 1000 {
 		dtime := heyue.NewTime + int64(heyue.RiskTime)*60
 		if dtime > time.Now().Unix() {
 			Logs.Println("NewTime:", dtime, time.Now().Unix())
