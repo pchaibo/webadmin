@@ -70,6 +70,9 @@ async function fetchItems() {
 function statusLabel(status: number): string {
   return status === 1 ? '正常' : '暂停'
 }
+function resetLabel(reset: number): string {
+  return reset === 1 ? '开启' : '关闭'
+}
 function closingLabel(closing: number): string {
   return closing === 2 ? '开启' : '关闭'
 }
@@ -108,6 +111,10 @@ function formatTime(ts: number): string {
            </div>
          </div>
          <div class="heyue-grid">
+          <div class="grid-item">
+            <span class="grid-label">重置开关</span>
+            <span class="grid-value" :class="{ 'risk-on': item.resset === 1 }">{{ resetLabel(item.resset) }}</span>
+          </div>
         
            <div class="grid-item">
              <span class="grid-label">首仓</span>

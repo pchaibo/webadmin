@@ -49,21 +49,24 @@ type Heyue struct {
 	Num             int32   `json:"num"`
 	Is_num          int32   `json:"is_num"`
 	Status          int32   `json:"status"`
-	Sellprice       float64 `json:"sellprice"`                            //收益百分比
-	Oneprice        float64 `from:"oneprice" json:"oneprice"`             //首仓usdt
-	Repeatprice     float64 `from:"Repeatprice" json:"repeatprice"`       //补仓usdt
-	Rangetype       int     `json:"rangetype"`                            //网格类型 1:差价usdt 2:网格保证金
-	Rangeprice      float64 `from:"rangeprice" json:"rangeprice"`         //网格差价usdt
-	Rangepercent    int     `json:"rangepercent"`                         //网格百分比
-	Rangeclosingpct int     `json:"rangeclosingpct"`                      //网格平仓百分比
-	Rangeclosing    int     `json:"rangeclosing"`                         //网格平仓 1:不平 2：平仓
-	Closingprice    float64 `from:"closingprice" json:"closingprice"`     //强平价格
-	Risk            int     `json:"risk"`                                 //风控
-	RiskTime        int     `json:"risktime"`                             //风控时间
-	Newprice        float64 `from:"newprice" json:"newprice"`             //最新价格
-	NewTime         int64   `json:"newtime"`                              //价格更新时间
-	TopPrice        float64 `from:"topprice" json:"topprice"`             //预估价格
-	ReductionRatio  int     `from:"reductionratio" json:"reductionratio"` //减仓比例
+	Sellprice       float64 `json:"sellprice"`                              //收益百分比
+	Oneprice        float64 `from:"oneprice" json:"oneprice"`               //首仓usdt
+	Repeatprice     float64 `from:"Repeatprice" json:"repeatprice"`         //补仓usdt
+	Rangetype       int     `json:"rangetype"`                              //网格类型 1:差价usdt 2:网格保证金
+	Rangeprice      float64 `from:"rangeprice" json:"rangeprice"`           //网格差价usdt
+	Rangepercent    int     `json:"rangepercent"`                           //网格百分比
+	Rangeclosingpct int     `json:"rangeclosingpct"`                        //网格平仓百分比
+	Rangeclosing    int     `json:"rangeclosing"`                           //网格平仓 1:不平 2：平仓
+	Closingprice    float64 `from:"closingprice" json:"closingprice"`       //强平价格
+	Risk            int     `json:"risk"`                                   //风控
+	RiskTime        int     `json:"risktime"`                               //风控时间
+	Newprice        float64 `from:"newprice" json:"newprice"`               //最新价格
+	NewTime         int64   `json:"newtime"`                                //价格更新时间
+	TopPrice        float64 `from:"topprice" json:"topprice"`               //预估价格
+	ReductionRatio  int     `from:"reductionratio" json:"reductionratio"`   //减仓比例
+	Resset          int     `from:"resset" json:"resset"`                   //重置开关 0：不开 1：开启
+	Resnum          int     `from:"resnum" json:"resnum"`                   //重置运行次数
+	Resrangepercent float64 `from:"resrangepercent" json:"resrangepercent"` //重置网格平仓百分比
 	AddTime         int64   `json:"addtime"`
 	UpdateTime      int64   `json:"updatetime"`
 }

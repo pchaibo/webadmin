@@ -664,6 +664,9 @@ export interface HeyueItem {
   newtime: number
   topprice: number
   reductionratio: number
+  resset: number
+  resnum: number
+  resrangepercent: number
   addtime: number
   updatetime: number
 }
@@ -715,6 +718,9 @@ export async function createHeyue(data: {
   risktime?: number
   topprice?: number
   reductionratio?: number
+  resset?: number
+  resnum?: number
+  resrangepercent?: number
 }): Promise<{ status: number; heyue?: HeyueItem; error?: string }> {
   const res = await fetch('/api/heyue', {
     method: 'POST',
@@ -746,6 +752,9 @@ export async function updateHeyue(
     risktime?: number
     topprice?: number
     reductionratio?: number
+    resset?: number
+    resnum?: number
+    resrangepercent?: number
   }
 ): Promise<{ status: number; heyue?: HeyueItem; error?: string }> {
   const res = await fetch(`/api/heyue/${id}`, {

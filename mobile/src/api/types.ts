@@ -39,6 +39,9 @@ export interface HeyueItem {
   newtime: number
   topprice: number
   reductionratio: number
+  resset: number
+  resnum: number
+  resrangepercent: number
   addtime: number
   updatetime: number
 }

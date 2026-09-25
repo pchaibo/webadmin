@@ -30,6 +30,9 @@ const submitting = ref(false)
    risktime: 30,
    topprice: 0,
    reductionratio: 50,
+   resset: 0,
+   resnum: 2,
+   resrangepercent: 0,
  })
  
 onMounted(async () => {
@@ -59,6 +62,9 @@ onMounted(async () => {
          form.risktime = (d.risktime as number) || 30
          form.topprice = (d.topprice as number) || 0
          form.reductionratio = (d.reductionratio as number) || 50
+         form.resset = d.resset
+         form.resnum = d.resnum
+         form.resrangepercent = d.resrangepercent
       }
     } catch { /* ignore */ }
   }
@@ -112,6 +118,9 @@ function goBack() {
          risktime: form.risktime,
          topprice: form.topprice,
          reductionratio: form.reductionratio,
+         resset: form.resset,
+         resnum: form.resnum,
+         resrangepercent: form.resrangepercent,
      }
  
      let res: { status: number; error?: string }
@@ -234,7 +243,28 @@ function goBack() {
        </div> -->
 
 
-      <div class="form-divider">风控设置</div>
+      <div class="form-divider">重置设置</div>
+       <div class="status-radios">
+         <label class="radio-option" :class="{ active: form.resset === 0 }">
+           <input type="radio" v-model="form.resset" :value="0" />
+           <span>关闭</span>
+         </label>
+         <label class="radio-option" :class="{ active: form.resset === 1 }">
+           <input type="radio" v-model="form.resset" :value="1" />
+           <span>开启</span>
+         </label>
+       </div>
+       <div class="form-row">
+         <div class="form-group flex-half">
+           <label class="form-label">重置运行次数</label>
+           <input v-model.number="form.resnum" type="number" min="0" step="1" class="form-input" />
+         </div>
+         <div class="form-group flex-half">
+           <label class="form-label">重置网格平仓%</label>
+           <input v-model.number="form.resrangepercent" type="number" min="0" max="100" step="0.1" class="form-input" />
+         </div>
+       </div>
+       <div class="form-divider">风控设置</div>
        <div class="form-group flex-half">
          <label class="form-label">风控</label>
          <div class="status-radios">

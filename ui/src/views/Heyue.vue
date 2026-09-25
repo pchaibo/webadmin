@@ -65,6 +65,15 @@
       <el-table-column prop="repeatprice" label="补仓USDT" width="100" />
       <el-table-column prop="topprice" label="预估价格" width="100" />
       <el-table-column prop="reductionratio" label="减仓比例%" width="100" />
+      <el-table-column prop="resset" label="重置" width="70">
+        <template #default="{ row }">
+          <span :style="{ color: row.resset === 1 ? '#e6a23c' : '#909399' }">
+            {{ row.resset === 1 ? '开启' : '关闭' }}
+          </span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="resnum" label="重置次数" width="90" />
+      <el-table-column prop="resrangepercent" label="重置平仓%" width="110" />
       <el-table-column prop="newprice" label="最新价" width="100" />
       <el-table-column prop="is_num" label="已加仓" width="70" />
        <el-table-column prop="risk" label="风控" width="70">
@@ -216,12 +225,36 @@
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="网格%">
-              <el-input-number v-model="form.rangepercent" :min="0" :max="100" :precision="0" :step="1" style="width: 100%" />
+              <el-input-number v-model="form.rangepercent" :min="0" :max="1000" :precision="0" :step="1" style="width: 100%" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="网格平仓%">
               <el-input-number v-model="form.rangeclosingpct" :min="0" :max="100" :precision="0" :step="1" style="width: 100%" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-divider>重置设置</el-divider>
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item label="重置开关">
+              <el-select v-model="form.resset" style="width: 100%">
+                <el-option label="关闭" :value="0" />
+                <el-option label="开启" :value="1" />
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="重置运行次数">
+              <el-input-number v-model="form.resnum" :min="0" :precision="0" :step="1" style="width: 100%" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item label="重置网格平仓%">
+              <el-input-number v-model="form.resrangepercent" :min="0" :max="100" :precision="2" :step="0.1" style="width: 100%" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -314,6 +347,9 @@ const form = reactive({
   risktime: 30,
   topprice: 0,
   reductionratio: 50,
+  resset: 0,
+  resnum: 2,
+  resrangepercent: 0,
 })
 
 const formRules = {
@@ -385,6 +421,9 @@ function openCreate() {
   form.risktime = 30
   form.topprice = 0
   form.reductionratio = 50
+  form.resset = 0
+  form.resnum = 2
+  form.resrangepercent = 0
   dialogVisible.value = true
 }
 
@@ -409,6 +448,9 @@ function openEdit(row: HeyueItem) {
   form.risktime = row.risktime
   form.topprice = row.topprice
   form.reductionratio = row.reductionratio
+  form.resset = row.resset
+  form.resnum = row.resnum
+  form.resrangepercent = row.resrangepercent
   dialogVisible.value = true
 }
 
@@ -439,6 +481,9 @@ async function submitForm() {
         risktime: form.risktime,
         topprice: form.topprice,
         reductionratio: form.reductionratio,
+        resset: form.resset,
+        resnum: form.resnum,
+        resrangepercent: form.resrangepercent,
       })
       if (res.status === 1) {
         ElMessage.success('更新成功')
@@ -467,6 +512,9 @@ async function submitForm() {
         risktime: form.risktime,
         topprice: form.topprice,
         reductionratio: form.reductionratio,
+        resset: form.resset,
+        resnum: form.resnum,
+        resrangepercent: form.resrangepercent,
       })
       if (res.status === 1) {
         ElMessage.success('创建成功')

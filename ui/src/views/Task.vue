@@ -142,7 +142,7 @@
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="价格">
-              <el-input-number v-model="form.price" :min="0" :step="0.01" :precision="6" style="width: 100%" />
+              <el-input-number v-model="form.price" :min="0" :step="0.01"  style="width: 100%" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
