@@ -32,7 +32,7 @@ const submitting = ref(false)
    reductionratio: 50,
    resset: 0,
    resnum: 2,
-   resrangepercent: 0,
+   resrangepercent: 50,
  })
  
 onMounted(async () => {
@@ -86,6 +86,14 @@ function decNum() {
 
 function incNum() {
   form.num++
+}
+
+function decResnum() {
+  if (form.resnum > 0) form.resnum--
+}
+
+function incResnum() {
+  form.resnum++
 }
 
 function goBack() {
@@ -257,7 +265,11 @@ function goBack() {
        <div class="form-row">
          <div class="form-group flex-half">
            <label class="form-label">重置运行次数</label>
-           <input v-model.number="form.resnum" type="number" min="0" step="1" class="form-input" />
+           <div class="stepper">
+             <button class="stepper-btn" @click="decResnum" :disabled="form.resnum <= 0">−</button>
+             <input v-model.number="form.resnum" type="number" min="0" step="1" class="form-input stepper-input" />
+             <button class="stepper-btn" @click="incResnum">+</button>
+           </div>
          </div>
          <div class="form-group flex-half">
            <label class="form-label">重置网格平仓%</label>

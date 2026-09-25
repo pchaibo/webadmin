@@ -349,7 +349,7 @@ const form = reactive({
   reductionratio: 50,
   resset: 0,
   resnum: 2,
-  resrangepercent: 0,
+  resrangepercent: 50,
 })
 
 const formRules = {
@@ -423,7 +423,7 @@ function openCreate() {
   form.reductionratio = 50
   form.resset = 0
   form.resnum = 2
-  form.resrangepercent = 0
+  form.resrangepercent = 50
   dialogVisible.value = true
 }
 

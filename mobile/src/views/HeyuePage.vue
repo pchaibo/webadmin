@@ -111,11 +111,6 @@ function formatTime(ts: number): string {
            </div>
          </div>
          <div class="heyue-grid">
-          <div class="grid-item">
-            <span class="grid-label">重置开关</span>
-            <span class="grid-value" :class="{ 'risk-on': item.resset === 1 }">{{ resetLabel(item.resset) }}</span>
-          </div>
-        
            <div class="grid-item">
              <span class="grid-label">首仓</span>
              <span class="grid-value">{{ item.oneprice }}</span>
@@ -147,6 +142,10 @@ function formatTime(ts: number): string {
           <div class="grid-item">
             <span class="grid-label">风控</span>
             <span class="grid-value" :class="{ 'risk-on': item.risk === 2 }">{{ riskLabel(item.risk) }}</span>
+          </div>
+          <div class="grid-item">
+            <span class="grid-label">重置开关</span>
+            <span class="grid-value" :class="{ 'risk-on': item.resset === 1 }">{{ resetLabel(item.resset) }}</span>
           </div>
           <div class="grid-item">
             <span class="grid-label">网格平仓</span>
