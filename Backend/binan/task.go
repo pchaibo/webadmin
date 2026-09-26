@@ -346,29 +346,38 @@ func Checkheyun(user *model.User, heyue *model.Heyue, resdata []PositionRisk) (r
 				//Logs.Println("v  : ", v)
 				//Logs.Println("totalincome", newmargin, margin, totalincome)
 				//Logs.Println("Checkadd : ", v.UnRealizedProfit, Marginpercentage, Rangepercent)
-
-				if v.UnRealizedProfit < 0 && Marginpercentage > Rangepercent {
-
-					//调用风控
-					// if heyue.Risk == 2 && heyue.Is_num >= 1 && heyue.NewTime > 100 {
-					// 	risk := Ckeckrisk(heyue)
-					// 	Logs.Println("风控 ", risk)
-					// 	if risk != 1 {
-					// 		Logs.Println("风控时间写 ", user.Username, heyue.Symbol, heyue.Repeatprice, heyue.Side)
-					// 		continue
-					// 	}
-					// }
-
+				if heyue.Side == 2 {
 					Logs.Println("v  : ", v)
+					Logs.Println("heyue  : ", heyue)
 					Logs.Println("totalincome", newmargin, margin, totalincome)
 					Logs.Println("Checkadd : ", v.UnRealizedProfit, Marginpercentage, Rangepercent)
-					if Rangepercent <= 0 {
-						Logs.Println("保证金百分比小于0:", Rangepercent, v.UnRealizedProfit)
-						continue
-					}
+				}
 
-					Logs.Println("保证金百分比计算SHORT:", v.positionSide, Rangepercent, v.UnRealizedProfit, v.MarkPrice)
-					Checkadd(user, heyue, 2)
+				if v.UnRealizedProfit < 0 && Marginpercentage > Rangepercent {
+					if heyue.Side == 1 {
+						Logs.Println("v  : ", v)
+						Logs.Println("totalincome", newmargin, margin, totalincome)
+						Logs.Println("Checkadd : ", v.UnRealizedProfit, Marginpercentage, Rangepercent)
+						if Rangepercent <= 0 {
+							Logs.Println("保证金百分比小于0:", Rangepercent, v.UnRealizedProfit)
+							continue
+						}
+
+						Logs.Println("保证金百分比计算SHORT:", v.positionSide, Rangepercent, v.UnRealizedProfit, v.MarkPrice)
+						Checkadd(user, heyue, 2)
+						//做空
+					} else if heyue.Side == 2 {
+						Logs.Println("v  : ", v)
+						Logs.Println("totalincome", newmargin, margin, totalincome)
+						Logs.Println("Checkadd : ", v.UnRealizedProfit, Marginpercentage, Rangepercent)
+						if Rangepercent <= 0 {
+							Logs.Println("保证金百分比小于0:", Rangepercent, v.UnRealizedProfit)
+							continue
+						}
+
+						Logs.Println("保证金百分比计算SHORT:", v.positionSide, Rangepercent, v.UnRealizedProfit, v.MarkPrice)
+						//Checkadd(user, heyue, 2)
+					}
 				}
 			}
 
