@@ -346,12 +346,12 @@ func Checkheyun(user *model.User, heyue *model.Heyue, resdata []PositionRisk) (r
 				//Logs.Println("v  : ", v)
 				//Logs.Println("totalincome", newmargin, margin, totalincome)
 				//Logs.Println("Checkadd : ", v.UnRealizedProfit, Marginpercentage, Rangepercent)
-				if heyue.Side == 2 {
-					Logs.Println("v  : ", v)
-					Logs.Println("heyue  : ", heyue)
-					Logs.Println("totalincome", newmargin, margin, totalincome)
-					Logs.Println("Checkadd : ", v.UnRealizedProfit, Marginpercentage, Rangepercent)
-				}
+				// if heyue.Side == 2 {
+				// 	Logs.Println("v  : ", v)
+				// 	Logs.Println("heyue  : ", heyue)
+				// 	Logs.Println("totalincome", newmargin, margin, totalincome)
+				// 	Logs.Println("Checkadd : ", v.UnRealizedProfit, Marginpercentage, Rangepercent)
+				// }
 
 				if v.UnRealizedProfit < 0 && Marginpercentage > Rangepercent {
 					if heyue.Side == 1 {
@@ -376,7 +376,7 @@ func Checkheyun(user *model.User, heyue *model.Heyue, resdata []PositionRisk) (r
 						}
 
 						Logs.Println("保证金百分比计算SHORT:", v.positionSide, Rangepercent, v.UnRealizedProfit, v.MarkPrice)
-						//Checkadd(user, heyue, 2)
+						Checkadd(user, heyue, 2)
 					}
 				}
 			}
