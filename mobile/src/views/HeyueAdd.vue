@@ -272,8 +272,8 @@ function goBack() {
            </div>
          </div>
          <div class="form-group flex-half">
-           <label class="form-label">重置网格平仓%</label>
-           <input v-model.number="form.resrangepercent" type="number" min="0" max="100" step="0.1" class="form-input" />
+           <label class="form-label">重置网格%</label>
+           <input v-model.number="form.resrangepercent" type="number" min="0"  step="0.1" class="form-input" />
          </div>
        </div>
        <div class="form-divider">风控设置</div>

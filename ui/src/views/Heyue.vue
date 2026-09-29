@@ -62,6 +62,7 @@
         </template>
       </el-table-column>
       <el-table-column prop="oneprice" label="首仓USDT" width="100" />
+      <el-table-column prop="is_num" label="已加仓" width="70" />
       <el-table-column prop="repeatprice" label="补仓USDT" width="100" />
       <el-table-column prop="topprice" label="预估价格" width="100" />
       <el-table-column prop="reductionratio" label="减仓比例%" width="100" />
@@ -75,7 +76,6 @@
       <el-table-column prop="resnum" label="重置次数" width="90" />
       <el-table-column prop="resrangepercent" label="重置平仓%" width="110" />
       <el-table-column prop="newprice" label="最新价" width="100" />
-      <el-table-column prop="is_num" label="已加仓" width="70" />
        <el-table-column prop="risk" label="风控" width="70">
         <template #default="{ row }">
           <span :style="{ color: row.risk === 2 ? '#e6a23c' : '#909399' }">
@@ -253,8 +253,8 @@
         </el-row>
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item label="重置网格平仓%">
-              <el-input-number v-model="form.resrangepercent" :min="0" :max="100" :precision="2" :step="0.1" style="width: 100%" />
+            <el-form-item label="重置网格%">
+              <el-input-number v-model="form.resrangepercent" :min="0"  :precision="0" :step="1" style="width: 100%" />
             </el-form-item>
           </el-col>
         </el-row>

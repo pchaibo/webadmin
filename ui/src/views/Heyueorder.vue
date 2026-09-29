@@ -17,7 +17,7 @@
         @keyup.enter="handleSearch"
         @clear="handleSearch"
       />
-      <el-select
+      <!-- <el-select
         v-model="filterStatus"
         placeholder="状态筛选"
         clearable
@@ -26,7 +26,9 @@
       >
         <el-option label="正常" :value="1" />
         <el-option label="暂停" :value="0" />
-      </el-select>
+      </el-select> -->
+
+
       <el-select
         v-model="filterOrdertype"
         placeholder="交易类型"
@@ -36,6 +38,16 @@
       >
         <el-option label="开仓" :value="1" />
         <el-option label="平仓" :value="2" />
+      </el-select>
+      <el-select
+        v-model="filterSide"
+        placeholder="方向"
+        clearable
+        style="width: 130px"
+        @change="handleSearch"
+      >
+        <el-option label="开多" :value="1" />
+        <el-option label="开空" :value="2" />
       </el-select>
       <el-button type="primary" @click="handleSearch">搜索</el-button>
       <!-- <el-button type="primary" @click="openCreate">新增订单22</el-button>
@@ -56,13 +68,6 @@
       <el-table-column prop="id" label="ID" width="60" />
       <el-table-column prop="username" label="用户名" min-width="100" />
       <el-table-column prop="symbol" label="合约代码" width="120" />
-      <el-table-column prop="ordertype" label="交易类型" width="100">
-        <template #default="{ row }">
-          <el-tag :type="row.ordertype === 1 ? 'primary' : 'warning'" size="small">
-            {{ row.ordertype === 1 ? '开仓' : '平仓' }}
-          </el-tag>
-        </template>
-      </el-table-column>
       <el-table-column prop="side" label="方向" width="70">
         <template #default="{ row }">
           <span :style="{ color: row.side === 1 ? '#f56c6c' : '#67c23a' }">
@@ -70,6 +75,14 @@
           </span>
         </template>
       </el-table-column>
+      <el-table-column prop="ordertype" label="交易类型" width="100">
+        <template #default="{ row }">
+          <el-tag :type="row.ordertype === 1 ? 'primary' : 'warning'" size="small">
+            {{ row.ordertype === 1 ? '开仓' : '平仓' }}
+          </el-tag>
+        </template>
+      </el-table-column>
+
       <el-table-column prop="price" label="价格" width="100">
         <template #default="{ row }">
           {{ row.price.toFixed(4) }}
@@ -245,6 +258,7 @@ const searchSymbol = ref('')
 const searchUsername = ref('')
 const filterStatus = ref<number | undefined>()
 const filterOrdertype = ref<number | undefined>()
+const filterSide = ref<number | undefined>()
 
 const dialogVisible = ref(false)
 const isEditing = ref(false)
@@ -288,7 +302,8 @@ async function fetchItems() {
       searchSymbol.value || undefined,
       searchUsername.value || undefined,
       filterStatus.value,
-      filterOrdertype.value
+      filterOrdertype.value,
+      filterSide.value
     )
     if (res.status === 1) {
       items.value = res.data || []

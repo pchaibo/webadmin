@@ -808,7 +808,14 @@ export interface HeyuesorderListResponse {
   error?: string
 }
 
-export async function getHeyuesorders(page: number = 1, symbol?: string, username?: string, status?: number, ordertype?: number): Promise<HeyuesorderListResponse> {
+export async function getHeyuesorders(
+  page: number = 1,
+  symbol?: string,
+  username?: string,
+  status?: number,
+  ordertype?: number,
+  side?: number
+): Promise<HeyuesorderListResponse> {
   let url = `/api/heyuesorder?page=${page}`
   if (symbol) {
     url += `&symbol=${encodeURIComponent(symbol)}`
@@ -821,6 +828,9 @@ export async function getHeyuesorders(page: number = 1, symbol?: string, usernam
   }
   if (ordertype !== undefined) {
     url += `&ordertype=${ordertype}`
+  }
+  if (side !== undefined) {
+    url += `&side=${side}`
   }
   const res = await fetch(url, {
     headers: authHeaders(),

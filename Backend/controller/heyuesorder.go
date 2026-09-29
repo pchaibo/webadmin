@@ -31,8 +31,9 @@ func HeyuesorderList(c *gin.Context) {
 	username := strings.TrimSpace(c.Query("username"))
 	statusStr := strings.TrimSpace(c.Query("status"))
 	ordertypeStr := strings.TrimSpace(c.Query("ordertype"))
+	sideStr := strings.TrimSpace(c.Query("side"))
 
-var items []model.Heyueorder
+	var items []model.Heyueorder
 	var total int64
 	var totalUsdt float64
 	var totalUsdtLong float64
@@ -61,6 +62,13 @@ var items []model.Heyueorder
 		}
 	}
 
+	if sideStr != "" {
+		if s, err := strconv.Atoi(sideStr); err == nil {
+			query = query.Where("side = ?", s)
+			statQuery = statQuery.Where("side = ?", s)
+		}
+	}
+
 	if err := query.Count(&total).Error; err != nil {
 		errorResponse(c, 500, "Failed to count heyuesorders")
 		return
@@ -84,7 +92,6 @@ var items []model.Heyueorder
 	}
 	totalUsdt = totalUsdtLong + totalUsdtShort
 
-
 	if err := query.Order("id desc").Limit(pageSize).Offset(offset).Find(&items).Error; err != nil {
 		errorResponse(c, 500, "Failed to retrieve heyuesorders")
 		return
@@ -95,11 +102,11 @@ var items []model.Heyueorder
 		status = 1
 	}
 	successResponse(c, 200, status, gin.H{
-		"page":       page,
-		"pagesize":   pageSize,
-		"total":      total,
-		"data":       items,
-		"total_usdt": totalUsdt,
+		"page":             page,
+		"pagesize":         pageSize,
+		"total":            total,
+		"data":             items,
+		"total_usdt":       totalUsdt,
 		"total_usdt_long":  totalUsdtLong,
 		"total_usdt_short": totalUsdtShort,
 	})
