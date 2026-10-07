@@ -46,8 +46,8 @@
         style="width: 130px"
         @change="handleSearch"
       >
-        <el-option label="开多" :value="1" />
-        <el-option label="开空" :value="2" />
+        <el-option label="多单" :value="1" />
+        <el-option label="空单" :value="2" />
       </el-select>
       <el-button type="primary" @click="handleSearch">搜索</el-button>
       <!-- <el-button type="primary" @click="openCreate">新增订单22</el-button>
@@ -71,13 +71,13 @@
       <el-table-column prop="side" label="方向" width="70">
         <template #default="{ row }">
           <span :style="{ color: row.side === 1 ? '#f56c6c' : '#67c23a' }">
-            {{ row.side === 1 ? '开多' : '开空' }}
+            {{ row.side === 1 ? '多单' : '空单' }}
           </span>
         </template>
       </el-table-column>
-      <el-table-column prop="ordertype" label="交易类型" width="100">
+      <el-table-column prop="ordertype" label="类型" width="70">
         <template #default="{ row }">
-          <el-tag :type="row.ordertype === 1 ? 'primary' : 'warning'" size="small">
+          <el-tag :type="row.ordertype === 1 ? 'primary' : 'warning'" size="small" class="no-border">
             {{ row.ordertype === 1 ? '开仓' : '平仓' }}
           </el-tag>
         </template>
@@ -90,8 +90,8 @@
       </el-table-column>
       <el-table-column prop="quantity" label="数量" width="100" />
       <el-table-column prop="total" label="总金额" width="100" />
-      <el-table-column prop="num" label="第几次" width="70" />
-      <el-table-column prop="usdt" label="收益" width="100">
+      <el-table-column prop="num" label="次数" width="70" />
+      <el-table-column prop="usdt" label="收益" width="80">
         <template #default="{ row }">
           <span :style="{ color: row.usdt >= 0 ? '#67c23a' : '#f56c6c' }">
             {{ row.usdt.toFixed(2) }}
@@ -512,5 +512,9 @@ async function handleBatchDelete() {
 .stats-info .short-profit {
   color: #e6a23c;
   font-weight: 600;
+}
+.no-border {
+  border: none !important;
+  background: transparent !important;
 }
 </style>

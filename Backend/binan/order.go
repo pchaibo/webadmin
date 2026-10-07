@@ -58,6 +58,11 @@ func Addpositon(user *model.User, heyue *model.Heyue) {
 	var num float64
 	var total float64
 	if heyue.Is_num == 0 {
+		//不开仓
+		if heyue.ReductionRatio <= 100 {
+			Logs.Println("ReductionRatio gt  100 ")
+			return
+		}
 		//预估价格-做多减仓
 		if heyue.Side == 1 && Coin.Close > heyue.TopPrice && heyue.TopPrice > 0 {
 			num = (heyue.Oneprice - heyue.Oneprice*float64(heyue.ReductionRatio)*0.01) / Coin.Close
