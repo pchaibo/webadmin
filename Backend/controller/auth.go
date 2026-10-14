@@ -36,7 +36,7 @@ func GenerateToken(userID int, username, email string) (string, error) {
 		Username: username,
 		Email:    email,
 		Iat:      time.Now().Unix(),
-		Exp:      time.Now().Add(24 * 7 * time.Hour).Unix(),
+		Exp:      time.Now().Add(24 * 1 * time.Hour).Unix(),
 	}
 
 	payload, err := json.Marshal(claims)

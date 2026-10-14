@@ -169,12 +169,12 @@ function goBack() {
       </div>
        <div class="form-divider">方向</div>
        <div class="status-radios">
-         <label class="radio-option" :class="{ active: form.side === 1 }">
-           <input type="radio" v-model="form.side" :value="1" />
+         <label class="radio-option" :class="{ active: form.side === 1, disabled: isEditing }">
+           <input type="radio" v-model="form.side" :value="1" :disabled="isEditing" />
            <span>开多</span>
          </label>
-         <label class="radio-option" :class="{ active: form.side === 2 }">
-           <input type="radio" v-model="form.side" :value="2" />
+         <label class="radio-option" :class="{ active: form.side === 2, disabled: isEditing }">
+           <input type="radio" v-model="form.side" :value="2" :disabled="isEditing" />
            <span>开空</span>
          </label>
        </div>
@@ -399,6 +399,10 @@ function goBack() {
    background: #ecf5ff;
    color: #409eff;
    font-weight: 500;
+ }
+ .radio-option.disabled {
+   cursor: not-allowed;
+   opacity: 0.6;
  }
  .form-divider {
    font-size: 14px;
