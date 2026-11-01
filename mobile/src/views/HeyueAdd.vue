@@ -33,6 +33,7 @@ const submitting = ref(false)
    resset: 0,
    resnum: 2,
    resrangepercent: 50,
+   resrepeatprice: 100,
  })
  
 onMounted(async () => {
@@ -65,6 +66,7 @@ onMounted(async () => {
          form.resset = d.resset
          form.resnum = d.resnum
          form.resrangepercent = d.resrangepercent
+         form.resrepeatprice = (d.resrepeatprice as number) ?? 100
       }
     } catch { /* ignore */ }
   }
@@ -129,6 +131,7 @@ function goBack() {
          resset: form.resset,
          resnum: form.resnum,
          resrangepercent: form.resrangepercent,
+         resrepeatprice: Math.trunc(Number(form.resrepeatprice)),
      }
  
      let res: { status: number; error?: string }
@@ -275,6 +278,10 @@ function goBack() {
            <label class="form-label">重置网格%</label>
            <input v-model.number="form.resrangepercent" type="number" min="0"  step="0.1" class="form-input" />
          </div>
+       </div>
+       <div class="form-group">
+         <label class="form-label">重置补仓</label>
+         <input v-model.number="form.resrepeatprice" type="number" min="0" step="1" inputmode="numeric" class="form-input" />
        </div>
        <div class="form-divider">风控设置</div>
        <div class="form-group flex-half">

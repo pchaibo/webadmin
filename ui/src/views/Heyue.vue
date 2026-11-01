@@ -75,6 +75,7 @@
       </el-table-column>
       <el-table-column prop="resnum" label="重置次数" width="90" />
       <el-table-column prop="resrangepercent" label="重置平仓%" width="110" />
+      <el-table-column prop="resrepeatprice" label="重置补仓" width="100" />
       <el-table-column prop="newprice" label="最新价" width="100" />
        <el-table-column prop="risk" label="风控" width="70">
         <template #default="{ row }">
@@ -257,6 +258,11 @@
               <el-input-number v-model="form.resrangepercent" :min="0"  :precision="0" :step="1" style="width: 100%" />
             </el-form-item>
           </el-col>
+          <el-col :span="12">
+            <el-form-item label="重置补仓USDT">
+              <el-input-number v-model="form.resrepeatprice" :min="0" :step="1" :precision="0" style="width: 100%" />
+            </el-form-item>
+          </el-col>
         </el-row>
       
 
@@ -350,6 +356,7 @@ const form = reactive({
   resset: 0,
   resnum: 2,
   resrangepercent: 50,
+  resrepeatprice: 100,
 })
 
 const formRules = {
@@ -424,6 +431,7 @@ function openCreate() {
   form.resset = 0
   form.resnum = 2
   form.resrangepercent = 50
+  form.resrepeatprice = 100
   dialogVisible.value = true
 }
 
@@ -451,6 +459,7 @@ function openEdit(row: HeyueItem) {
   form.resset = row.resset
   form.resnum = row.resnum
   form.resrangepercent = row.resrangepercent
+  form.resrepeatprice = row.resrepeatprice
   dialogVisible.value = true
 }
 
@@ -484,6 +493,7 @@ async function submitForm() {
         resset: form.resset,
         resnum: form.resnum,
         resrangepercent: form.resrangepercent,
+        resrepeatprice: form.resrepeatprice,
       })
       if (res.status === 1) {
         ElMessage.success('更新成功')
@@ -515,6 +525,7 @@ async function submitForm() {
         resset: form.resset,
         resnum: form.resnum,
         resrangepercent: form.resrangepercent,
+        resrepeatprice: form.resrepeatprice,
       })
       if (res.status === 1) {
         ElMessage.success('创建成功')

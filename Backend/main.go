@@ -2,6 +2,7 @@
 
 import (
 	"webadmin/binan"
+	"webadmin/ccxt"
 	"webadmin/controller"
 	"webadmin/router"
 	"webadmin/task"
@@ -15,10 +16,14 @@ func getshell() {
 func main_test() {
 	//binan.TestSendSMS()
 	binan.PostEmail()
+	ccxt.Tdemo()
+
+}
+func main_bak() {
+	ccxt.Tdemo()
+	ccxt.FetchAccount()
 }
 func main() {
-
-	//go getshell()
 	go bainstart()
 	go controller.Broadcaster() //websocket
 

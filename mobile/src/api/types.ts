@@ -42,6 +42,7 @@ export interface HeyueItem {
   resset: number
   resnum: number
   resrangepercent: number
+  resrepeatprice: number
   addtime: number
   updatetime: number
 }

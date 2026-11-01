@@ -67,6 +67,7 @@ type Heyue struct {
 	Resset          int     `from:"resset" json:"resset"`                   //重置开关 0：不开 1：开启
 	Resnum          int     `from:"resnum" json:"resnum"`                   //重置运行次数
 	Resrangepercent float64 `from:"resrangepercent" json:"resrangepercent"` //重置网格百分比
+	Resrepeatprice  float64 `gorm:"default:100" from:"resrepeatprice" json:"resrepeatprice"` //重置补仓
 	AddTime         int64   `json:"addtime"`
 	UpdateTime      int64   `json:"updatetime"`
 }
