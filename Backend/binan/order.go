@@ -252,7 +252,7 @@ func Closeposition(user *model.User, heyue *model.Heyue, resdata PositionRisk) (
 			rest = 1
 			//重置网格
 			if heyue.Resset == 1 && heyue.Resnum > 0 && heyue.Resrangepercent > 0 {
-				model.Db.Model(&model.Heyue{}).Where("id = ?", heyue.Id).UpdateColumn("is_num", 0).UpdateColumn("newprice", 0).UpdateColumn("num", heyue.Resnum).UpdateColumn("rangepercent", heyue.Resrangepercent).UpdateColumn("resrepeatprice", heyue.Resrepeatprice)
+				model.Db.Model(&model.Heyue{}).Where("id = ?", heyue.Id).UpdateColumn("is_num", 0).UpdateColumn("newprice", 0).UpdateColumn("num", heyue.Resnum).UpdateColumn("rangepercent", heyue.Resrangepercent).UpdateColumn("repeatprice", heyue.Resrepeatprice)
 			} else {
 				model.Db.Model(&model.Heyue{}).Where("id = ?", heyue.Id).UpdateColumn("is_num", 0).UpdateColumn("newprice", 0)
 			}
@@ -289,7 +289,7 @@ func Closeposition(user *model.User, heyue *model.Heyue, resdata PositionRisk) (
 			rest = 1
 			//重置网格
 			if heyue.Resset == 1 && heyue.Resnum > 0 && heyue.Resrangepercent > 0 {
-				model.Db.Model(&model.Heyue{}).Where("id = ?", heyue.Id).UpdateColumn("is_num", 0).UpdateColumn("newprice", 0).UpdateColumn("num", heyue.Resnum).UpdateColumn("rangepercent", heyue.Resrangepercent).UpdateColumn("resrepeatprice", heyue.Resrepeatprice)
+				model.Db.Model(&model.Heyue{}).Where("id = ?", heyue.Id).UpdateColumn("is_num", 0).UpdateColumn("newprice", 0).UpdateColumn("num", heyue.Resnum).UpdateColumn("rangepercent", heyue.Resrangepercent).UpdateColumn("repeatprice", heyue.Resrepeatprice)
 			} else {
 				model.Db.Model(&model.Heyue{}).Where("id = ?", heyue.Id).UpdateColumn("is_num", 0).UpdateColumn("newprice", 0)
 			}
