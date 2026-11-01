@@ -250,7 +250,7 @@ func Closeposition(user *model.User, heyue *model.Heyue, resdata PositionRisk) (
 		orderId := gjson.Get(response, "orderId").Int()
 		if orderId > 0 {
 			rest = 1
-			//重置网格
+			//重置网格 repeatprice
 			if heyue.Resset == 1 && heyue.Resnum > 0 && heyue.Resrangepercent > 0 {
 				model.Db.Model(&model.Heyue{}).Where("id = ?", heyue.Id).UpdateColumn("is_num", 0).UpdateColumn("newprice", 0).UpdateColumn("num", heyue.Resnum).UpdateColumn("rangepercent", heyue.Resrangepercent).UpdateColumn("repeatprice", heyue.Resrepeatprice)
 			} else {
@@ -287,7 +287,7 @@ func Closeposition(user *model.User, heyue *model.Heyue, resdata PositionRisk) (
 		orderId := gjson.Get(response_short, "orderId").Int()
 		if orderId > 0 {
 			rest = 1
-			//重置网格
+			//重置网格 repeatprice
 			if heyue.Resset == 1 && heyue.Resnum > 0 && heyue.Resrangepercent > 0 {
 				model.Db.Model(&model.Heyue{}).Where("id = ?", heyue.Id).UpdateColumn("is_num", 0).UpdateColumn("newprice", 0).UpdateColumn("num", heyue.Resnum).UpdateColumn("rangepercent", heyue.Resrangepercent).UpdateColumn("repeatprice", heyue.Resrepeatprice)
 			} else {
