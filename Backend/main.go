@@ -20,8 +20,8 @@ func main_test() {
 
 }
 func main_bak() {
-	ccxt.Tdemo()
-	ccxt.FetchAccount()
+	//ccxt.Tdemo()
+	//ccxt.FetchAccount()
 }
 func main() {
 	go bainstart()
