@@ -76,6 +76,13 @@
       <el-table-column prop="resnum" label="重置次数" width="90" />
       <el-table-column prop="resrangepercent" label="重置平仓%" width="110" />
       <el-table-column prop="resrepeatprice" label="重置补仓" width="100" />
+      <el-table-column prop="autoadd" label="自动开仓" width="90">
+        <template #default="{ row }">
+          <span :style="{ color: row.autoadd === 1 ? '#67c23a' : '#909399' }">
+            {{ row.autoadd === 1 ? '开启' : '关闭' }}
+          </span>
+        </template>
+      </el-table-column>
       <el-table-column prop="newprice" label="最新价" width="100" />
        <el-table-column prop="risk" label="风控" width="70">
         <template #default="{ row }">
@@ -296,6 +303,16 @@
           </el-col>
         </el-row>
 
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item label="自动开仓">
+              <el-select v-model="form.autoadd" style="width: 100%">
+                <el-option label="开启" :value="1" />
+                <el-option label="关闭" :value="2" />
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
       </el-form>
       <template #footer>
         <el-button @click="dialogVisible = false">取消</el-button>
@@ -357,6 +374,7 @@ const form = reactive({
   resnum: 2,
   resrangepercent: 50,
   resrepeatprice: 100,
+  autoadd: 1,
 })
 
 const formRules = {
@@ -432,6 +450,7 @@ function openCreate() {
   form.resnum = 2
   form.resrangepercent = 50
   form.resrepeatprice = 100
+  form.autoadd = 1
   dialogVisible.value = true
 }
 
@@ -460,6 +479,7 @@ function openEdit(row: HeyueItem) {
   form.resnum = row.resnum
   form.resrangepercent = row.resrangepercent
   form.resrepeatprice = row.resrepeatprice
+  form.autoadd = row.autoadd ?? 1
   dialogVisible.value = true
 }
 
@@ -494,6 +514,7 @@ async function submitForm() {
         resnum: form.resnum,
         resrangepercent: form.resrangepercent,
         resrepeatprice: form.resrepeatprice,
+        autoadd: form.autoadd,
       })
       if (res.status === 1) {
         ElMessage.success('更新成功')
@@ -526,6 +547,7 @@ async function submitForm() {
         resnum: form.resnum,
         resrangepercent: form.resrangepercent,
         resrepeatprice: form.resrepeatprice,
+        autoadd: form.autoadd,
       })
       if (res.status === 1) {
         ElMessage.success('创建成功')

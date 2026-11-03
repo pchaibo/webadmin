@@ -49,6 +49,10 @@ func RoundTo(v float64, n int) float64 {
 
 // 加仓
 func Addpositon(user *model.User, heyue *model.Heyue) {
+	//自动开仓
+	if heyue.Autoadd != 1 {
+		return
+	}
 	var Coin model.Coin
 	err := model.Db.Where("status=1 and symbol= ?", heyue.Symbol).First(&Coin).Error
 	if err != nil {

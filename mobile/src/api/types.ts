@@ -43,6 +43,7 @@ export interface HeyueItem {
   resnum: number
   resrangepercent: number
   resrepeatprice: number
+  autoadd: number
   addtime: number
   updatetime: number
 }

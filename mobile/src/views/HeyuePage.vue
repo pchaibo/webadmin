@@ -147,6 +147,7 @@ function formatTime(ts: number): string {
             <span class="grid-label">重置开关</span>
             <span class="grid-value" :class="{ 'risk-on': item.resset === 1 }">{{ resetLabel(item.resset) }}</span>
           </div>
+         
           <div class="grid-item">
             <span class="grid-label">网格平仓</span>
             <span class="grid-value" :class="{ 'risk-on': item.rangeclosing === 2 }">{{ closingLabel(item.rangeclosing) }}</span>
@@ -158,6 +159,10 @@ function formatTime(ts: number): string {
           <div class="grid-item">
             <span class="grid-label">网格平仓%</span>
             <span class="grid-value">{{ item.rangeclosingpct }}</span>
+          </div>
+          <div class="grid-item">
+            <span class="grid-label">自动开仓</span>
+            <span class="grid-value" :class="{ 'auto-on': item.autoadd === 1 }">{{ item.autoadd === 1 ? '开启' : '关闭' }}</span>
           </div>
 
         </div>
@@ -233,6 +238,7 @@ function formatTime(ts: number): string {
  .profit-up { color: #27ae60; }
  .profit-down { color: #e74c3c; }
 .risk-on { color: #e6a23c; }
+.auto-on { color: #27ae60; }
 .heyue-time {
   display: flex;
   align-items: center;

@@ -34,6 +34,7 @@ const submitting = ref(false)
    resnum: 2,
    resrangepercent: 50,
    resrepeatprice: 100,
+   autoadd: 1,
  })
  
 onMounted(async () => {
@@ -67,6 +68,7 @@ onMounted(async () => {
          form.resnum = d.resnum
          form.resrangepercent = d.resrangepercent
          form.resrepeatprice = (d.resrepeatprice as number) ?? 100
+         form.autoadd = (d.autoadd as number) ?? 1
       }
     } catch { /* ignore */ }
   }
@@ -132,6 +134,7 @@ function goBack() {
          resnum: form.resnum,
          resrangepercent: form.resrangepercent,
          resrepeatprice: Math.trunc(Number(form.resrepeatprice)),
+         autoadd: Math.trunc(Number(form.autoadd)),
      }
  
      let res: { status: number; error?: string }
@@ -282,6 +285,17 @@ function goBack() {
        <div class="form-group">
          <label class="form-label">重置补仓</label>
          <input v-model.number="form.resrepeatprice" type="number" min="0" step="1" inputmode="numeric" class="form-input" />
+       </div>
+       <div class="form-divider">自动开仓</div>
+       <div class="status-radios">
+         <label class="radio-option" :class="{ active: form.autoadd === 1 }">
+           <input type="radio" v-model="form.autoadd" :value="1" />
+           <span>开启</span>
+         </label>
+         <label class="radio-option" :class="{ active: form.autoadd === 2 }">
+           <input type="radio" v-model="form.autoadd" :value="2" />
+           <span>关闭</span>
+         </label>
        </div>
        <div class="form-divider">风控设置</div>
        <div class="form-group flex-half">
