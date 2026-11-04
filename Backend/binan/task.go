@@ -339,7 +339,7 @@ func Checkheyun(user *model.User, heyue *model.Heyue, resdata []PositionRisk) (r
 
 			}
 			//同步价格和仓位
-			if heyue.Is_num == 0 && heyue.Autoadd == 2 && heyue.Newprice == 0 {
+			if heyue.Is_num == 0 && heyue.Autoadd == 2 && heyue.Newprice < 0.00001 {
 				Updateheyue(heyue, v)
 				continue
 			}
