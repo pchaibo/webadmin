@@ -36,7 +36,7 @@ func Taskuser() {
 	Updateuser()
 	for true {
 		Updtecoinpric()
-		time.Sleep(10 * time.Second)
+		time.Sleep(5 * time.Second)
 	}
 
 }
@@ -271,6 +271,10 @@ func Checkadd(user *model.User, heyue *model.Heyue, num int32) {
 			Logs.Println("风控时间写 ", user.Username, heyue.Symbol, heyue.Repeatprice, heyue.Side)
 			return
 		}
+	}
+	//自动开仓
+	if num == 1 && heyue.Autoadd != 1 {
+		return
 	}
 
 	Logs.Println("Checkadd  : ", user.Username, heyue.Symbol, heyue.Oneprice, heyue.Repeatprice)

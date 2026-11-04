@@ -5,6 +5,7 @@ import (
 	"crypto/hmac"
 	"crypto/sha256"
 	"encoding/hex"
+	"encoding/json"
 	"fmt"
 	"io"
 	"log"
@@ -58,13 +59,35 @@ func Updateheyue(heyue *model.Heyue, v PositionRisk) {
 	}
 
 }
+func getcoinpric(heyue *model.Heyue) (model.Coin, error) {
+	var coinup model.Coin
+	err := model.Db.Where("status=1 and symbol= ?", heyue.Symbol).First(&coinup).Error
+	if err != nil {
+		Logs.Println("getcoinpric Coin error ", err.Error())
+		return coinup, err
+	}
+	reddate, err := Redisclinet.HGet(Ctx, "coinprice", heyue.Symbol).Result()
+	if err != nil {
+		return coinup, err
+	}
+	var symbol Symbol
+	err = json.Unmarshal([]byte(reddate), &symbol)
+	if err != nil {
+		return coinup, err
+	}
+
+	coinup.Close = symbol.C
+	coinup.High = symbol.H
+	coinup.Low = symbol.I
+	return coinup, err
+}
 
 // 加仓
 func Addpositon(user *model.User, heyue *model.Heyue) {
 	//自动开仓
-	if heyue.Autoadd != 1 {
-		return
-	}
+	// if heyue.Autoadd != 1 {
+	// 	return
+	// }
 	var Coin model.Coin
 	err := model.Db.Where("status=1 and symbol= ?", heyue.Symbol).First(&Coin).Error
 	if err != nil {
