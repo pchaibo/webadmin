@@ -338,21 +338,16 @@ func Checkheyun(user *model.User, heyue *model.Heyue, resdata []PositionRisk) (r
 				}
 
 			}
+			//同步价格和仓位
+			if heyue.Is_num == 0 && heyue.Autoadd == 2 && heyue.Newprice == 0 {
+				Updateheyue(heyue, v)
+				continue
+			}
 
 			//网格补仓 2:保证金百分比计算
 			if heyue.Is_num < heyue.Num && heyue.Newprice > 0 {
 				totalincome := math.Abs(newmargin) - margin*20
 				Marginpercentage := math.Abs(totalincome) / (math.Abs(newmargin) / 20) //计算在新保证金的比例
-				//Logs.Println("v  : ", v)
-				//Logs.Println("totalincome", newmargin, margin, totalincome)
-				//Logs.Println("Checkadd : ", v.UnRealizedProfit, Marginpercentage, Rangepercent)
-				// if heyue.Side == 2 {
-				// 	Logs.Println("v  : ", v)
-				// 	Logs.Println("heyue  : ", heyue)
-				// 	Logs.Println("totalincome", newmargin, margin, totalincome)
-				// 	Logs.Println("Checkadd : ", v.UnRealizedProfit, Marginpercentage, Rangepercent)
-				// }
-
 				if v.UnRealizedProfit < 0 && Marginpercentage > Rangepercent {
 					if heyue.Side == 1 {
 						Logs.Println("v  : ", v)

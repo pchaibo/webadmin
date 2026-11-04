@@ -70,7 +70,7 @@
       <el-table-column prop="symbol" label="合约代码" width="120" />
       <el-table-column prop="side" label="方向" width="70">
         <template #default="{ row }">
-          <span :style="{ color: row.side === 1 ? '#f56c6c' : '#67c23a' }">
+          <span :style="{ color: row.side === 1 ? '#67c23a' : '#f56c6c' }">
             {{ row.side === 1 ? '多单' : '空单' }}
           </span>
         </template>

@@ -44,17 +44,25 @@
     >
       <el-table-column type="selection" width="55" />
       <el-table-column prop="id" label="ID" width="60" />
-      <el-table-column prop="userid" label="用户ID" min-width="50" />
+      <el-table-column prop="userid" label="用户" min-width="50" />
       <el-table-column prop="username" label="用户名" min-width="100" />
-      <el-table-column prop="symbol" label="合约代码" width="120" />
+      <el-table-column prop="symbol" label="合约代码" width="100" />
       <el-table-column prop="side" label="方向" width="70">
         <template #default="{ row }">
-          <span :style="{ color: row.side === 1 ? '#f56c6c' : '#67c23a' }">
+          <span :style="{ color: row.side === 1 ? '#67c23a' : '#f56c6c' }">
             {{ row.side === 1 ? '开多' : '开空' }}
           </span>
         </template>
       </el-table-column>
-      <el-table-column prop="num" label="最大次数" width="100" />
+       <el-table-column prop="autoadd" label="自动开仓" width="90">
+        <template #default="{ row }">
+          <span :style="{ color: row.autoadd === 1 ? '#67c23a' : '#909399' }">
+            {{ row.autoadd === 1 ? '开启' : '关闭' }}
+          </span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="newprice" label="最新价" width="100" />
+      <el-table-column prop="num" label="次数" width="60" />
       
       <el-table-column prop="sellprice" label="收益%" width="80">
         <template #default="{ row }">
@@ -76,14 +84,8 @@
       <el-table-column prop="resnum" label="重置次数" width="90" />
       <el-table-column prop="resrangepercent" label="重置平仓%" width="110" />
       <el-table-column prop="resrepeatprice" label="重置补仓" width="100" />
-      <el-table-column prop="autoadd" label="自动开仓" width="90">
-        <template #default="{ row }">
-          <span :style="{ color: row.autoadd === 1 ? '#67c23a' : '#909399' }">
-            {{ row.autoadd === 1 ? '开启' : '关闭' }}
-          </span>
-        </template>
-      </el-table-column>
-      <el-table-column prop="newprice" label="最新价" width="100" />
+     
+      
        <el-table-column prop="risk" label="风控" width="70">
         <template #default="{ row }">
           <span :style="{ color: row.risk === 2 ? '#e6a23c' : '#909399' }">

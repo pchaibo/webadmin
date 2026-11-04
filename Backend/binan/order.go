@@ -47,6 +47,18 @@ func RoundTo(v float64, n int) float64 {
 	return math.Round(v*pow) / pow
 }
 
+// 更新价格
+func Updateheyue(heyue *model.Heyue, v PositionRisk) {
+	var newheyue model.Heyue
+	newheyue.Is_num = 1
+	newheyue.Newprice = v.EntryPrice
+	newheyue.NewTime = time.Now().Unix()
+	if v.EntryPrice > 0 && heyue.Id > 0 {
+		model.Db.Model(&model.Heyue{}).Where("id = ?", heyue.Id).Select("is_num", "newprice", "new_time").Updates(&newheyue)
+	}
+
+}
+
 // 加仓
 func Addpositon(user *model.User, heyue *model.Heyue) {
 	//自动开仓
