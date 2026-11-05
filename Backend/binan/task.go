@@ -36,7 +36,7 @@ func Taskuser() {
 	Updateuser()
 	for true {
 		Updtecoinpric()
-		time.Sleep(5 * time.Second)
+		time.Sleep(2 * time.Second)
 	}
 
 }
@@ -139,8 +139,7 @@ func Userinfo(u *userHeyue) {
 			//平仓和补仓
 			res := Checkheyun(user, hey, resdata)
 			if res != 1 {
-				Logs.Println("symbol  null: ", hey.Symbol)
-				//Addpositon(user, hey)
+				//Logs.Println("symbol  null: ", hey.Symbol)
 				Checkadd(user, hey, 1)
 				continue
 
@@ -225,7 +224,8 @@ func Checkuserinfo(user *model.User) (rest int) {
 	totalMarginBalance := gjson.Get(bodys, "totalMarginBalance").Float()
 	marginmode := totalInitialMargin / totalMarginBalance * 10
 	if marginmode < float64(user.Margin) {
-		Logs.Printf("totalInitialMargin:%f totalMarginBalance:%f  marginmode:%f \n", totalInitialMargin, totalMarginBalance, marginmode)
+		//是否加仓
+		//Logs.Printf("totalInitialMargin:%f totalMarginBalance:%f  marginmode:%f \n", totalInitialMargin, totalMarginBalance, marginmode)
 		rest = 1
 		return
 	}
