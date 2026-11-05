@@ -44,8 +44,8 @@
     >
       <el-table-column type="selection" width="55" />
       <el-table-column prop="id" label="ID" width="60" />
-      <el-table-column prop="userid" label="用户" min-width="50" />
-      <el-table-column prop="username" label="用户名" min-width="100" />
+      <!-- <el-table-column prop="userid" label="用户" min-width="50" /> -->
+      <!-- <el-table-column prop="username" label="用户名" min-width="100" /> -->
       <el-table-column prop="symbol" label="合约代码" width="100" />
       <el-table-column prop="side" label="方向" width="70">
         <template #default="{ row }">
@@ -54,7 +54,7 @@
           </span>
         </template>
       </el-table-column>
-       <el-table-column prop="autoadd" label="自动开仓" width="90">
+       <el-table-column prop="autoadd" label="自动开仓" width="70">
         <template #default="{ row }">
           <span :style="{ color: row.autoadd === 1 ? '#67c23a' : '#909399' }">
             {{ row.autoadd === 1 ? '开启' : '关闭' }}
@@ -69,9 +69,11 @@
           {{ row.sellprice }}%
         </template>
       </el-table-column>
-      <el-table-column prop="oneprice" label="首仓USDT" width="100" />
+      <el-table-column prop="oneprice" label="首仓U" width="70" />
       <el-table-column prop="is_num" label="已加仓" width="70" />
-      <el-table-column prop="repeatprice" label="补仓USDT" width="100" />
+      <el-table-column prop="repeatprice" label="补仓U" width="70" />
+      <el-table-column prop="rangepercent" label="网格%" width="70" />
+      <el-table-column prop="rangeclosingpct" label="网平仓" width="70" />
       <el-table-column prop="topprice" label="预估价格" width="100" />
       <el-table-column prop="reductionratio" label="减仓比例%" width="100" />
       <el-table-column prop="resset" label="重置" width="70">

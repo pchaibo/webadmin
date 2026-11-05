@@ -273,7 +273,7 @@ func Checkadd(user *model.User, heyue *model.Heyue, num int32) {
 		}
 	}
 	//自动开仓
-	if num == 1 && heyue.Autoadd != 1 {
+	if heyue.Autoadd != 1 {
 		return
 	}
 
