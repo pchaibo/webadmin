@@ -44,6 +44,7 @@ export interface HeyueItem {
   resrangepercent: number
   resrepeatprice: number
   autoadd: number
+  leverage: number
   addtime: number
   updatetime: number
 }

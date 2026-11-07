@@ -69,6 +69,7 @@ type Heyue struct {
 	Resrangepercent float64 `from:"resrangepercent" json:"resrangepercent"`                  //重置网格百分比
 	Resrepeatprice  float64 `gorm:"default:100" from:"resrepeatprice" json:"resrepeatprice"` //重置补仓
 	Autoadd         int     `gorm:"default:1" from:"autoadd" json:"autoadd"`                 //自动开仓 1：启开 2：停用
+	Leverage        int     `gorm:"default:50" from:"leverage" json:"leverage"`              //杠杆倍数 默认：50
 	AddTime         int64   `json:"addtime"`
 	UpdateTime      int64   `json:"updatetime"`
 }

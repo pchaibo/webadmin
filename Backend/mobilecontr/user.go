@@ -8,6 +8,7 @@ import (
 	"sync"
 	"time"
 
+	"webadmin/config"
 	"webadmin/model"
 
 	"github.com/gin-gonic/gin"
@@ -120,6 +121,19 @@ func UserCreate(c *gin.Context) {
 	var admin model.User
 	if err := c.ShouldBindJSON(&admin); err != nil {
 		errorResponse(c, 400, "Invalid request")
+		return
+	}
+	//autouseradd
+	autouseraddStr := config.Get("autouseradd")
+
+	autouseradd, err := strconv.Atoi(autouseraddStr)
+	if err != nil {
+		fmt.Println("autouseraddStr: ", err.Error())
+		errorResponse(c, 400, "User registration is disabled")
+		return
+	}
+	if autouseradd != 1 {
+		errorResponse(c, 400, "User registration is disabled")
 		return
 	}
 

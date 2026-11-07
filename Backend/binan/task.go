@@ -290,6 +290,12 @@ func Checkheyun(user *model.User, heyue *model.Heyue, resdata []PositionRisk) (r
 	} else {
 		positionSide = "SHORT"
 	}
+	var Leverage float64
+	if heyue.Leverage < 10 {
+		Leverage = float64(10)
+	} else {
+		Leverage = float64(heyue.Leverage)
+	}
 
 	res = 0
 	for _, v := range resdata {
@@ -298,7 +304,7 @@ func Checkheyun(user *model.User, heyue *model.Heyue, resdata []PositionRisk) (r
 			res = 1
 			sell := heyue.Sellprice * 1e-2
 			Rangepercent := float64(heyue.Rangepercent) * 1e-2 * float64(heyue.Is_num) //百分比* 0.01 * 次数
-			margin := v.EntryPrice * math.Abs(v.PositionAmt) / 20                      //计算保证金
+			margin := v.EntryPrice * math.Abs(v.PositionAmt) / Leverage                //计算保证金
 			newmargin := v.MarkPrice * math.Abs(v.PositionAmt)
 			income := margin * sell
 			Debug := config.Get("debug")
@@ -350,8 +356,8 @@ func Checkheyun(user *model.User, heyue *model.Heyue, resdata []PositionRisk) (r
 
 			//网格补仓 2:保证金百分比计算
 			if heyue.Is_num < heyue.Num && heyue.Newprice > 0 {
-				totalincome := math.Abs(newmargin) - margin*20
-				Marginpercentage := math.Abs(totalincome) / (math.Abs(newmargin) / 20) //计算在新保证金的比例
+				totalincome := math.Abs(newmargin) - margin*Leverage
+				Marginpercentage := math.Abs(totalincome) / (math.Abs(newmargin) / Leverage) //计算在新保证金的比例
 				if v.UnRealizedProfit < 0 && Marginpercentage > Rangepercent {
 					if heyue.Side == 1 {
 						Logs.Println("v  : ", v)
@@ -392,6 +398,13 @@ func Checkheyun(user *model.User, heyue *model.Heyue, resdata []PositionRisk) (r
 func Rangclosing(user *model.User, heyue *model.Heyue, resdata []PositionRisk) {
 	var positionSide string
 
+	var Leverage float64
+	if heyue.Leverage < 10 {
+		Leverage = float64(10)
+	} else {
+		Leverage = float64(heyue.Leverage)
+	}
+
 	for _, v := range resdata {
 		if heyue.Side == 1 {
 			positionSide = "LONG"
@@ -407,9 +420,9 @@ func Rangclosing(user *model.User, heyue *model.Heyue, resdata []PositionRisk) {
 				continue
 			}
 
-			Quantity := order.Quantity * order.Price                                //原价
-			user_LONG := Quantity + Quantity/20*float64(heyue.Rangeclosingpct)*1e-2 //除0倍* 百分比
-			user_SHORT := Quantity - Quantity/20*float64(heyue.Rangeclosingpct)*1e-2
+			Quantity := order.Quantity * order.Price                                      //原价
+			user_LONG := Quantity + Quantity/Leverage*float64(heyue.Rangeclosingpct)*1e-2 //除0倍* 百分比
+			user_SHORT := Quantity - Quantity/Leverage*float64(heyue.Rangeclosingpct)*1e-2
 
 			newprcie := v.MarkPrice * order.Quantity
 			v.PositionAmt = order.Quantity

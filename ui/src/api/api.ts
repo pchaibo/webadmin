@@ -669,6 +669,7 @@ export interface HeyueItem {
   resrangepercent: number
   resrepeatprice: number
   autoadd: number
+  leverage: number
   addtime: number
   updatetime: number
 }
@@ -725,6 +726,7 @@ export async function createHeyue(data: {
   resrangepercent?: number
   resrepeatprice?: number
   autoadd?: number
+  leverage?: number
 }): Promise<{ status: number; heyue?: HeyueItem; error?: string }> {
   const res = await fetch('/api/heyue', {
     method: 'POST',
@@ -761,6 +763,7 @@ export async function updateHeyue(
     resrangepercent?: number
     resrepeatprice?: number
     autoadd?: number
+    leverage?: number
   }
 ): Promise<{ status: number; heyue?: HeyueItem; error?: string }> {
   const res = await fetch(`/api/heyue/${id}`, {

@@ -63,6 +63,7 @@
       </el-table-column>
       <el-table-column prop="newprice" label="最新价" width="100" />
       <el-table-column prop="num" label="次数" width="60" />
+      <el-table-column prop="leverage" label="杠杆倍数" width="90" />
       
       <el-table-column prop="sellprice" label="收益%" width="80">
         <template #default="{ row }">
@@ -158,6 +159,17 @@
                 <el-option label="开多" :value="1" />
                 <el-option label="开空" :value="2" />
               </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="杠杆倍数">
+              <el-input-number
+                v-model="form.leverage"
+                :min="1"
+                :precision="0"
+                :step="1"
+                style="width: 100%"
+              />
             </el-form-item>
           </el-col>
         </el-row>
@@ -379,6 +391,7 @@ const form = reactive({
   resrangepercent: 50,
   resrepeatprice: 100,
   autoadd: 1,
+  leverage: 50,
 })
 
 const formRules = {
@@ -455,6 +468,7 @@ function openCreate() {
   form.resrangepercent = 50
   form.resrepeatprice = 100
   form.autoadd = 1
+  form.leverage = 50
   dialogVisible.value = true
 }
 
@@ -484,6 +498,7 @@ function openEdit(row: HeyueItem) {
   form.resrangepercent = row.resrangepercent
   form.resrepeatprice = row.resrepeatprice
   form.autoadd = row.autoadd ?? 1
+  form.leverage = row.leverage ?? 50
   dialogVisible.value = true
 }
 
@@ -519,6 +534,7 @@ async function submitForm() {
         resrangepercent: form.resrangepercent,
         resrepeatprice: form.resrepeatprice,
         autoadd: form.autoadd,
+        leverage: form.leverage,
       })
       if (res.status === 1) {
         ElMessage.success('更新成功')
@@ -552,6 +568,7 @@ async function submitForm() {
         resrangepercent: form.resrangepercent,
         resrepeatprice: form.resrepeatprice,
         autoadd: form.autoadd,
+        leverage: form.leverage,
       })
       if (res.status === 1) {
         ElMessage.success('创建成功')

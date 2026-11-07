@@ -98,6 +98,9 @@ func HeyueCreate(c *gin.Context) {
 	if item.Autoadd == 0 {
 		item.Autoadd = 1
 	}
+	if item.Leverage <= 0 {
+		item.Leverage = 50
+	}
 
 	item.AddTime = time.Now().Unix()
 	item.UpdateTime = time.Now().Unix()
@@ -156,6 +159,10 @@ func HeyueUpdate(c *gin.Context) {
 	updates["resrangepercent"] = req.Resrangepercent
 	updates["resrepeatprice"] = req.Resrepeatprice
 	updates["autoadd"] = req.Autoadd
+	if req.Leverage <= 0 {
+		req.Leverage = 50
+	}
+	updates["leverage"] = req.Leverage
 	updates["update_time"] = time.Now().Unix()
 
 	result := model.Db.Model(&model.Heyue{}).Where("id = ?", id).Updates(updates)

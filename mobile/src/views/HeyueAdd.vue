@@ -35,6 +35,7 @@ const submitting = ref(false)
    resrangepercent: 50,
    resrepeatprice: 100,
    autoadd: 1,
+   leverage: 50,
  })
  
 onMounted(async () => {
@@ -69,6 +70,7 @@ onMounted(async () => {
          form.resrangepercent = d.resrangepercent
          form.resrepeatprice = (d.resrepeatprice as number) ?? 100
          form.autoadd = (d.autoadd as number) ?? 1
+         form.leverage = Math.trunc(Number(d.leverage)) || 50
       }
     } catch { /* ignore */ }
   }
@@ -135,6 +137,7 @@ function goBack() {
          resrangepercent: form.resrangepercent,
          resrepeatprice: Math.trunc(Number(form.resrepeatprice)),
          autoadd: Math.trunc(Number(form.autoadd)),
+         leverage: Math.trunc(Number(form.leverage)),
      }
  
      let res: { status: number; error?: string }
@@ -183,6 +186,17 @@ function goBack() {
            <input type="radio" v-model="form.side" :value="2" :disabled="isEditing" />
            <span>开空</span>
          </label>
+       </div>
+       <div class="form-group">
+         <label class="form-label">杠杆倍数</label>
+         <input
+           v-model.number="form.leverage"
+           type="number"
+           min="1"
+           step="1"
+           inputmode="numeric"
+           class="form-input"
+         />
        </div>
        <div class="form-row">
          <div class="form-group flex-half">
