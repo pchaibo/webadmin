@@ -328,10 +328,10 @@ func Closeposition(user *model.User, heyue *model.Heyue, resdata PositionRisk) (
 
 			var order model.Heyueorder
 			order.Ordertype = 2
-			order.Quantity = resdata.PositionAmt
+			order.Quantity = quantity
 			price := math.Round(resdata.MarkPrice*10000) / 10000
 			order.Price = price
-			order.Total = price * resdata.PositionAmt
+			order.Total = price * quantity
 			order.Side = heyue.Side
 			order.Orderid = orderId
 			order.UserId = uint(user.Id)
@@ -368,10 +368,10 @@ func Closeposition(user *model.User, heyue *model.Heyue, resdata PositionRisk) (
 			}
 			var order model.Heyueorder
 			order.Ordertype = 2
-			order.Quantity = resdata.PositionAmt
+			order.Quantity = quantity
 			price := math.Round(resdata.MarkPrice*10000) / 10000
 			order.Price = price
-			order.Total = price * resdata.PositionAmt
+			order.Total = price * quantity
 			order.Side = heyue.Side
 			order.Orderid = orderId
 			order.UserId = uint(user.Id)
