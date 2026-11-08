@@ -70,12 +70,12 @@
           {{ row.sellprice }}%
         </template>
       </el-table-column>
+      <el-table-column prop="closepositionrate" label="平仓%" width="70" />
       <el-table-column prop="oneprice" label="首仓U" width="70" />
       <el-table-column prop="is_num" label="已加仓" width="70" />
       <el-table-column prop="repeatprice" label="补仓U" width="70" />
       <el-table-column prop="rangepercent" label="网格%" width="70" />
       <el-table-column prop="rangeclosingpct" label="网平仓" width="70" />
-      <el-table-column prop="closepositionrate" label="平仓率%" width="90" />
       <el-table-column prop="topprice" label="预估价格" width="100" />
       <el-table-column prop="reductionratio" label="减仓比例%" width="100" />
       <el-table-column prop="resset" label="重置" width="70">
@@ -174,6 +174,22 @@
             </el-form-item>
           </el-col>
         </el-row>
+        
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item label="首仓USDT">
+              <el-input-number v-model="form.oneprice" :min="0" :step="1" :precision="2" style="width: 100%" />
+            </el-form-item>
+          </el-col>
+          <!-- <el-col :span="12">
+            <el-form-item label="网格类型">
+              <el-select v-model="form.rangetype" style="width: 100%">
+                <el-option label="差价USDT" :value="1" />
+                <el-option label="网格保证金" :value="2" />
+              </el-select>
+            </el-form-item>
+          </el-col> -->
+        </el-row>
        
         <el-row :gutter="20">
           <el-col :span="12">
@@ -181,14 +197,23 @@
               <el-input-number v-model="form.sellprice" :min="0" :step="0.1" :precision="2" style="width: 100%" />
             </el-form-item>
           </el-col>
-          <el-col :span="12">
-            <el-form-item label="首仓USDT">
-              <el-input-number v-model="form.oneprice" :min="0" :step="1" :precision="2" style="width: 100%" />
+         
+           <el-col :span="12">
+            <el-form-item label="平仓率%">
+              <el-input-number
+                v-model="form.closepositionrate"
+                :min="1"
+                :max="100"
+                :precision="0"
+                :step="1"
+                style="width: 100%"
+              />
             </el-form-item>
           </el-col>
-          
-         
         </el-row>
+
+      
+
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="预估价格">
@@ -201,21 +226,8 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-row :gutter="20">
-          <!-- <el-col :span="12">
-            <el-form-item label="网格类型">
-              <el-select v-model="form.rangetype" style="width: 100%">
-                <el-option label="差价USDT" :value="1" />
-                <el-option label="网格保证金" :value="2" />
-              </el-select>
-            </el-form-item>
-          </el-col> -->
-          <!-- <el-col :span="12">
-            <el-form-item label="网格差价">
-              <el-input-number v-model="form.rangeprice" :min="0" :step="0.1" :precision="4" style="width: 100%" />
-            </el-form-item>
-          </el-col> -->
-        </el-row>
+       
+
         <el-divider>网格设置</el-divider>
          <el-row :gutter="20">
           <el-col :span="12">
@@ -223,18 +235,7 @@
               <el-input-number v-model="form.num" :min="1" :precision="0" :step="1" style="width: 100%" />
             </el-form-item>
           </el-col>
-          <el-col :span="12">
-            <el-form-item label="平仓率%">
-              <el-input-number
-                v-model="form.closepositionrate"
-                :min="1"
-                :max="100"
-                :precision="0"
-                :step="1"
-                style="width: 100%"
-              />
-            </el-form-item>
-          </el-col>
+          
         </el-row>
 
           <el-row :gutter="20">

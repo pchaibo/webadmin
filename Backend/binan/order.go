@@ -52,7 +52,13 @@ func RoundTo(v float64, n int) float64 {
 func Updateheyue(heyue *model.Heyue, v PositionRisk) {
 	var newheyue model.Heyue
 	newheyue.Is_num = 1
-	newheyue.Newprice = v.EntryPrice
+	var uewprice float64
+	if v.EntryPrice > 10 {
+		uewprice = RoundTo(v.EntryPrice, 3)
+	} else {
+		uewprice = RoundTo(v.EntryPrice, 6)
+	}
+	newheyue.Newprice = uewprice
 	newheyue.NewTime = time.Now().Unix()
 	if v.EntryPrice > 0 && heyue.Id > 0 {
 		model.Db.Model(&model.Heyue{}).Where("id = ?", heyue.Id).Select("is_num", "newprice", "new_time").Updates(&newheyue)
