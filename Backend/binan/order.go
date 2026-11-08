@@ -338,7 +338,8 @@ func Closeposition(user *model.User, heyue *model.Heyue, resdata PositionRisk) (
 			order.Username = user.Username
 			order.Symbol = heyue.Symbol
 			order.Log = response
-			order.Usdt = resdata.UnRealizedProfit
+			Usdt := resdata.UnRealizedProfit * float64(heyue.Closepositionrate) * 0.01
+			order.Usdt = Roundto(Usdt, 2)
 			order.Status = 1
 			order.Num = 1
 			order.AddTime = time.Now().Unix()
@@ -380,7 +381,8 @@ func Closeposition(user *model.User, heyue *model.Heyue, resdata PositionRisk) (
 			order.Status = 1
 			order.Num = 1
 			order.Log = response_short
-			order.Usdt = resdata.UnRealizedProfit
+			Usdt := resdata.UnRealizedProfit * float64(heyue.Closepositionrate) * 0.01
+			order.Usdt = Roundto(Usdt, 2)
 			order.AddTime = time.Now().Unix()
 			model.Db.Create(&order)
 
