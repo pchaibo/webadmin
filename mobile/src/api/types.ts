@@ -45,6 +45,7 @@ export interface HeyueItem {
   resrepeatprice: number
   autoadd: number
   leverage: number
+  closepositionrate: number
   addtime: number
   updatetime: number
 }

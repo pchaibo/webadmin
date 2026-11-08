@@ -75,6 +75,7 @@
       <el-table-column prop="repeatprice" label="补仓U" width="70" />
       <el-table-column prop="rangepercent" label="网格%" width="70" />
       <el-table-column prop="rangeclosingpct" label="网平仓" width="70" />
+      <el-table-column prop="closepositionrate" label="平仓率%" width="90" />
       <el-table-column prop="topprice" label="预估价格" width="100" />
       <el-table-column prop="reductionratio" label="减仓比例%" width="100" />
       <el-table-column prop="resset" label="重置" width="70">
@@ -222,7 +223,18 @@
               <el-input-number v-model="form.num" :min="1" :precision="0" :step="1" style="width: 100%" />
             </el-form-item>
           </el-col>
-         
+          <el-col :span="12">
+            <el-form-item label="平仓率%">
+              <el-input-number
+                v-model="form.closepositionrate"
+                :min="1"
+                :max="100"
+                :precision="0"
+                :step="1"
+                style="width: 100%"
+              />
+            </el-form-item>
+          </el-col>
         </el-row>
 
           <el-row :gutter="20">
@@ -392,6 +404,7 @@ const form = reactive({
   resrepeatprice: 100,
   autoadd: 1,
   leverage: 50,
+  closepositionrate: 50,
 })
 
 const formRules = {
@@ -469,6 +482,7 @@ function openCreate() {
   form.resrepeatprice = 100
   form.autoadd = 1
   form.leverage = 50
+  form.closepositionrate = 50
   dialogVisible.value = true
 }
 
@@ -499,6 +513,7 @@ function openEdit(row: HeyueItem) {
   form.resrepeatprice = row.resrepeatprice
   form.autoadd = row.autoadd ?? 1
   form.leverage = row.leverage ?? 50
+  form.closepositionrate = row.closepositionrate ?? 50
   dialogVisible.value = true
 }
 
@@ -535,6 +550,7 @@ async function submitForm() {
         resrepeatprice: form.resrepeatprice,
         autoadd: form.autoadd,
         leverage: form.leverage,
+        closepositionrate: Math.trunc(Number(form.closepositionrate)),
       })
       if (res.status === 1) {
         ElMessage.success('更新成功')
@@ -569,6 +585,7 @@ async function submitForm() {
         resrepeatprice: form.resrepeatprice,
         autoadd: form.autoadd,
         leverage: form.leverage,
+        closepositionrate: Math.trunc(Number(form.closepositionrate)),
       })
       if (res.status === 1) {
         ElMessage.success('创建成功')

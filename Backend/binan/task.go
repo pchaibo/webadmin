@@ -140,6 +140,10 @@ func Userinfo(u *userHeyue) {
 			res := Checkheyun(user, hey, resdata)
 			if res != 1 {
 				//Logs.Println("symbol  null: ", hey.Symbol)
+				//自动开仓
+				if hey.Autoadd != 1 {
+					continue
+				}
 				Checkadd(user, hey, 1)
 				continue
 
@@ -150,6 +154,10 @@ func Userinfo(u *userHeyue) {
 			}
 
 		} else {
+			//自动开仓
+			if hey.Autoadd != 1 {
+				continue
+			}
 			//无持仓
 			Checkadd(user, hey, 1)
 			continue
@@ -272,10 +280,6 @@ func Checkadd(user *model.User, heyue *model.Heyue, num int32) {
 			return
 		}
 	}
-	//自动开仓
-	if heyue.Autoadd != 1 {
-		return
-	}
 
 	Logs.Println("Checkadd  : ", user.Username, heyue.Symbol, heyue.Oneprice, heyue.Repeatprice)
 	Addpositon(user, heyue)
@@ -313,12 +317,12 @@ func Checkheyun(user *model.User, heyue *model.Heyue, resdata []PositionRisk) (r
 			}
 			//Logs.Println("收益平仓: ", v, heyue.Id, v.UnRealizedProfit, v.InitialMargin, income)
 			//收益平仓多
-			if v.UnRealizedProfit > 0 && v.UnRealizedProfit > income && heyue.Side == 1 && heyue.Newprice < v.MarkPrice {
+			if v.UnRealizedProfit > 0 && v.UnRealizedProfit > income && heyue.Side == 1 && heyue.Newprice < v.MarkPrice && heyue.Closeposition == 1 {
 				Logs.Println("收益平仓多: ", v, heyue.Id, v.UnRealizedProfit, v.InitialMargin, income)
 				rest := Checkuserinfo(user) //查询保证金比例
 				if rest == 1 {
 					posite_red := Closeposition(user, heyue, v)
-					if posite_red == 1 {
+					if posite_red == 1 && heyue.Autoadd == 1 {
 						heyue.Is_num = 0
 						heyue.Newprice = 0
 						Addpositon(user, heyue) //马上加仓
@@ -331,12 +335,12 @@ func Checkheyun(user *model.User, heyue *model.Heyue, resdata []PositionRisk) (r
 
 			}
 			//收益平仓空
-			if v.UnRealizedProfit > 0 && v.UnRealizedProfit > income && heyue.Side == 2 && heyue.Newprice > v.MarkPrice {
+			if v.UnRealizedProfit > 0 && v.UnRealizedProfit > income && heyue.Side == 2 && heyue.Newprice > v.MarkPrice && heyue.Closeposition == 1 {
 				Logs.Println("收益平仓空v: ", v, heyue.Id, v.UnRealizedProfit, v.InitialMargin, income)
 				rest := Checkuserinfo(user) //查询保证金比例
 				if rest == 1 {
 					posite_red := Closeposition(user, heyue, v)
-					if posite_red == 1 {
+					if posite_red == 1 && heyue.Autoadd == 1 {
 						heyue.Is_num = 0
 						heyue.Newprice = 0
 						Addpositon(user, heyue) //马上加仓

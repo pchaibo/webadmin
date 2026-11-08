@@ -101,6 +101,9 @@ func HeyueCreate(c *gin.Context) {
 	if item.Leverage <= 0 {
 		item.Leverage = 50
 	}
+	if item.Closepositionrate <= 0 {
+		item.Closepositionrate = 50
+	}
 
 	item.AddTime = time.Now().Unix()
 	item.UpdateTime = time.Now().Unix()
@@ -159,6 +162,10 @@ func HeyueUpdate(c *gin.Context) {
 	updates["resrangepercent"] = req.Resrangepercent
 	updates["resrepeatprice"] = req.Resrepeatprice
 	updates["autoadd"] = req.Autoadd
+	if req.Closepositionrate <= 0 {
+		req.Closepositionrate = 50
+	}
+	updates["closepositionrate"] = req.Closepositionrate
 	if req.Leverage <= 0 {
 		req.Leverage = 50
 	}

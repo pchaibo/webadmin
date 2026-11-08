@@ -36,6 +36,7 @@ const submitting = ref(false)
    resrepeatprice: 100,
    autoadd: 1,
    leverage: 50,
+   closepositionrate: 50,
  })
  
 onMounted(async () => {
@@ -71,6 +72,7 @@ onMounted(async () => {
          form.resrepeatprice = (d.resrepeatprice as number) ?? 100
          form.autoadd = (d.autoadd as number) ?? 1
          form.leverage = Math.trunc(Number(d.leverage)) || 50
+        form.closepositionrate = Math.trunc(Number(d.closepositionrate)) || 50
       }
     } catch { /* ignore */ }
   }
@@ -138,6 +140,7 @@ function goBack() {
          resrepeatprice: Math.trunc(Number(form.resrepeatprice)),
          autoadd: Math.trunc(Number(form.autoadd)),
          leverage: Math.trunc(Number(form.leverage)),
+        closepositionrate: Math.trunc(Number(form.closepositionrate)),
      }
  
      let res: { status: number; error?: string }
@@ -198,6 +201,18 @@ function goBack() {
            class="form-input"
          />
        </div>
+      <div class="form-group">
+        <label class="form-label">平仓率%</label>
+        <input
+          v-model.number="form.closepositionrate"
+          type="number"
+          min="1"
+          max="100"
+          step="1"
+          inputmode="numeric"
+          class="form-input"
+        />
+      </div>
        <div class="form-row">
          <div class="form-group flex-half">
            <label class="form-label">收益%</label>

@@ -274,12 +274,35 @@ func RangCloseposition(user *model.User, heyue *model.Heyue, resdata PositionRis
 	}
 	return
 }
+func DecimalPlaces(num float64) int {
+	s := strconv.FormatFloat(num, 'f', -1, 64)
+
+	if !strings.Contains(s, ".") {
+		return 0
+	}
+
+	return len(strings.Split(s, ".")[1])
+}
+
+// RoundTo 保留指定小数位
+func Roundto(num float64, precision int) float64 {
+	factor := math.Pow(10, float64(precision))
+	return math.Round(num*factor) / factor
+}
 
 // 平仓
 func Closeposition(user *model.User, heyue *model.Heyue, resdata PositionRisk) (rest int) {
 	rest = 0
+	var quantity float64
+	quantity = resdata.PositionAmt
+	quantity_num := DecimalPlaces(quantity)
 	if heyue.Side == 1 {
-		response, err := placeOrder(resdata.Symbol, "SELL", "LONG", user.Bnaccess, user.Bnasecret, resdata.PositionAmt)
+		//按比例平仓
+		if heyue.Closepositionrate < 100 {
+			PositionAmt := resdata.PositionAmt * float64(heyue.Closepositionrate) * 0.001
+			quantity = Roundto(PositionAmt, quantity_num)
+		}
+		response, err := placeOrder(resdata.Symbol, "SELL", "LONG", user.Bnaccess, user.Bnasecret, quantity)
 		if err != nil {
 			Logs.Println("Closeposition Error  order: ", err.Error())
 			return
@@ -293,7 +316,7 @@ func Closeposition(user *model.User, heyue *model.Heyue, resdata PositionRisk) (
 			if heyue.Resset == 1 && heyue.Resnum > 0 && heyue.Resrangepercent > 0 {
 				model.Db.Model(&model.Heyue{}).Where("id = ?", heyue.Id).UpdateColumn("is_num", 0).UpdateColumn("newprice", 0).UpdateColumn("num", heyue.Resnum).UpdateColumn("rangepercent", heyue.Resrangepercent).UpdateColumn("repeatprice", heyue.Resrepeatprice)
 			} else {
-				model.Db.Model(&model.Heyue{}).Where("id = ?", heyue.Id).UpdateColumn("is_num", 0).UpdateColumn("newprice", 0)
+				model.Db.Model(&model.Heyue{}).Where("id = ?", heyue.Id).UpdateColumn("is_num", 0).UpdateColumn("closeposition", 2).UpdateColumn("newprice", 0)
 			}
 
 			var order model.Heyueorder
@@ -317,7 +340,11 @@ func Closeposition(user *model.User, heyue *model.Heyue, resdata PositionRisk) (
 
 		return
 	} else if heyue.Side == 2 {
-		response_short, err := placeOrder(resdata.Symbol, "BUY", "SHORT", user.Bnaccess, user.Bnasecret, resdata.PositionAmt)
+		if heyue.Closepositionrate < 100 {
+			PositionAmt := resdata.PositionAmt * float64(heyue.Closepositionrate) * 0.001
+			quantity = Roundto(PositionAmt, quantity_num)
+		}
+		response_short, err := placeOrder(resdata.Symbol, "BUY", "SHORT", user.Bnaccess, user.Bnasecret, quantity)
 		if err != nil {
 			Logs.Printf("Error placing buy order: %v", err)
 			return
@@ -330,7 +357,7 @@ func Closeposition(user *model.User, heyue *model.Heyue, resdata PositionRisk) (
 			if heyue.Resset == 1 && heyue.Resnum > 0 && heyue.Resrangepercent > 0 {
 				model.Db.Model(&model.Heyue{}).Where("id = ?", heyue.Id).UpdateColumn("is_num", 0).UpdateColumn("newprice", 0).UpdateColumn("num", heyue.Resnum).UpdateColumn("rangepercent", heyue.Resrangepercent).UpdateColumn("repeatprice", heyue.Resrepeatprice)
 			} else {
-				model.Db.Model(&model.Heyue{}).Where("id = ?", heyue.Id).UpdateColumn("is_num", 0).UpdateColumn("newprice", 0)
+				model.Db.Model(&model.Heyue{}).Where("id = ?", heyue.Id).UpdateColumn("is_num", 0).UpdateColumn("closeposition", 2).UpdateColumn("newprice", 0)
 			}
 			var order model.Heyueorder
 			order.Ordertype = 2
