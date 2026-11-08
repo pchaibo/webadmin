@@ -306,7 +306,7 @@ func Closeposition(user *model.User, heyue *model.Heyue, resdata PositionRisk) (
 	if heyue.Side == 1 {
 		//按比例平仓
 		if heyue.Closepositionrate < 100 {
-			PositionAmt := resdata.PositionAmt * float64(heyue.Closepositionrate) * 0.001
+			PositionAmt := quantity * float64(heyue.Closepositionrate) * 0.01
 			quantity = Roundto(PositionAmt, quantity_num)
 		}
 		response, err := placeOrder(resdata.Symbol, "SELL", "LONG", user.Bnaccess, user.Bnasecret, quantity)
@@ -348,7 +348,7 @@ func Closeposition(user *model.User, heyue *model.Heyue, resdata PositionRisk) (
 		return
 	} else if heyue.Side == 2 {
 		if heyue.Closepositionrate < 100 {
-			PositionAmt := resdata.PositionAmt * float64(heyue.Closepositionrate) * 0.001
+			PositionAmt := quantity * float64(heyue.Closepositionrate) * 0.01
 			quantity = Roundto(PositionAmt, quantity_num)
 		}
 		response_short, err := placeOrder(resdata.Symbol, "BUY", "SHORT", user.Bnaccess, user.Bnasecret, quantity)
