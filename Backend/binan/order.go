@@ -148,6 +148,7 @@ func Addpositon(user *model.User, heyue *model.Heyue) {
 	newheyue.Is_num = heyue.Is_num + 1
 	newheyue.Newprice = Coin.Close
 	newheyue.NewTime = time.Now().Unix()
+	newheyue.Closeposition = 1
 	//LONG
 	if heyue.Side == 1 {
 		response, err := placeOrder(symbol, "BUY", "LONG", user.Bnaccess, user.Bnasecret, quantity)
@@ -158,7 +159,7 @@ func Addpositon(user *model.User, heyue *model.Heyue) {
 		Logs.Println("加仓 LONG:", response)
 		orderId := gjson.Get(response, "orderId").Int()
 		if orderId > 0 {
-			model.Db.Model(&model.Heyue{}).Where("id = ?", heyue.Id).Select("is_num", "newprice", "new_time").Updates(&newheyue)
+			model.Db.Model(&model.Heyue{}).Where("id = ?", heyue.Id).Select("is_num", "newprice", "new_time", "closeposition").Updates(&newheyue)
 			var order model.Heyueorder
 			order.Total = total
 			order.Ordertype = 1
@@ -187,7 +188,7 @@ func Addpositon(user *model.User, heyue *model.Heyue) {
 		Logs.Println("加仓 SHORT:", response)
 		orderId := gjson.Get(response, "orderId").Int()
 		if orderId > 0 {
-			model.Db.Model(&model.Heyue{}).Where("id = ?", heyue.Id).Select("is_num", "newprice", "new_time").Updates(&newheyue)
+			model.Db.Model(&model.Heyue{}).Where("id = ?", heyue.Id).Select("is_num", "newprice", "new_time", "closeposition").Updates(&newheyue)
 			var order model.Heyueorder
 			order.Total = total
 			order.Ordertype = 1
