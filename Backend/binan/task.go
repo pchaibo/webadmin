@@ -138,6 +138,9 @@ func Userinfo(u *userHeyue) {
 
 			//平仓和补仓
 			res := Checkheyun(user, hey, resdata)
+			if res == 1 {
+				Updateuser() //更新用户数据
+			}
 			if res != 1 {
 				//Logs.Println("symbol  null: ", hey.Symbol)
 				//自动开仓
@@ -327,6 +330,7 @@ func Checkheyun(user *model.User, heyue *model.Heyue, resdata []PositionRisk) (r
 						heyue.Newprice = 0
 						Addpositon(user, heyue) //马上加仓
 					}
+
 					return
 				} else {
 					Logs.Println("仓位过重，平仓 id: ", heyue.Id, heyue.Symbol)
