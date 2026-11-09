@@ -85,7 +85,7 @@ func Task() {
 		}
 		wg.Wait()
 
-		time.Sleep(100 * time.Millisecond) //
+		time.Sleep(1000 * time.Millisecond) //
 		Updateuser()
 	}
 
