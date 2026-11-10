@@ -294,7 +294,8 @@ func DecimalPlaces(num float64) int {
 // RoundTo 保留指定小数位
 func Roundto(num float64, precision int) float64 {
 	factor := math.Pow(10, float64(precision))
-	return math.Round(num*factor) / factor
+	//return math.Round(num*factor) / factor
+	return math.Ceil(num*factor) / factor //向上取
 }
 
 // 平仓
@@ -303,12 +304,18 @@ func Closeposition(user *model.User, heyue *model.Heyue, resdata PositionRisk) (
 	var quantity float64
 	quantity = resdata.PositionAmt
 	quantity_num := DecimalPlaces(quantity)
+
 	if heyue.Side == 1 {
 		//按比例平仓
 		if heyue.Closepositionrate < 100 {
 			PositionAmt := quantity * float64(heyue.Closepositionrate) * 0.01
 			quantity = Roundto(PositionAmt, quantity_num)
 		}
+		if quantity <= 0 {
+			Logs.Println("数量小于:", quantity, quantity_num)
+			return
+		}
+
 		response, err := placeOrder(resdata.Symbol, "SELL", "LONG", user.Bnaccess, user.Bnasecret, quantity)
 		if err != nil {
 			Logs.Println("Closeposition Error  order: ", err.Error())
@@ -351,6 +358,10 @@ func Closeposition(user *model.User, heyue *model.Heyue, resdata PositionRisk) (
 		if heyue.Closepositionrate < 100 {
 			PositionAmt := quantity * float64(heyue.Closepositionrate) * 0.01
 			quantity = Roundto(PositionAmt, quantity_num)
+		}
+		if quantity <= 0 {
+			Logs.Println("数量小于:", quantity, quantity_num)
+			return
 		}
 		response_short, err := placeOrder(resdata.Symbol, "BUY", "SHORT", user.Bnaccess, user.Bnasecret, quantity)
 		if err != nil {

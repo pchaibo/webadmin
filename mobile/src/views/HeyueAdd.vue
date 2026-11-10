@@ -17,9 +17,9 @@ const submitting = ref(false)
    side: 1,
    num: 2,
    status: 1,
-   sellprice: 30,
-   oneprice: 100,
-   repeatprice: 50,
+   sellprice: 100,
+   oneprice: 300,
+   repeatprice: 200,
    rangetype: 2,
    rangeprice: 0,
    rangepercent: 100,
@@ -28,15 +28,15 @@ const submitting = ref(false)
    closingprice: 0,
    risk: 2,
    risktime: 30,
-   topprice: 0,
+   topprice: 800,
    reductionratio: 50,
    resset: 0,
    resnum: 2,
    resrangepercent: 50,
    resrepeatprice: 100,
-   autoadd: 1,
+   autoadd: 2,
    leverage: 50,
-   closepositionrate: 50,
+   closepositionrate: 100,
  })
  
 onMounted(async () => {
@@ -190,7 +190,8 @@ function goBack() {
            <span>开空</span>
          </label>
        </div>
-       <div class="form-group">
+       <div class="form-row">
+         <div class="form-group flex-half">
          <label class="form-label">杠杆倍数</label>
          <input
            v-model.number="form.leverage"
@@ -200,33 +201,30 @@ function goBack() {
            inputmode="numeric"
            class="form-input"
          />
+        </div>
+      
+         <div class="form-group flex-half">
+           <label class="form-label">首仓USDT</label>
+           <input v-model.number="form.oneprice" type="number" step="1" class="form-input" />
+         </div>
+
        </div>
-      <div class="form-group">
-        <label class="form-label">平仓率%</label>
-        <input
-          v-model.number="form.closepositionrate"
-          type="number"
-          min="1"
-          max="100"
-          step="1"
-          inputmode="numeric"
-          class="form-input"
-        />
-      </div>
+      
        <div class="form-row">
          <div class="form-group flex-half">
            <label class="form-label">收益%</label>
-           <input v-model.number="form.sellprice" type="number" step="0.1" class="form-input" />
+           <input v-model.number="form.sellprice" type="number" step="1" class="form-input" />
          </div>
-         <div class="form-group flex-half">
-           <label class="form-label">首仓USDT</label>
-           <input v-model.number="form.oneprice" type="number" step="0.01" class="form-input" />
-         </div>
+        <div class="form-group flex-half">
+          <label class="form-label">平仓%</label>
+          <input v-model.number="form.closepositionrate" type="number" min="1" max="100" step="1" inputmode="numeric" class="form-input"/>
+        </div>
        </div>
+       
        <div class="form-row">
          <div class="form-group flex-half">
            <label class="form-label">预估价格</label>
-           <input v-model.number="form.topprice" type="number" step="0.001" class="form-input" />
+           <input v-model.number="form.topprice" type="number" step="1" class="form-input" />
          </div>
          <div class="form-group flex-half">
            <label class="form-label">减仓比例%</label>
@@ -245,7 +243,7 @@ function goBack() {
          </div>
          <div class="form-group flex-half">
            <label class="form-label">补仓USDT</label>
-           <input v-model.number="form.repeatprice" type="number" step="0.01" class="form-input" />
+           <input v-model.number="form.repeatprice" type="number" step="1" class="form-input" />
          </div>
        </div>
         <div class="form-row">
