@@ -37,6 +37,9 @@ const submitting = ref(false)
    autoadd: 2,
    leverage: 50,
    closepositionrate: 100,
+   hightrading: 0,
+   highopenprice: 100,
+   highstoplossprice: 90,
  })
  
 onMounted(async () => {
@@ -72,7 +75,10 @@ onMounted(async () => {
          form.resrepeatprice = (d.resrepeatprice as number) ?? 100
          form.autoadd = (d.autoadd as number) ?? 1
          form.leverage = Math.trunc(Number(d.leverage)) || 50
-        form.closepositionrate = Math.trunc(Number(d.closepositionrate)) || 50
+         form.closepositionrate = Math.trunc(Number(d.closepositionrate)) || 50
+         form.hightrading = (d.hightrading as number) ?? 0
+         form.highopenprice = (d.highopenprice as number) ?? 100
+         form.highstoplossprice = (d.highstoplossprice as number) ?? 90
       }
     } catch { /* ignore */ }
   }
@@ -140,7 +146,10 @@ function goBack() {
          resrepeatprice: Math.trunc(Number(form.resrepeatprice)),
          autoadd: Math.trunc(Number(form.autoadd)),
          leverage: Math.trunc(Number(form.leverage)),
-        closepositionrate: Math.trunc(Number(form.closepositionrate)),
+         closepositionrate: Math.trunc(Number(form.closepositionrate)),
+         hightrading: Math.trunc(Number(form.hightrading)),
+         highopenprice: Number(form.highopenprice),
+         highstoplossprice: Number(form.highstoplossprice),
      }
  
      let res: { status: number; error?: string }
@@ -229,6 +238,39 @@ function goBack() {
          <div class="form-group flex-half">
            <label class="form-label">减仓比例%</label>
            <input v-model.number="form.reductionratio" type="number" step="1" class="form-input" />
+         </div>
+       </div>
+       <div class="form-divider">高频交易设置</div>
+       <div class="status-radios">
+         <label class="radio-option" :class="{ active: form.hightrading === 0 }">
+           <input type="radio" v-model.number="form.hightrading" :value="0" />
+           <span>关闭</span>
+         </label>
+         <label class="radio-option" :class="{ active: form.hightrading === 1 }">
+           <input type="radio" v-model.number="form.hightrading" :value="1" />
+           <span>开启</span>
+         </label>
+       </div>
+       <div class="form-row">
+         <div class="form-group flex-half">
+           <label class="form-label">高频开仓价格</label>
+           <input
+             v-model.number="form.highopenprice"
+             type="number"
+             min="0"
+             step="0.1"
+             class="form-input"
+           />
+         </div>
+         <div class="form-group flex-half">
+           <label class="form-label">高频止损价格</label>
+           <input
+             v-model.number="form.highstoplossprice"
+             type="number"
+             min="0"
+             step="0.1"
+             class="form-input"
+           />
          </div>
        </div>
        <div class="form-divider">网格设置</div>

@@ -135,6 +135,11 @@ func Userinfo(u *userHeyue) {
 	heyues := u.Heyues
 	for _, hey := range heyues {
 		if len(resdata) > 0 {
+			//高频交易
+			if hey.Hightrading == 1 {
+				//Hightrading()
+				continue
+			}
 
 			//平仓和补仓
 			res := Checkheyun(user, hey, resdata)

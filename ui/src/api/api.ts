@@ -671,6 +671,9 @@ export interface HeyueItem {
   autoadd: number
   leverage: number
   closepositionrate: number
+  hightrading: number
+  highopenprice: number
+  highstoplossprice: number
   addtime: number
   updatetime: number
 }
@@ -729,6 +732,9 @@ export async function createHeyue(data: {
   autoadd?: number
   leverage?: number
   closepositionrate?: number
+  hightrading?: number
+  highopenprice?: number
+  highstoplossprice?: number
 }): Promise<{ status: number; heyue?: HeyueItem; error?: string }> {
   const res = await fetch('/api/heyue', {
     method: 'POST',
@@ -767,6 +773,9 @@ export async function updateHeyue(
     autoadd?: number
     leverage?: number
     closepositionrate?: number
+    hightrading?: number
+    highopenprice?: number
+    highstoplossprice?: number
   }
 ): Promise<{ status: number; heyue?: HeyueItem; error?: string }> {
   const res = await fetch(`/api/heyue/${id}`, {

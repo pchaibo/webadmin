@@ -72,6 +72,11 @@ type Heyue struct {
 	Leverage          int     `gorm:"default:50" from:"leverage" json:"leverage"`                   //杠杆倍数 默认：50
 	Closeposition     int     `gorm:"default:1" from:"closeposition" json:"closeposition"`          //平仓 1：开启 2：平过停用
 	Closepositionrate int     `gorm:"default:50" from:"closepositionrate" json:"closepositionrate"` //平仓率 默认:50 全平：100
+
+	Hightrading       int     `gorm:"default:0" from:"hightrading" json:"hightrading"`              //高频交易 0:不开 1：开启
+	Highopenprice     float64 `gorm:"default:100" from:"highopenprice" json:"highopenprice"`        //高频开仓价格
+	Highstoplossprice float64 `gorm:"default:90" from:"highstoplossprice" json:"highstoplossprice"` //高频止损价格
+	Highstatus        int     `gorm:"default:0" from:"highstatus" json:"highstatus"`                //交易  0: 没单 1: 下单 2: 平仓
 	AddTime           int64   `json:"addtime"`
 	UpdateTime        int64   `json:"updatetime"`
 }

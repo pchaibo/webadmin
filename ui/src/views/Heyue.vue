@@ -78,6 +78,15 @@
       <el-table-column prop="rangeclosingpct" label="网平仓" width="70" />
       <el-table-column prop="topprice" label="预估价格" width="100" />
       <el-table-column prop="reductionratio" label="减仓比例%" width="100" />
+      <el-table-column prop="hightrading" label="高频交易" width="90">
+        <template #default="{ row }">
+          <span :style="{ color: row.hightrading === 1 ? '#67c23a' : '#909399' }">
+            {{ row.hightrading === 1 ? '开启' : '关闭' }}
+          </span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="highopenprice" label="高频开仓价" width="110" />
+      <el-table-column prop="highstoplossprice" label="高频止损价" width="110" />
       <el-table-column prop="resset" label="重置" width="70">
         <template #default="{ row }">
           <span :style="{ color: row.resset === 1 ? '#e6a23c' : '#909399' }">
@@ -227,6 +236,45 @@
           </el-col>
         </el-row>
        
+
+        <el-divider>高频交易设置</el-divider>
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item label="高频交易">
+              <el-switch
+                v-model="form.hightrading"
+                :active-value="1"
+                :inactive-value="0"
+                active-text="开启"
+                inactive-text="关闭"
+              />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="开仓价格">
+              <el-input-number
+                v-model="form.highopenprice"
+                :min="0"
+                :step="0.1"
+                :precision="2"
+                style="width: 100%"
+              />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item label="止损价格">
+              <el-input-number
+                v-model="form.highstoplossprice"
+                :min="0"
+                :step="0.1"
+                :precision="2"
+                style="width: 100%"
+              />
+            </el-form-item>
+          </el-col>
+        </el-row>
 
         <el-divider>网格设置</el-divider>
          <el-row :gutter="20">
@@ -406,6 +454,9 @@ const form = reactive({
   autoadd: 1,
   leverage: 50,
   closepositionrate: 50,
+  hightrading: 0,
+  highopenprice: 100,
+  highstoplossprice: 90,
 })
 
 const formRules = {
@@ -484,6 +535,9 @@ function openCreate() {
   form.autoadd = 1
   form.leverage = 50
   form.closepositionrate = 50
+  form.hightrading = 0
+  form.highopenprice = 100
+  form.highstoplossprice = 90
   dialogVisible.value = true
 }
 
@@ -515,6 +569,9 @@ function openEdit(row: HeyueItem) {
   form.autoadd = row.autoadd ?? 1
   form.leverage = row.leverage ?? 50
   form.closepositionrate = row.closepositionrate ?? 50
+  form.hightrading = row.hightrading ?? 0
+  form.highopenprice = row.highopenprice ?? 100
+  form.highstoplossprice = row.highstoplossprice ?? 90
   dialogVisible.value = true
 }
 
@@ -552,6 +609,9 @@ async function submitForm() {
         autoadd: form.autoadd,
         leverage: form.leverage,
         closepositionrate: Math.trunc(Number(form.closepositionrate)),
+        hightrading: Math.trunc(Number(form.hightrading)),
+        highopenprice: Number(form.highopenprice),
+        highstoplossprice: Number(form.highstoplossprice),
       })
       if (res.status === 1) {
         ElMessage.success('更新成功')
@@ -587,6 +647,9 @@ async function submitForm() {
         autoadd: form.autoadd,
         leverage: form.leverage,
         closepositionrate: Math.trunc(Number(form.closepositionrate)),
+        hightrading: Math.trunc(Number(form.hightrading)),
+        highopenprice: Number(form.highopenprice),
+        highstoplossprice: Number(form.highstoplossprice),
       })
       if (res.status === 1) {
         ElMessage.success('创建成功')

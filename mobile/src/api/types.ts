@@ -46,6 +46,9 @@ export interface HeyueItem {
   autoadd: number
   leverage: number
   closepositionrate: number
+  hightrading: number
+  highopenprice: number
+  highstoplossprice: number
   addtime: number
   updatetime: number
 }

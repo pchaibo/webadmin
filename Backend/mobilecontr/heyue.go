@@ -143,6 +143,16 @@ func HeyueCreate(c *gin.Context) {
 	if item.Closepositionrate <= 0 {
 		item.Closepositionrate = 50
 	}
+	if item.Hightrading != 0 && item.Hightrading != 1 {
+		item.Hightrading = 0
+	}
+	if item.Highopenprice <= 0 {
+		item.Highopenprice = 100
+	}
+	if item.Highstoplossprice <= 0 {
+		item.Highstoplossprice = 90
+	}
+	item.Highstatus = 0
 
 	item.AddTime = time.Now().Unix()
 	item.UpdateTime = time.Now().Unix()
@@ -209,6 +219,18 @@ func HeyueUpdate(c *gin.Context) {
 		req.Leverage = 50
 	}
 	updates["leverage"] = req.Leverage
+	if req.Hightrading != 0 && req.Hightrading != 1 {
+		req.Hightrading = 0
+	}
+	updates["hightrading"] = req.Hightrading
+	if req.Highopenprice <= 0 {
+		req.Highopenprice = 100
+	}
+	updates["highopenprice"] = req.Highopenprice
+	if req.Highstoplossprice <= 0 {
+		req.Highstoplossprice = 90
+	}
+	updates["highstoplossprice"] = req.Highstoplossprice
 	updates["update_time"] = time.Now().Unix()
 
 	result := model.Db.Model(&model.Heyue{}).Where("id = ?", id).Updates(updates)
