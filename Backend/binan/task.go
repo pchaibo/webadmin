@@ -137,7 +137,7 @@ func Userinfo(u *userHeyue) {
 		if len(resdata) > 0 {
 			//高频交易
 			if hey.Hightrading == 1 {
-				//Hightrading()
+				Hightrading(user, hey, resdata)
 				continue
 			}
 
@@ -294,7 +294,119 @@ func Checkadd(user *model.User, heyue *model.Heyue, num int32) {
 
 }
 
-// 查询持仓
+// 高频交易 开仓平仓
+func Hightrading(user *model.User, heyue *model.Heyue, resdata []PositionRisk) (res int) {
+	var positionSide string
+	if heyue.Side == 1 {
+		positionSide = "LONG"
+	} else {
+		positionSide = "SHORT"
+	}
+	var Leverage float64
+	if heyue.Leverage < 10 {
+		Leverage = float64(10)
+	} else {
+		Leverage = float64(heyue.Leverage)
+	}
+
+	res = 0
+	for _, v := range resdata {
+		if v.Symbol == strings.ToUpper(heyue.Symbol) && v.positionSide == positionSide {
+			//Logs.Println("Checkheyun resdata  : ", resdata)
+			res = 1
+			sell := heyue.Sellprice * 1e-2
+			Rangepercent := float64(heyue.Rangepercent) * 1e-2 * float64(heyue.Is_num) //百分比* 0.01 * 次数
+			margin := v.EntryPrice * math.Abs(v.PositionAmt) / Leverage                //计算保证金
+			newmargin := v.MarkPrice * math.Abs(v.PositionAmt)
+			income := margin * sell
+			Debug := config.Get("debug")
+			if Debug == "true" {
+				Logs.Println("收益平仓: ", heyue.Id, v.UnRealizedProfit, v.InitialMargin, income)
+			}
+			//Logs.Println("收益平仓: ", v, heyue.Id, v.UnRealizedProfit, v.InitialMargin, income)
+			//收益平仓多
+			if v.UnRealizedProfit > 0 && v.UnRealizedProfit > income && heyue.Side == 1 && heyue.Newprice < v.MarkPrice && heyue.Closeposition == 1 {
+				Logs.Println("收益平仓多: ", v, heyue.Id, v.UnRealizedProfit, v.InitialMargin, income)
+				rest := Checkuserinfo(user) //查询保证金比例
+				if rest == 1 {
+					posite_red := Closeposition(user, heyue, v)
+					if posite_red == 1 && heyue.Autoadd == 1 {
+						heyue.Is_num = 0
+						heyue.Newprice = 0
+						Addpositon(user, heyue) //马上加仓
+					}
+
+					return
+				} else {
+					Logs.Println("仓位过重，平仓 id: ", heyue.Id, heyue.Symbol)
+					return
+				}
+
+			}
+			//收益平仓空
+			if v.UnRealizedProfit > 0 && v.UnRealizedProfit > income && heyue.Side == 2 && heyue.Newprice > v.MarkPrice && heyue.Closeposition == 1 {
+				Logs.Println("收益平仓空v: ", v, heyue.Id, v.UnRealizedProfit, v.InitialMargin, income)
+				rest := Checkuserinfo(user) //查询保证金比例
+				if rest == 1 {
+					posite_red := Closeposition(user, heyue, v)
+					if posite_red == 1 && heyue.Autoadd == 1 {
+						heyue.Is_num = 0
+						heyue.Newprice = 0
+						Addpositon(user, heyue) //马上加仓
+					}
+					return
+				} else {
+					Logs.Println("仓位过重，平仓 id: ", heyue.Id, heyue.Symbol)
+					return
+				}
+
+			}
+			//同步价格和仓位
+			if heyue.Is_num == 0 && heyue.Autoadd == 2 && heyue.Newprice < 0.00001 {
+				Updateheyue(heyue, v)
+				continue
+			}
+
+			//网格补仓 2:保证金百分比计算
+			if heyue.Is_num < heyue.Num && heyue.Newprice > 0 {
+				totalincome := math.Abs(newmargin) - margin*Leverage
+				Marginpercentage := math.Abs(totalincome) / (math.Abs(newmargin) / Leverage) //计算在新保证金的比例
+				if v.UnRealizedProfit < 0 && Marginpercentage > Rangepercent {
+					if heyue.Side == 1 {
+						Logs.Println("v  : ", v)
+						Logs.Println("totalincome", newmargin, margin, totalincome)
+						Logs.Println("Checkadd : ", v.UnRealizedProfit, Marginpercentage, Rangepercent)
+						if Rangepercent <= 0 {
+							Logs.Println("保证金百分比小于0:", Rangepercent, v.UnRealizedProfit)
+							continue
+						}
+
+						Logs.Println("保证金百分比计算SHORT:", v.positionSide, Rangepercent, v.UnRealizedProfit, v.MarkPrice)
+						Checkadd(user, heyue, 2)
+						//做空
+					} else if heyue.Side == 2 {
+						Logs.Println("v  : ", v)
+						Logs.Println("totalincome", newmargin, margin, totalincome)
+						Logs.Println("Checkadd : ", v.UnRealizedProfit, Marginpercentage, Rangepercent)
+						if Rangepercent <= 0 {
+							Logs.Println("保证金百分比小于0:", Rangepercent, v.UnRealizedProfit)
+							continue
+						}
+
+						Logs.Println("保证金百分比计算SHORT:", v.positionSide, Rangepercent, v.UnRealizedProfit, v.MarkPrice)
+						Checkadd(user, heyue, 2)
+					}
+				}
+			}
+
+			return
+		}
+
+	}
+	return
+}
+
+// 查询持仓 平仓和补仓
 func Checkheyun(user *model.User, heyue *model.Heyue, resdata []PositionRisk) (res int) {
 	var positionSide string
 	if heyue.Side == 1 {
